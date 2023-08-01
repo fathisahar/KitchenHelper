@@ -4,16 +4,16 @@ function animationInfo(){
 
     switch (randomBorder){
         case 1:
-            borderXY.push(0-50, windowY(), window.innerWidth+50, windowY());
+            borderXY.push(0-400, windowY(), window.innerWidth+400, windowY());
             break;
         case 2:
-            borderXY.push(windowX(), 0-50, windowX(), window.innerHeight+50);
+            borderXY.push(windowX(), 0-400, windowX(), window.innerHeight+50);
             break;
         case 3:
             borderXY.push(window.innerWidth+50, windowY(), 0-50, windowY());
             break;
         case 4:
-            borderXY.push(windowX(), window.innerHeight+50, windowX(), 0-50);
+            borderXY.push(windowX(), window.innerHeight+50, windowX(), 0-400);
     }
     return borderXY;
 }
@@ -39,13 +39,24 @@ function screenX(){
 }
 
 function animateEmoji(emoji, duration) {
-    const startInfo = animationInfo();
+    let startInfo = animationInfo();
     const startX = startInfo[0];
     const startY = startInfo[1];
     const endX = startInfo[2];
     const endY = startInfo[3];
     
     emoji.style.transform = `translateX(${startX}px) translateY(${startY}px)`;
+
+    let emojiXY = emoji.getBoundingClientRect();
+    let x = emojiXY.left;
+    let y = emojiXY.top;
+
+    console.log('new');
+    console.log('start x ' + x);
+    console.log('start y ' + y);
+    console.log('end x ' + endX);
+    console.log('end y ' + endY);
+    
 
     const startTime = performance.now();
   
@@ -66,10 +77,17 @@ function animateEmoji(emoji, duration) {
   }
 
   function runAnimation() {
-    const emojis = document.querySelectorAll('.emoji');
+    const emojis = document.querySelectorAll('.asian');
+    
+    console.log('window W ' +window.innerWidth);
+    
+    console.log('screen w ' + screen.width);
+    console.log('screen h ' + screen.height);
 
     animateEmoji(emojis[0], 5000);
     animateEmoji(emojis[1], 5000); 
+    animateEmoji(emojis[2], 5000);
+    animateEmoji(emojis[3], 5000); 
 }
 
 window.addEventListener('load', runAnimation);
