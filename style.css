@@ -3,8 +3,11 @@ body {
     overflow: hidden;
 }
 
-.emoji {
-    position: absolute;
-    width: 24px;
-    height: 24px; 
+.meat, .bread, .asian, .desert, .fruits, .vegetables {
+    font-size: 50px; 
+    transform-origin: center center;
+    transform: scale(1.5);
 }
+
+
+

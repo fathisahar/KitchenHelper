@@ -13,7 +13,7 @@ function animationInfo(){
             borderXY.push(window.innerWidth+50, windowY(), 0-50, windowY());
             break;
         case 4:
-            borderXY.push(windowX(), window.innerHeight+50, windowX(), 0-400);
+            borderXY.push(windowX(), window.innerHeight+50, windowX(), 0-500);
     }
     return borderXY;
 }
@@ -77,17 +77,42 @@ function animateEmoji(emoji, duration) {
   }
 
   function runAnimation() {
-    const emojis = document.querySelectorAll('.asian');
+    const asians = document.querySelectorAll('.asian');
+    const meats = document.querySelectorAll('.meat');
+    const breads = document.querySelectorAll('.bread');
+    const deserts = document.querySelectorAll('.desert');
+    const fruits = document.querySelectorAll('.fruits');
+    const vegetables = document.querySelectorAll('.vegetables');
     
     console.log('window W ' +window.innerWidth);
     
     console.log('screen w ' + screen.width);
     console.log('screen h ' + screen.height);
 
-    animateEmoji(emojis[0], 5000);
-    animateEmoji(emojis[1], 5000); 
-    animateEmoji(emojis[2], 5000);
-    animateEmoji(emojis[3], 5000); 
+    for (let i = 0; i < asians.length; i++){
+        animateEmoji(asians[i], 5000);
+    }
+
+    for (let i = 0; i < meats.length; i++){
+        animateEmoji(meats[i], 5000);
+    }
+
+    for (let i = 0; i < breads.length; i++){
+        animateEmoji(breads[i], 5000); 
+    }
+
+    for (let i = 0; i < deserts.length; i++){
+        animateEmoji(deserts[i], 5000);   
+    }
+
+    for (let i = 0; i < fruits.length; i++){
+        animateEmoji(fruits[i], 5000);
+    }
+
+    for (let i = 0; i < vegetables.length; i++){
+        animateEmoji(vegetables[i], 5000);
+    }
 }
+
 
 window.addEventListener('load', runAnimation);
