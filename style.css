@@ -9,5 +9,9 @@ body {
     transform: scale(1.5);
 }
 
+.btn-primary {
+    box-shadow: 0 4px 10px rgba(0, 20, 0, 10);
+  }
+  
 
 
