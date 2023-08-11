@@ -53,6 +53,7 @@ async function animateEmoji(emoji) {
     
     for (i = 0; i < emoji.length; i++) {
         emoji[i].style.transform = `translateX(${startX}px) translateY(${startY}px)`;
+        
     }
 
     for (i = 0; i < emoji.length; i++) {
