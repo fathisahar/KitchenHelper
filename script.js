@@ -5,8 +5,8 @@ function waitForSeconds(seconds) {
   }
 
 function animationInfo(){
-    const randomBorder = Math.floor(Math.random() * 4) + 1;
-    const borderXY = [];
+    let randomBorder = Math.floor(Math.random() * 4) + 1;
+    let borderXY = [];
 
     switch (randomBorder){
         case 1:
@@ -25,31 +25,31 @@ function animationInfo(){
 }
 
 function windowY(){
-    const y = window.innerHeight - Math.floor(Math.random() *  window.innerHeight);
+    let y = window.innerHeight - Math.floor(Math.random() *  window.innerHeight);
     return y;
 }
 
 function windowX(){
-    const x = window.innerWidth - Math.floor(Math.random() *  window.innerWidth);
+    let x = window.innerWidth - Math.floor(Math.random() *  window.innerWidth);
     return x;
 }
 
 function screenY(){
-    const y = screen.height - Math.floor(Math.random() *  screen.height);
+    let y = screen.height - Math.floor(Math.random() *  screen.height);
     return y;
 }
 
 function screenX(){
-    const x = screen.width - Math.floor(Math.random() *  screen.width);
+    let x = screen.width - Math.floor(Math.random() *  screen.width);
     return x;
 }
 
 async function animateEmoji(emoji) {
-    const startInfo = animationInfo();
-    const startX = startInfo[0];
-    const startY = startInfo[1];
-    const endX = startInfo[2];
-    const endY = startInfo[3];
+    let startInfo = animationInfo();
+    let startX = startInfo[0];
+    let startY = startInfo[1];
+    let endX = startInfo[2];
+    let endY = startInfo[3];
     
     for (i = 0; i < emoji.length; i++) {
         emoji[i].style.transform = `translateX(${startX}px) translateY(${startY}px)`;
@@ -62,14 +62,14 @@ async function animateEmoji(emoji) {
 }
 
   function animate(startX, startY, endX, endY, duration, emoji) {
-    const startTime = performance.now();
+    let startTime = performance.now();
   
     function step(currentTime) {
-        const elapsed = currentTime - startTime;
-        const progress = Math.min(elapsed / duration, 2);
+        let elapsed = currentTime - startTime;
+        let progress = Math.min(elapsed / duration, 2);
   
-        const x = startX + (endX - startX) * progress;
-        const y = startY + (endY - startY) * progress;
+        let x = startX + (endX - startX) * progress;
+        let y = startY + (endY - startY) * progress;
   
         emoji.style.transform = `translateX(${x}px) translateY(${y}px)`;
   
@@ -91,7 +91,7 @@ async function animateEmoji(emoji) {
 
   }
 
-  function runAnimation() {
+  async function runAnimation() {
     const asians = document.querySelectorAll('.asian');
     const meats = document.querySelectorAll('.meat');
     const breads = document.querySelectorAll('.bread');
@@ -105,10 +105,15 @@ async function animateEmoji(emoji) {
     console.log('screen h ' + screen.height);
 
     animateEmoji(asians);
+    await waitForSeconds(1);
     animateEmoji(meats);
+    await waitForSeconds(1);
     animateEmoji(breads);
+    await waitForSeconds(1);
     animateEmoji(fruits);
+    await waitForSeconds(1);
     animateEmoji(deserts);
+    await waitForSeconds(1);
     animateEmoji(vegetables);
     
 }
