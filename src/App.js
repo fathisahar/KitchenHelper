@@ -1,16 +1,16 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './Home'; // Import your Home component
-import SecondPage from './SecondPage'; // Import your SecondPage component
+import HomePage from './HomePage'; 
+import LoginPage from './LoginPage'; 
 
 function App() {
   return (
     <div className="kitchenhelper">
-      {/* Your main content */}
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/second-page" element={<SecondPage />} />
+          <Route path="" element={<HomePage />} />
+          <Route path="/home-page" element={<HomePage />} />
+          <Route path="/login-page" element={<LoginPage />} />
         </Routes>
       </Router>
     </div>
