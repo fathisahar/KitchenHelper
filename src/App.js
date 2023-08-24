@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import HomePage from './HomePage';
-import LoginPage from './LoginPage';
-import CreateUserPage from './CreateUserPage'; // Make sure to import the correct path
+import P_Home from './P_Home';
+import P_Login from './P_Login';
+import P_CreateUser from './P_CreateUser'; // Make sure to import the correct path
 
 
 function App() {
@@ -16,9 +16,9 @@ function App() {
         </header>
 
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/create-user" element={<CreateUserPage />} />
+          <Route path="/" element={<P_Home />} />
+          <Route path="/login" element={<P_Login />} />
+          <Route path="/create-user" element={<P_CreateUser />} />
         </Routes>
       </>
     </Router>

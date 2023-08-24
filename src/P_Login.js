@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-function LoginPage() {
+function P_Login() {
     return (
         <div>
             <h1>this is the login page</h1>
@@ -12,4 +12,4 @@ function LoginPage() {
     );    
 }
 
-  export default LoginPage;
+  export default P_Login;

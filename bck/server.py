@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Database configuration
-DATABASE = 'your_database.db'  # Replace with your database name
+DATABASE = 'kitchen.db'  # Replace with your database name
 
 def get_db_connection():
     conn = sqlite3.connect(DATABASE)

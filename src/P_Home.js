@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 
-function HomePage(){
+function P_Home(){
   const [data, setdata] = useState({
     name: "",
     age: 0,
@@ -62,4 +62,4 @@ function HomePage(){
     );
 }
 
-export default HomePage;
+export default P_Home;

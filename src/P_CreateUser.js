@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-function CreateUserPage() {
+function P_CreateUser() {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -74,4 +74,4 @@ function CreateUserPage() {
     );
 }
 
-export default CreateUserPage;
+export default P_CreateUser;
