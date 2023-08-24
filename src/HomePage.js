@@ -16,7 +16,6 @@ function HomePage(){
     setInputValue(event.target.value);
   };
 
-
   // Using useEffect for single rendering
   useEffect(() => {
     // Using fetch to fetch the api from
@@ -35,9 +34,11 @@ function HomePage(){
   }, []);
 
     return (
-        <div>
-          <h1>welcome to the home page</h1>
-          <Link to="/login-page">go to the to log in page</Link>
+      <div>
+
+
+        <h1>welcome to the home page</h1>
+        <Link to="/login">go to the to log in page</Link>
 
         <header className="App-header">
           <h1>React and flask</h1>
@@ -49,15 +50,15 @@ function HomePage(){
         </header>
 
         <h1>Text Field Example</h1>
-      <input
-        type="text"
-        value={inputValue}
-        onChange={handleInputChange}
-        placeholder="Enter text..."
-      />
-      <p>You entered: {inputValue}</p>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          placeholder="Enter text..."
+        />
+        <p>You entered: {inputValue}</p>
 
-        </div>
+      </div>
     );
 }
 

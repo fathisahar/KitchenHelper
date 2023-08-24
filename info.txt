@@ -5,3 +5,6 @@ source ~/.bashrc
 GRANT ALL PRIVILEGES ON *.* TO 'your_new_username'@'localhost';
 FLUSH PRIVILEGES;
 exit;
+
+
+ <p>You entered: {inputValue}</p>
