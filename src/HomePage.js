@@ -10,6 +10,13 @@ function HomePage(){
     programming: "",
   });
 
+  const [inputValue, setInputValue] = useState('');
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+
   // Using useEffect for single rendering
   useEffect(() => {
     // Using fetch to fetch the api from
@@ -40,6 +47,16 @@ function HomePage(){
             <p>{data.date}</p>
             <p>{data.programming}</p>
         </header>
+
+        <h1>Text Field Example</h1>
+      <input
+        type="text"
+        value={inputValue}
+        onChange={handleInputChange}
+        placeholder="Enter text..."
+      />
+      <p>You entered: {inputValue}</p>
+
         </div>
     );
 }
