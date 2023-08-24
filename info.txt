@@ -8,3 +8,15 @@ exit;
 
 
  <p>You entered: {inputValue}</p>
+
+
+ for login:
+ - have restrictions on usernames, passwords (validation) 
+ - send email to confirm account creation
+ 
+
+
+
+ - emails:
+    - username
+    - password
