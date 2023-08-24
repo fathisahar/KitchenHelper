@@ -1,7 +1,7 @@
 import sqlite3
 
 def create_database():
-    conn = sqlite3.connect('your_database.db')  # Replace with your desired database name
+    conn = sqlite3.connect('fridge.db')  # Replace with your desired database name
     cursor = conn.cursor()
 
     # Create the users table
