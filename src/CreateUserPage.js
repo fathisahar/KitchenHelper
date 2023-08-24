@@ -2,49 +2,74 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function CreateUserPage() {
-    const [inputValue, setInputValue] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleInputChange = (event) => {
-        setInputValue(event.target.value);
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
     };
 
-    const submitUser = () => {
-        // Create an object with the new data
-        const newData = {
-            Name: "geek", // Update with your data
-            Age: inputValue,
-            Date: "some-date",
-            programming: "python"
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
+    const handleSubmit = () => {
+        const newUser = {
+            username: username,
+            email: email,
+            password: password
         };
 
-        // Send POST request to update data
-        fetch('http://localhost:5000/data', {
+        // Send POST request to register user
+        fetch('http://localhost:5000/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(newData)
+            body: JSON.stringify(newUser)
         })
         .then(response => response.json())
         .then(data => {
             console.log(data.message); // Message from the server
+            // Clear form fields
+            setUsername('');
+            setEmail('');
+            setPassword('');
         });
     };
 
     return (
         <div>
-            <h1>Welcome to the create user page</h1>
+            <h1>Create User Page</h1>
             <Link to="/login">Go to the login page</Link>
 
-            <h1>Text Field Example</h1>
-            <input
-                type="text"
-                value={inputValue}
-                onChange={handleInputChange}
-                placeholder="Enter text..."
-            />
-
-            <button onClick={submitUser}>Submit</button>
+            <h2>User Registration</h2>
+            <div>
+                <input
+                    type="text"
+                    value={username}
+                    onChange={handleUsernameChange}
+                    placeholder="Username"
+                />
+                <input
+                    type="text"
+                    value={email}
+                    onChange={handleEmailChange}
+                    placeholder="Email"
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={handlePasswordChange}
+                    placeholder="Password"
+                />
+                <button onClick={handleSubmit}>Register</button>
+            </div>
         </div>
     );
 }

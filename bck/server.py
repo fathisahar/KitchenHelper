@@ -1,32 +1,36 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import datetime
-
-x = datetime.datetime.now()
+import sqlite3
 
 app = Flask(__name__)
 CORS(app)
 
-# Sample initial data
-user_data = {
-    'Name': "geek",
-    'Age': "22",
-    'Date': x,
-    'programming': "python"
-}
+# Database configuration
+DATABASE = 'your_database.db'  # Replace with your database name
 
-@app.route('/data', methods=['GET', 'POST'])
-def handle_data():
-    if request.method == 'GET':
-        return jsonify(user_data)
-    elif request.method == 'POST':
-        # Assuming the POST data is in JSON format
-        new_data = request.json
+def get_db_connection():
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row
+    return conn
 
-        # Update user_data with new_data
-        user_data.update(new_data)
+@app.route('/register', methods=['POST'])
+def register_user():
+    data = request.json
+    username = data.get('username')
+    email = data.get('email')
+    password = data.get('password')
 
-        return jsonify(message="Data updated successfully")
-
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
+                       (username, email, password))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify(message='User registered successfully')
+    except Exception as e:
+        return jsonify(error=str(e))
+    
 if __name__ == '__main__':
     app.run(debug=True)
