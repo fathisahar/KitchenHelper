@@ -25,22 +25,6 @@ function P_CreateUser() {
             password: password
         };
 
-        // Send POST request to register user
-        fetch('http://localhost:5000/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newUser)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message); // Message from the server
-            // Clear form fields
-            setUsername('');
-            setEmail('');
-            setPassword('');
-        });
     };
 
     return (

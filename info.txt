@@ -1,6 +1,9 @@
 mysql -u root -p
 mysql -u saharfathi -p
 source ~/.bashrc
+SHOW DATABASES;
+DROP DATABASE food;
+
 
 GRANT ALL PRIVILEGES ON *.* TO 'your_new_username'@'localhost';
 FLUSH PRIVILEGES;
