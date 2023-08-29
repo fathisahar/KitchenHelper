@@ -13,8 +13,7 @@ function P_Stock() {
     const [recipeIngredients, setRecipeIngredients] = useState('');
     const [categoryType, setCategoryType] = useState('Please select value.');
     const [categoryError, setCategoryError] = useState(false);
-    const [nameError, setNameError] = useState(false);
-    const [submitted, setSubmitted] = useState(false);
+    const [categorySubmitted, setCategorySubmitted] = useState(false);
 
     //const history = useHistory();
 
@@ -29,13 +28,11 @@ function P_Stock() {
     const changeCategoryType = (event) => { setCategoryType(event.target.value);};
 
     const handleCategorySubmit = () => {
-        // Set submission attempt flag
-        setSubmitted(true);
+        setCategorySubmitted(true);
 
-        // Check for empty fields
-        if (categoryType === '' || nameCategory === '' || nameCategory === 'Please select value.') {
-            setCategoryError(categoryType === '' || categoryType === 'Please select value.');
-            setNameError(nameCategory === '' || nameCategory === 'Please select value.');
+        if (nameCategory === '' || categoryType === 'Please select value.') {
+            setCategoryError(true);
+            console.log('Stopped by empty field(s).')
             return;
         }
         
@@ -55,8 +52,7 @@ function P_Stock() {
         .then(data => {
             console.log(data.message); 
             setCategoryError(false);
-            setNameError(false);
-            setSubmitted(false);
+            setCategorySubmitted(false);
             setNameCategory('');
             setCategoryType('Please select value.');
         });
@@ -131,7 +127,7 @@ function P_Stock() {
                         <option value="ingredient">Ingredient</option>
                         <option value="recipe">Recipe</option>
                     </select>
-                    {submitted && (categoryError || nameError) && (
+                    {categorySubmitted && categoryError && (
                         <p className="error-message">Please select a value for both fields.</p>
                     )}
 
