@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './CSS_Stock.css'; 
 
@@ -14,6 +14,7 @@ function P_Stock() {
     const [categoryType, setCategoryType] = useState('Please select value.');
     const [categoryError, setCategoryError] = useState(false);
     const [categorySubmitted, setCategorySubmitted] = useState(false);
+    const [ingredientCategories, setIngredientCategories] = useState('');
 
     //const history = useHistory();
 
@@ -55,6 +56,7 @@ function P_Stock() {
             setCategorySubmitted(false);
             setNameCategory('');
             setCategoryType('Please select value.');
+            fetchIngredientCategories();
         });
     };
     
@@ -106,6 +108,21 @@ function P_Stock() {
         });
     };
 
+    const fetchIngredientCategories = () => {
+        fetch('http://localhost:5000/get-ingredient-categories')
+            .then(response => response.text())
+            .then(data => {
+                setIngredientCategories(data);
+            })
+            .catch(error => {
+                console.error('Error fetching ingredient categories:', error);
+            });
+    };
+
+    useEffect(() => {
+        fetchIngredientCategories();
+    }, []); 
+
     return (
         <div>
             <div className="top">
@@ -130,8 +147,8 @@ function P_Stock() {
                     {categorySubmitted && categoryError && (
                         <p className="error-message">Please select a value for both fields.</p>
                     )}
-
                     <button onClick={handleCategorySubmit}>Submit</button>
+                    <div dangerouslySetInnerHTML={{ __html: ingredientCategories }}></div>
                 </div>
                 <div className="box">
                     <input

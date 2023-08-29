@@ -28,7 +28,6 @@ class Category(db.Model):
     ingredients = db.relationship('Ingredient', backref='category', lazy=True)
     recipes = db.relationship('Recipe', backref='category', lazy=True)
 
-# Association table for many-to-many relationship between Recipe and Ingredient
 recipe_ingredient = db.Table(
     'recipe_ingredient',
     db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id'), primary_key=True),
@@ -48,6 +47,22 @@ def add_category():
         return jsonify(message='Category added successfully')
     except Exception as e:
         return jsonify(error=str(e))
+    
+@app.route('/get-ingredient-categories', methods=['GET'])
+def get_list_categories():
+    try:
+        categories = db.session.execute(db.select(Category)
+                .filter_by(categoryType='ingredient')
+                .order_by(Category.categoryType)).scalars()
+        
+        category_text = '<ul>'
+        for category in categories:
+            category_text += '<li>' + category.name + '</li>'
+        category_text += '</ul>'
+        return category_text
+    except Exception as e:
+        return jsonify(error=str(e))
+
 
 @app.route('/add-ingredient', methods=['POST'])
 def add_ingredient():
