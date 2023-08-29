@@ -15,7 +15,8 @@ function P_Stock() {
     const [categoryError, setCategoryError] = useState(false);
     const [categorySubmitted, setCategorySubmitted] = useState(false);
     const [ingredientCategories, setIngredientCategories] = useState('');
-
+    const [recipeCategories, setRecipeCategories] = useState('');
+    
     //const history = useHistory();
 
     const changeNameCategory = (event) => { setNameCategory(event.target.value);};
@@ -33,7 +34,7 @@ function P_Stock() {
 
         if (nameCategory === '' || categoryType === 'Please select value.') {
             setCategoryError(true);
-            console.log('Stopped by empty field(s).')
+            console.log('Stopped by empty category field(s).')
             return;
         }
         
@@ -57,6 +58,7 @@ function P_Stock() {
             setNameCategory('');
             setCategoryType('Please select value.');
             fetchIngredientCategories();
+            fetchRecipeCategories();
         });
     };
     
@@ -110,17 +112,30 @@ function P_Stock() {
 
     const fetchIngredientCategories = () => {
         fetch('http://localhost:5000/get-ingredient-categories')
-            .then(response => response.text())
+            .then(response => response.json())
             .then(data => {
-                setIngredientCategories(data);
+                setIngredientCategories(data.categories);
             })
             .catch(error => {
                 console.error('Error fetching ingredient categories:', error);
             });
     };
 
+    const fetchRecipeCategories = () => {
+        fetch('http://localhost:5000/get-recipe-categories')
+            .then(response => response.json())
+            .then(data => {
+                setRecipeCategories(data.categories);
+            })
+            .catch(error => {
+                console.error('Error fetching ingredient categories:', error);
+            });
+    };
+    
+
     useEffect(() => {
         fetchIngredientCategories();
+        fetchRecipeCategories();
     }, []); 
 
     return (
@@ -163,12 +178,16 @@ function P_Stock() {
                         onChange={changeQuantityIngredient}
                         placeholder="Quantity"
                     />
-                    <input
-                        type="text"
-                        value={categoryIngredient}
-                        onChange={changeCategoryIngredient}
-                        placeholder="Category"
-                    />
+                    <select id="choiceBox" value={categoryIngredient} onChange={changeCategoryIngredient}>
+                        <option value="Please select value." disabled>
+                            Select an option
+                        </option>
+                        {ingredientCategories && ingredientCategories.map((category, index) => (
+                           <option key={index} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
                     <button onClick={handleIngredientSubmit}>Submit</button>
                 </div>
                 <div className="box">
@@ -186,16 +205,20 @@ function P_Stock() {
                     />
                     <input
                         type="text"
-                        value={categoryRecipe}
-                        onChange={changeCategoryRecipe}
-                        placeholder="Category"
-                    />
-                    <input
-                        type="text"
                         value={recipeIngredients}
                         onChange={changeRecipeIngredients}
                         placeholder="Ingredients"
                     />
+                    <select id="choiceBox" value={categoryRecipe} onChange={changeCategoryRecipe}>
+                        <option value="Please select value." disabled>
+                            Select an option
+                        </option>
+                        {recipeCategories && recipeCategories.map((category, index) => (
+                           <option key={index} value={category}>
+                                {category}
+                            </option>
+                        ))}
+                    </select>
                     <button onClick={handleRecipeSubmit}>Submit</button>
                 </div>
             </div>

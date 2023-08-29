@@ -49,17 +49,28 @@ def add_category():
         return jsonify(error=str(e))
     
 @app.route('/get-ingredient-categories', methods=['GET'])
-def get_list_categories():
+def get_ingredient_categories():
     try:
         categories = db.session.execute(db.select(Category)
                 .filter_by(categoryType='ingredient')
                 .order_by(Category.categoryType)).scalars()
+
+        category_names = [category.name for category in categories]
         
-        category_text = '<ul>'
-        for category in categories:
-            category_text += '<li>' + category.name + '</li>'
-        category_text += '</ul>'
-        return category_text
+        return jsonify(categories=category_names)
+    except Exception as e:
+        return jsonify(error=str(e))
+    
+@app.route('/get-recipe-categories', methods=['GET'])
+def get_recipe_categories():
+    try:
+        categories = db.session.execute(db.select(Category)
+                .filter_by(categoryType='recipe')
+                .order_by(Category.categoryType)).scalars()
+
+        category_names = [category.name for category in categories]
+        
+        return jsonify(categories=category_names)
     except Exception as e:
         return jsonify(error=str(e))
 
