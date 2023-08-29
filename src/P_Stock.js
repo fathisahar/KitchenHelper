@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './CSS_Stock.css'; 
 
-function P_CreateUser() {
+function P_Stock() {
     const [nameCategory, setNameCategory] = useState('');
     const [nameIngredient, setNameIngredient] = useState('');
     const [nameRecipe, setNameRecipe] = useState('');
@@ -10,6 +10,11 @@ function P_CreateUser() {
     const [categoryIngredient, setCategoryIngredient] = useState('');
     const [categoryRecipe, setCategoryRecipe] = useState('');
     const [instructionsRecipe, setInstructionsRecipe] = useState('');
+    const [recipeIngredients, setRecipeIngredients] = useState('');
+    const [categoryType, setCategoryType] = useState('Please select value.');
+    const [categoryError, setCategoryError] = useState(false);
+    const [nameError, setNameError] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
     //const history = useHistory();
 
@@ -20,11 +25,23 @@ function P_CreateUser() {
     const changeCategoryIngredient = (event) => { setCategoryIngredient(event.target.value);};
     const changeCategoryRecipe = (event) => { setCategoryRecipe(event.target.value);};
     const changeInstructionsRecipe = (event) => { setInstructionsRecipe(event.target.value);};
-
+    const changeRecipeIngredients = (event) => { setRecipeIngredients(event.target.value);};
+    const changeCategoryType = (event) => { setCategoryType(event.target.value);};
 
     const handleCategorySubmit = () => {
+        // Set submission attempt flag
+        setSubmitted(true);
+
+        // Check for empty fields
+        if (categoryType === '' || nameCategory === '' || nameCategory === 'Please select value.') {
+            setCategoryError(categoryType === '' || categoryType === 'Please select value.');
+            setNameError(nameCategory === '' || nameCategory === 'Please select value.');
+            return;
+        }
+        
         const newCategory = {
-            nameCategory: nameCategory
+            nameCategory: nameCategory,
+            categoryType: categoryType
         };
 
         fetch('http://localhost:5000/add-category', {
@@ -37,8 +54,11 @@ function P_CreateUser() {
         .then(response => response.json())
         .then(data => {
             console.log(data.message); 
-            //history.push('/success'); // Redirect to success page
+            setCategoryError(false);
+            setNameError(false);
+            setSubmitted(false);
             setNameCategory('');
+            setCategoryType('Please select value.');
         });
     };
     
@@ -69,7 +89,9 @@ function P_CreateUser() {
         const newIngredient = {
             nameRecipe: nameRecipe,        
             instructionsRecipe: instructionsRecipe, 
-            categoryRecipe: categoryRecipe
+            categoryRecipe: categoryRecipe,
+            recipeIngredients: recipeIngredients
+
         };
 
         fetch('http://localhost:5000/add-recipe', {
@@ -102,6 +124,17 @@ function P_CreateUser() {
                         onChange={changeNameCategory}
                         placeholder="Category"
                     />
+                    <select id="choiceBox" value={categoryType} onChange={changeCategoryType}>
+                        <option value="Please select value." disabled>
+                            Select an option
+                        </option>
+                        <option value="ingredient">Ingredient</option>
+                        <option value="recipe">Recipe</option>
+                    </select>
+                    {submitted && (categoryError || nameError) && (
+                        <p className="error-message">Please select a value for both fields.</p>
+                    )}
+
                     <button onClick={handleCategorySubmit}>Submit</button>
                 </div>
                 <div className="box">
@@ -144,6 +177,12 @@ function P_CreateUser() {
                         onChange={changeCategoryRecipe}
                         placeholder="Category"
                     />
+                    <input
+                        type="text"
+                        value={recipeIngredients}
+                        onChange={changeRecipeIngredients}
+                        placeholder="Ingredients"
+                    />
                     <button onClick={handleRecipeSubmit}>Submit</button>
                 </div>
             </div>
@@ -152,4 +191,4 @@ function P_CreateUser() {
     
 }
 
-export default P_CreateUser;
+export default P_Stock;
