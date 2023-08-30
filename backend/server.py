@@ -20,6 +20,7 @@ class Ingredient(db.Model):
     name = db.Column(db.String(255), nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     stock_quantity = db.Column(db.Float, nullable=False)
+    stock_type = db.Column(db.String(255), nullable=False)
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -79,16 +80,32 @@ def get_recipe_categories():
 def add_ingredient():
     data = request.json
     ingredient_name = data.get('nameIngredient')
-    category_id = data.get('categoryIngredient') 
+    category_name = data.get('categoryIngredient') 
     stock_quantity = data.get('quantityIngredient') 
+    stock_type = data.get('quantityType')
 
     try:
-        new_ingredient = Ingredient(name=ingredient_name, category_id=category_id, stock_quantity=stock_quantity)
+        category_instance = db.session.execute(db.select(Category)
+            .filter_by(name=category_name)).scalar()
+
+        if category_instance:
+            category_id = category_instance.id
+        else:
+            return jsonify(error='Category not found')
+
+        new_ingredient = Ingredient(
+            name=ingredient_name, 
+            category_id=category_id, 
+            stock_quantity=stock_quantity, 
+            stock_type=stock_type
+        )
+
         db.session.add(new_ingredient)
         db.session.commit()
         return jsonify(message='Ingredient added successfully')
     except Exception as e:
         return jsonify(error=str(e))
+
 
 @app.route('/add-recipe', methods=['POST'])
 def add_recipe():

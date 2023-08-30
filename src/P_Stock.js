@@ -15,8 +15,10 @@ function P_Stock() {
     const [categoryError, setCategoryError] = useState(false);
     const [categorySubmitted, setCategorySubmitted] = useState(false);
     const [ingredientCategories, setIngredientCategories] = useState('');
-    const [recipeCategories, setRecipeCategories] = useState('');
-    
+    const [recipeCategories, setRecipeCategories] = useState(''); 
+    const [quantityType, setQuantityType] = useState(''); 
+    const [ingredientError, setIngredientError] = useState(false);
+    const [ingredientSubmitted, setIngredientSubmitted] = useState(false);
     //const history = useHistory();
 
     const changeNameCategory = (event) => { setNameCategory(event.target.value);};
@@ -28,6 +30,7 @@ function P_Stock() {
     const changeInstructionsRecipe = (event) => { setInstructionsRecipe(event.target.value);};
     const changeRecipeIngredients = (event) => { setRecipeIngredients(event.target.value);};
     const changeCategoryType = (event) => { setCategoryType(event.target.value);};
+    const changeQuantityType = (event) => { setQuantityType(event.target.value);};
 
     const handleCategorySubmit = () => {
         setCategorySubmitted(true);
@@ -39,7 +42,7 @@ function P_Stock() {
         }
         
         const newCategory = {
-            nameCategory: nameCategory,
+            nameCategory: nameCategory.toLowerCase(),
             categoryType: categoryType
         };
 
@@ -59,13 +62,23 @@ function P_Stock() {
             setCategoryType('Please select value.');
             fetchIngredientCategories();
             fetchRecipeCategories();
+            setCategoryIngredient('Please select value.');
+            setCategoryRecipe('Please select value.');
         });
     };
     
     const handleIngredientSubmit = () => {
+        setIngredientSubmitted(true);
+        if (nameIngredient === '' || quantityIngredient === '' || quantityType === '' || categoryIngredient === 'Please select value.') {
+            setIngredientError(true);
+            console.log('Stopped by empty ingredient field(s).')
+            return;
+        }
+
         const newIngredient = {
-            nameIngredient: nameIngredient,        
+            nameIngredient: nameIngredient.toLowerCase(),        
             quantityIngredient: quantityIngredient, 
+            quantityType: quantityType,
             categoryIngredient: categoryIngredient
         };
 
@@ -119,6 +132,7 @@ function P_Stock() {
             .catch(error => {
                 console.error('Error fetching ingredient categories:', error);
             });
+            setCategoryIngredient('Please select value.');
     };
 
     const fetchRecipeCategories = () => {
@@ -130,12 +144,14 @@ function P_Stock() {
             .catch(error => {
                 console.error('Error fetching ingredient categories:', error);
             });
+            setCategoryRecipe('Please select value.');
     };
     
 
     useEffect(() => {
         fetchIngredientCategories();
         fetchRecipeCategories();
+        setQuantityType('Please select value.');
     }, []); 
 
     return (
@@ -154,7 +170,7 @@ function P_Stock() {
                     />
                     <select id="choiceBox" value={categoryType} onChange={changeCategoryType}>
                         <option value="Please select value." disabled>
-                            Select an option
+                            Select a type
                         </option>
                         <option value="ingredient">Ingredient</option>
                         <option value="recipe">Recipe</option>
@@ -178,9 +194,26 @@ function P_Stock() {
                         onChange={changeQuantityIngredient}
                         placeholder="Quantity"
                     />
+                    <select id="choiceBox" value={quantityType} onChange={changeQuantityType}>
+                        <option value="Please select value." disabled>
+                            Select unit
+                        </option>
+                        <option value="grams">g </option>
+                        <option value="miligrams">mg</option>
+                        <option value="kilograms">kg</option>
+                        <option value="pound">lb</option>
+                        <option value="ounces">oz</option>
+                        <option value="militers">ml</option>
+                        <option value="liters">L</option>
+                        <option value="units">units</option>
+                        <option value="cloves">cloves</option>
+                        <option value="leaves">leaves</option>
+                        <option value="teaspoon">tsp</option>
+                        <option value="tablespoon">tbsp</option>
+                    </select>
                     <select id="choiceBox" value={categoryIngredient} onChange={changeCategoryIngredient}>
                         <option value="Please select value." disabled>
-                            Select an option
+                            Select category
                         </option>
                         {ingredientCategories && ingredientCategories.map((category, index) => (
                            <option key={index} value={category}>
@@ -188,6 +221,9 @@ function P_Stock() {
                             </option>
                         ))}
                     </select>
+                    {ingredientSubmitted && ingredientError && (
+                        <p className="error-message">Please select a value for all fields.</p>
+                    )}
                     <button onClick={handleIngredientSubmit}>Submit</button>
                 </div>
                 <div className="box">
@@ -211,7 +247,7 @@ function P_Stock() {
                     />
                     <select id="choiceBox" value={categoryRecipe} onChange={changeCategoryRecipe}>
                         <option value="Please select value." disabled>
-                            Select an option
+                            Select category
                         </option>
                         {recipeCategories && recipeCategories.map((category, index) => (
                            <option key={index} value={category}>
