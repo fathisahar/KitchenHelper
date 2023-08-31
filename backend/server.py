@@ -1,12 +1,15 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from sqlalchemy.exc import SQLAlchemyError
 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://saharfathi:fathiSahar4321@localhost/kitchen'
 db = SQLAlchemy(app)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
+
+
 
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,22 +37,18 @@ recipe_ingredient = db.Table(
     db.Column('recipe_id', db.Integer, db.ForeignKey('recipe.id'), primary_key=True),
     db.Column('ingredient_id', db.Integer, db.ForeignKey('ingredient.id'), primary_key=True)
 )
-
-@app.route('/add-category', methods=['POST'])
-def add_category():
-    data = request.json
-    category_name = data.get('nameCategory')  
-    category_type = data.get('categoryType')
-
+    
+@app.route('/api/get-categories', methods=['GET'])
+def get_categories():
     try:
-        new_category = Category(categoryType = category_type, name=category_name)
-        db.session.add(new_category)
-        db.session.commit()
-        return jsonify(message='Category added successfully')
-    except Exception as e:
+        categories = db.session.execute(db.select(Category))
+        category_names = [category.name for category in categories]
+        return jsonify(categories=category_names)
+    except SQLAlchemyError as e:
         return jsonify(error=str(e))
     
-@app.route('/get-ingredient-categories', methods=['GET'])
+
+@app.route('/api/get-ingredient-categories', methods=['GET'])
 def get_ingredient_categories():
     try:
         categories = db.session.execute(db.select(Category)
@@ -62,7 +61,7 @@ def get_ingredient_categories():
     except Exception as e:
         return jsonify(error=str(e))
     
-@app.route('/get-recipe-categories', methods=['GET'])
+@app.route('/api/get-recipe-categories', methods=['GET'])
 def get_recipe_categories():
     try:
         categories = db.session.execute(db.select(Category)
@@ -70,13 +69,13 @@ def get_recipe_categories():
                 .order_by(Category.categoryType)).scalars()
 
         category_names = [category.name for category in categories]
-        
+
         return jsonify(categories=category_names)
     except Exception as e:
         return jsonify(error=str(e))
 
 
-@app.route('/add-ingredient', methods=['POST'])
+@app.route('/api/add-ingredient', methods=['POST'])
 def add_ingredient():
     data = request.json
     ingredient_name = data.get('nameIngredient')
@@ -107,7 +106,7 @@ def add_ingredient():
         return jsonify(error=str(e))
 
 
-@app.route('/add-recipe', methods=['POST'])
+@app.route('/api/add-recipe', methods=['POST'])
 def add_recipe():
     data = request.json
     name = data.get('nameRecipe')
@@ -119,6 +118,20 @@ def add_recipe():
         db.session.add(new_recipe)
         db.session.commit()
         return jsonify(message='Recipe added successfully')
+    except Exception as e:
+        return jsonify(error=str(e))
+    
+@app.route('/api/add-category', methods=['POST'])
+def add_category():
+    data = request.json
+    category_name = data.get('nameCategory')  
+    category_type = data.get('categoryType')
+
+    try:
+        new_category = Category(categoryType = category_type, name=category_name)
+        db.session.add(new_category)
+        db.session.commit()
+        return jsonify(message='Category added successfully')
     except Exception as e:
         return jsonify(error=str(e))
 

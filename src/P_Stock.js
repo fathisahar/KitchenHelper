@@ -1,6 +1,7 @@
 import React, { useState , useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './CSS_Stock.css'; 
+import Select from 'react-select';
 
 function P_Stock() {
     const [nameCategory, setNameCategory] = useState('');
@@ -14,11 +15,14 @@ function P_Stock() {
     const [categoryType, setCategoryType] = useState('Please select value.');
     const [categoryError, setCategoryError] = useState(false);
     const [categorySubmitted, setCategorySubmitted] = useState(false);
-    const [ingredientCategories, setIngredientCategories] = useState('');
-    const [recipeCategories, setRecipeCategories] = useState(''); 
+    const [ingredientCategories, setIngredientCategories] = useState([]);
+    const [recipeCategories, setRecipeCategories] = useState([]); 
     const [quantityType, setQuantityType] = useState(''); 
     const [ingredientError, setIngredientError] = useState(false);
     const [ingredientSubmitted, setIngredientSubmitted] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState('Please select value.');
+    
     //const history = useHistory();
 
     const changeNameCategory = (event) => { setNameCategory(event.target.value);};
@@ -31,6 +35,8 @@ function P_Stock() {
     const changeRecipeIngredients = (event) => { setRecipeIngredients(event.target.value);};
     const changeCategoryType = (event) => { setCategoryType(event.target.value);};
     const changeQuantityType = (event) => { setQuantityType(event.target.value);};
+    //const changeCategories = (event) => { setCategories(event.target.value);};
+    const handleCategoryChange = (event) => { setSelectedCategory(event.target.value); };
 
     const handleCategorySubmit = () => {
         setCategorySubmitted(true);
@@ -46,7 +52,7 @@ function P_Stock() {
             categoryType: categoryType
         };
 
-        fetch('http://localhost:5000/add-category', {
+        fetch('http://localhost:5000/api/add-category', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -60,10 +66,9 @@ function P_Stock() {
             setCategorySubmitted(false);
             setNameCategory('');
             setCategoryType('Please select value.');
-            fetchIngredientCategories();
-            fetchRecipeCategories();
             setCategoryIngredient('Please select value.');
             setCategoryRecipe('Please select value.');
+            updateDropdowns();
         });
     };
     
@@ -82,7 +87,7 @@ function P_Stock() {
             categoryIngredient: categoryIngredient
         };
 
-        fetch('http://localhost:5000/add-ingredient', {
+        fetch('http://localhost:5000/api/add-ingredient', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -107,7 +112,7 @@ function P_Stock() {
 
         };
 
-        fetch('http://localhost:5000/add-recipe', {
+        fetch('http://localhost:5000/api/add-recipe', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -124,7 +129,7 @@ function P_Stock() {
     };
 
     const fetchIngredientCategories = () => {
-        fetch('http://localhost:5000/get-ingredient-categories')
+        fetch('http://localhost:5000/api/get-ingredient-categories')
             .then(response => response.json())
             .then(data => {
                 setIngredientCategories(data.categories);
@@ -136,126 +141,242 @@ function P_Stock() {
     };
 
     const fetchRecipeCategories = () => {
-        fetch('http://localhost:5000/get-recipe-categories')
+        fetch('http://localhost:5000/api/get-recipe-categories')
             .then(response => response.json())
             .then(data => {
                 setRecipeCategories(data.categories);
             })
             .catch(error => {
-                console.error('Error fetching ingredient categories:', error);
+                console.error('Error fetching recipe categories:', error);
             });
             setCategoryRecipe('Please select value.');
+    };
+
+    const fetchCategories = () => {
+        fetch('http://localhost:5000/api/get-categories')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Received data:', data);
+                setCategories(data.categories);
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
+            //setCategories('Please select value.');
     };
     
 
     useEffect(() => {
-        fetchIngredientCategories();
-        fetchRecipeCategories();
+        updateDropdowns();
         setQuantityType('Please select value.');
     }, []); 
+
+    const updateDropdowns = () => {
+        fetchIngredientCategories();
+        fetchRecipeCategories();
+        fetchCategories();
+    }
 
     return (
         <div>
             <div className="top">
-                <h1>insert information page</h1>
+                <h1>insert information</h1>
                 <Link to="/login">Go to the login page</Link>
             </div>
-            <div className="container">
-                <div className="box">
-                    <input
-                        type="text"
-                        value={nameCategory}
-                        onChange={changeNameCategory}
-                        placeholder="Category"
-                    />
-                    <select id="choiceBox" value={categoryType} onChange={changeCategoryType}>
-                        <option value="Please select value." disabled>
-                            Select a type
-                        </option>
-                        <option value="ingredient">Ingredient</option>
-                        <option value="recipe">Recipe</option>
-                    </select>
-                    {categorySubmitted && categoryError && (
-                        <p className="error-message">Please select a value for both fields.</p>
-                    )}
-                    <button onClick={handleCategorySubmit}>Submit</button>
-                    <div dangerouslySetInnerHTML={{ __html: ingredientCategories }}></div>
-                </div>
-                <div className="box">
-                    <input
-                        type="text"
-                        value={nameIngredient}
-                        onChange={changeNameIngredient}
-                        placeholder="Name"
-                    />
-                    <input
-                        type="text"
-                        value={quantityIngredient}
-                        onChange={changeQuantityIngredient}
-                        placeholder="Quantity"
-                    />
-                    <select id="choiceBox" value={quantityType} onChange={changeQuantityType}>
-                        <option value="Please select value." disabled>
-                            Select unit
-                        </option>
-                        <option value="grams">g </option>
-                        <option value="miligrams">mg</option>
-                        <option value="kilograms">kg</option>
-                        <option value="pound">lb</option>
-                        <option value="ounces">oz</option>
-                        <option value="militers">ml</option>
-                        <option value="liters">L</option>
-                        <option value="units">units</option>
-                        <option value="cloves">cloves</option>
-                        <option value="leaves">leaves</option>
-                        <option value="teaspoon">tsp</option>
-                        <option value="tablespoon">tbsp</option>
-                    </select>
-                    <select id="choiceBox" value={categoryIngredient} onChange={changeCategoryIngredient}>
-                        <option value="Please select value." disabled>
-                            Select category
-                        </option>
-                        {ingredientCategories && ingredientCategories.map((category, index) => (
-                           <option key={index} value={category}>
-                                {category}
+            <div className="row">
+                <div className="container">
+                    <div className="box">
+                        <input
+                            type="text"
+                            value={nameCategory}
+                            onChange={changeNameCategory}
+                            placeholder="Category"
+                        />
+                        <select id="choiceBox" value={categoryType} onChange={changeCategoryType}>
+                            <option value="Please select value." disabled>
+                                Select a type
                             </option>
-                        ))}
-                    </select>
-                    {ingredientSubmitted && ingredientError && (
-                        <p className="error-message">Please select a value for all fields.</p>
-                    )}
-                    <button onClick={handleIngredientSubmit}>Submit</button>
-                </div>
-                <div className="box">
-                    <input
-                        type="text"
-                        value={nameRecipe}
-                        onChange={changeNameRecipe}
-                        placeholder="Name"
-                    />
-                    <input
-                        type="text"
-                        value={instructionsRecipe}
-                        onChange={changeInstructionsRecipe}
-                        placeholder="Instructions"
-                    />
-                    <input
-                        type="text"
-                        value={recipeIngredients}
-                        onChange={changeRecipeIngredients}
-                        placeholder="Ingredients"
-                    />
-                    <select id="choiceBox" value={categoryRecipe} onChange={changeCategoryRecipe}>
-                        <option value="Please select value." disabled>
-                            Select category
-                        </option>
-                        {recipeCategories && recipeCategories.map((category, index) => (
-                           <option key={index} value={category}>
-                                {category}
+                            <option value="ingredient">Ingredient</option>
+                            <option value="recipe">Recipe</option>
+                        </select>
+                        {categorySubmitted && categoryError && (
+                            <p className="error-message">Please select a value for both fields.</p>
+                        )}
+                        <button onClick={handleCategorySubmit}>Submit</button>
+                        <div dangerouslySetInnerHTML={{ __html: ingredientCategories }}></div>
+                    </div>
+                    <div className="box">
+                        <input
+                            type="text"
+                            value={nameIngredient}
+                            onChange={changeNameIngredient}
+                            placeholder="Name"
+                        />
+                        <input
+                            type="text"
+                            value={quantityIngredient}
+                            onChange={changeQuantityIngredient}
+                            placeholder="Quantity"
+                        />
+                        <select id="choiceBox" value={quantityType} onChange={changeQuantityType}>
+                            <option value="Please select value." disabled>
+                                Select unit
                             </option>
-                        ))}
-                    </select>
-                    <button onClick={handleRecipeSubmit}>Submit</button>
+                            <option value="grams">g </option>
+                            <option value="miligrams">mg</option>
+                            <option value="kilograms">kg</option>
+                            <option value="pound">lb</option>
+                            <option value="ounces">oz</option>
+                            <option value="militers">ml</option>
+                            <option value="liters">L</option>
+                            <option value="units">units</option>
+                            <option value="cloves">cloves</option>
+                            <option value="leaves">leaves</option>
+                            <option value="teaspoon">tsp</option>
+                            <option value="tablespoon">tbsp</option>
+                        </select>
+                        <select id="choiceBox" value={categoryIngredient} onChange={changeCategoryIngredient}>
+                            <option value="Please select value." disabled>
+                                Select category
+                            </option>
+                            {ingredientCategories && ingredientCategories.map((category, index) => (
+                            <option key={index} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
+                        {ingredientSubmitted && ingredientError && (
+                            <p className="error-message">Please select a value for all fields.</p>
+                        )}
+                        <button onClick={handleIngredientSubmit}>Submit</button>
+                    </div>
+                    <div className="box">
+                        <input
+                            type="text"
+                            value={nameRecipe}
+                            onChange={changeNameRecipe}
+                            placeholder="Name"
+                        />
+                        <input
+                            type="text"
+                            value={instructionsRecipe}
+                            onChange={changeInstructionsRecipe}
+                            placeholder="Instructions"
+                        />
+                        <input
+                            type="text"
+                            value={recipeIngredients}
+                            onChange={changeRecipeIngredients}
+                            placeholder="Ingredients"
+                        />
+                        <select id="choiceBox" value={categoryRecipe} onChange={changeCategoryRecipe}>
+                            <option value="Please select value." disabled>
+                                Select category
+                            </option>
+                            {recipeCategories && recipeCategories.map((category, index) => (
+                            <option key={index} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
+                        <button onClick={handleRecipeSubmit}>Submit</button>
+                    </div>
+                </div>
+            </div>
+            <div className="top">
+                <h1>modify information</h1>
+            </div>
+            <div className="row">
+                <div className="container">
+                    <div className="box">
+                        <select id="choiceBox" value={selectedCategory} onChange={handleCategoryChange}>
+                            <option value="Please select value." disabled>
+                                    Select category
+                                </option>
+                                {categories && categories.map((category, index) => (
+                                <option key={index} value={category}>
+                                        {category.name}
+                                    </option>
+                                ))}
+                        </select>
+                        <button onClick={handleCategorySubmit}>Submit</button>
+                    </div>
+                    <div className="box">
+                        <input
+                            type="text"
+                            value={nameIngredient}
+                            onChange={changeNameIngredient}
+                            placeholder="Name"
+                        />
+                        <input
+                            type="text"
+                            value={quantityIngredient}
+                            onChange={changeQuantityIngredient}
+                            placeholder="Quantity"
+                        />
+                        <select id="choiceBox" value={quantityType} onChange={changeQuantityType}>
+                            <option value="Please select value." disabled>
+                                Select unit
+                            </option>
+                            <option value="grams">g </option>
+                            <option value="miligrams">mg</option>
+                            <option value="kilograms">kg</option>
+                            <option value="pound">lb</option>
+                            <option value="ounces">oz</option>
+                            <option value="militers">ml</option>
+                            <option value="liters">L</option>
+                            <option value="units">units</option>
+                            <option value="cloves">cloves</option>
+                            <option value="leaves">leaves</option>
+                            <option value="teaspoon">tsp</option>
+                            <option value="tablespoon">tbsp</option>
+                        </select>
+                        <select id="choiceBox" value={categoryIngredient} onChange={changeCategoryIngredient}>
+                            <option value="Please select value." disabled>
+                                Select category
+                            </option>
+                            {ingredientCategories && ingredientCategories.map((category, index) => (
+                            <option key={index} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
+                        {ingredientSubmitted && ingredientError && (
+                            <p className="error-message">Please select a value for all fields.</p>
+                        )}
+                        <button onClick={handleIngredientSubmit}>Submit</button>
+                    </div>
+                    <div className="box">
+                        <input
+                            type="text"
+                            value={nameRecipe}
+                            onChange={changeNameRecipe}
+                            placeholder="Name"
+                        />
+                        <input
+                            type="text"
+                            value={instructionsRecipe}
+                            onChange={changeInstructionsRecipe}
+                            placeholder="Instructions"
+                        />
+                        <input
+                            type="text"
+                            value={recipeIngredients}
+                            onChange={changeRecipeIngredients}
+                            placeholder="Ingredients"
+                        />
+                        <select id="choiceBox" value={categoryRecipe} onChange={changeCategoryRecipe}>
+                            <option value="Please select value." disabled>
+                                Select category
+                            </option>
+                            {recipeCategories && recipeCategories.map((category, index) => (
+                            <option key={index} value={category}>
+                                    {category}
+                                </option>
+                            ))}
+                        </select>
+                        <button onClick={handleRecipeSubmit}>Submit</button>
+                    </div>
                 </div>
             </div>
         </div>
