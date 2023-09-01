@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import or_
 
 
 app = Flask(__name__)
@@ -41,8 +42,14 @@ recipe_ingredient = db.Table(
 @app.route('/api/get-categories', methods=['GET'])
 def get_categories():
     try:
-        categories = db.session.execute(db.select(Category))
+        categories = db.session.execute(
+            db.select(Category)
+            .filter(or_(Category.categoryType == 'ingredient', Category.categoryType == 'recipe'))
+            .order_by(Category.categoryType)
+        ).scalars()
+
         category_names = [category.name for category in categories]
+        
         return jsonify(categories=category_names)
     except SQLAlchemyError as e:
         return jsonify(error=str(e))
