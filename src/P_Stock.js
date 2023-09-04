@@ -21,7 +21,6 @@ function P_Stock() {
     const [ingredientError, setIngredientError] = useState(false);
     const [ingredientSubmitted, setIngredientSubmitted] = useState(false);
     const [categories, setCategories] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState('Please select value.');
     
     //const history = useHistory();
 
@@ -35,8 +34,6 @@ function P_Stock() {
     const changeRecipeIngredients = (event) => { setRecipeIngredients(event.target.value);};
     const changeCategoryType = (event) => { setCategoryType(event.target.value);};
     const changeQuantityType = (event) => { setQuantityType(event.target.value);};
-    //const changeCategories = (event) => { setCategories(event.target.value);};
-    const handleCategoryChange = (event) => { setSelectedCategory(event.target.value); };
 
     const handleCategorySubmit = () => {
         setCategorySubmitted(true);
@@ -164,7 +161,6 @@ function P_Stock() {
             });
             //setCategories('Please select value.');
     };
-    
 
     useEffect(() => {
         updateDropdowns();
@@ -177,6 +173,78 @@ function P_Stock() {
         fetchCategories();
     }
 
+    const handleCategoryDelete = () => {
+        setShowModifyCategory(false);
+        setShowCancelCategory(true);
+        setShowDeleteCategory(false);
+        setDeleteCategory(true);
+        setShowFirstSubmitDeleteCategory(true);
+        setCategoryToModifyError(true);
+    }
+
+    const handleCategoryDeleteSubmit = () => {
+    }
+
+    const handleVerificationCategoryDelete = () => {
+        setShowVerificationDeleteCategory(true);
+        setShowFirstSubmitDeleteCategory(false);
+    }
+    
+    const handleCategoryModify = () => {
+        if (categoryToModify === 'Please select value.') {
+            setCategoryToModifyError(true);
+            console.log('Stopped by empty category select.')
+            setModifyCategory(false);
+            setShowModifyCategory(true);
+        } else {
+            setCategoryToModifyError(false);
+            setShowModifyCategory(false);
+            setModifyCategory(true);
+        }
+        setShowDeleteCategory(false);
+        setShowCancelCategory(true);
+    }
+
+    const handleCategoryModifySubmit = () => {
+    }
+
+    const handleVerificationCategoryModify = () => {
+        if (categoryNewName === '') {
+            setCategoryToModifyNameError(true);
+            console.log('Stopped by empty category select.')
+        } else {
+            setCategoryToModifyNameError(false);
+            setShowVerificationModifyCategory(true);
+            setShowFirstSubmitModifyCategory(false);
+        }
+    } 
+
+    const handleCancelCategory = () => {
+        setShowDeleteCategory(true);
+        setShowModifyCategory(true);
+        setShowCancelCategory(false);
+        setCategoryToModifyError(false);
+        setDeleteCategory(false);
+        setModifyCategory(false);
+        setShowVerificationModifyCategory(false);
+    }
+
+    const changeCategoryToModify = (event) => { setCategoryToModify(event.target.value);};
+    const changeCategoryNewName = (event) => { setCategoryNewName(event.target.value);};
+    const [categoryToModifyError, setCategoryToModifyError] = useState(false);
+    const [categoryToModifyNameError, setCategoryToModifyNameError] = useState(false);
+    const [modifyCategory, setModifyCategory] = useState(false);
+    const [deleteCategory, setDeleteCategory] = useState(false);
+    const [showDeleteCategory, setShowDeleteCategory] = useState(true);
+    const [showModifyCategory, setShowModifyCategory] = useState(true);
+    const [showCancelCategory, setShowCancelCategory] = useState(false);
+    const [showVerificationModifyCategory, setShowVerificationModifyCategory] = useState(false);
+    const [showFirstSubmitModifyCategory, setShowFirstSubmitModifyCategory] = useState(true);
+    const [showVerificationDeleteCategory, setShowVerificationDeleteCategory] = useState(false);
+    const [showFirstSubmitDeleteCategory, setShowFirstSubmitDeleteCategory] = useState(true);
+    const [categoryToModify, setCategoryToModify] = useState('Please select value.');
+    const [categoryNewName, setCategoryNewName] = useState('');
+
     return (
         <div>
             <div className="top">
@@ -186,6 +254,7 @@ function P_Stock() {
             <div className="row">
                 <div className="container">
                     <div className="box">
+                        <p>Category</p>
                         <input
                             type="text"
                             value={nameCategory}
@@ -206,6 +275,7 @@ function P_Stock() {
                         <div dangerouslySetInnerHTML={{ __html: ingredientCategories }}></div>
                     </div>
                     <div className="box">
+                        <p>Ingredient</p>
                         <input
                             type="text"
                             value={nameIngredient}
@@ -251,6 +321,7 @@ function P_Stock() {
                         <button onClick={handleIngredientSubmit}>Submit</button>
                     </div>
                     <div className="box">
+                        <p>Recipe</p>
                         <input
                             type="text"
                             value={nameRecipe}
@@ -289,17 +360,68 @@ function P_Stock() {
             <div className="row">
                 <div className="container">
                     <div className="box">
-                        <select id="choiceBox" value={selectedCategory} onChange={handleCategoryChange}>
+                        <p>Category</p>
+                        <select id="choiceBox" value={categoryToModify} onChange={changeCategoryToModify}>
                             <option value="Please select value." disabled>
                                     Select category
                                 </option>
                                 {categories && categories.map((category, index) => (
                                 <option key={index} value={category}>
-                                        {category.name}
+                                        {category}
                                     </option>
                                 ))}
                         </select>
-                        <button onClick={handleCategorySubmit}>Submit</button>
+                        {showModifyCategory && (
+                            <div className='nomatter'>
+                                <button onClick={handleCategoryModify}>Modify</button>
+                            </div>
+                        )}
+                        {categoryToModifyError && (
+                            <p className="error-message">Please select a category to modify.</p>
+                        )}
+                        {modifyCategory && (
+                            <div className="nomatter">
+                                <input
+                                type="text"
+                                value={categoryNewName}
+                                onChange={changeCategoryNewName}
+                                placeholder="New category name"
+                                />
+                                {showFirstSubmitModifyCategory && (
+                                    <div className="nomatter">
+                                        {categoryToModifyNameError && (
+                                            <p className="error-message">Please enter a value for the field.</p>
+                                        )}
+                                        <button onClick={handleVerificationCategoryModify}>Submit</button>
+                                    </div>
+                                )}
+                                {showVerificationModifyCategory && (
+                                    <div className="nomatter">
+                                        <p>Are you sure you want to modify the category?</p>
+                                        <button onClick={handleCategoryModifySubmit}>Submit</button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {showDeleteCategory && (
+                            <button onClick={handleCategoryDelete}>Delete</button>
+                        )}
+                        {deleteCategory && (
+                            <div className="nomatter">
+                                {showFirstSubmitDeleteCategory && (
+                                    <button onClick={handleVerificationCategoryDelete}>Submit</button>
+                                )}
+                                {showVerificationDeleteCategory && (
+                                    <div className="nomatter">
+                                        <p>Are you sure you want to delete the category?</p>
+                                        <button onClick={handleCategoryDeleteSubmit}>Submit</button>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {showCancelCategory && (
+                            <button onClick={handleCancelCategory}>Cancel</button>
+                        )}
                     </div>
                     <div className="box">
                         <input
