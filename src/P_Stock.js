@@ -175,11 +175,18 @@ function P_Stock() {
 
     const handleCategoryDelete = () => {
         setShowModifyCategory(false);
-        setShowCancelCategory(true);
-        setShowDeleteCategory(false);
-        setDeleteCategory(true);
-        setShowFirstSubmitDeleteCategory(true);
-        setCategoryToModifyError(true);
+        if (categoryToModify === 'Please select value.') {
+            setCategoryToModifyError(true);
+            setShowCancelCategory(true);
+            setShowDeleteCategory(true);
+        } else {
+            setDeleteCategory(true);
+            setCategoryToModifyError(false);
+            setShowDeleteCategory(false);
+            setShowFirstSubmitDeleteCategory(false);
+            setShowVerificationDeleteCategory(true);
+        }
+        
     }
 
     const handleCategoryDeleteSubmit = () => {
