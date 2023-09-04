@@ -174,7 +174,6 @@ function P_Stock() {
             .catch(error => {
                 console.error('Error fetching categories:', error);
             });
-            //setCategories('Please select value.');
     };
 
     useEffect(() => {
@@ -202,7 +201,6 @@ function P_Stock() {
             setShowFirstSubmitDeleteCategory(false);
             setShowVerificationDeleteCategory(true);
         }
-        
     }
 
     const handleCategoryDeleteSubmit = () => {
@@ -254,7 +252,7 @@ function P_Stock() {
             categoryToModify: categoryToModify,
             categoryNewName: categoryNewName
         }
-        fetch('http://localhost:5000/api/modift-category', {
+        fetch('http://localhost:5000/api/modify-category', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
