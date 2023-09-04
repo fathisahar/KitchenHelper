@@ -21,6 +21,19 @@ function P_Stock() {
     const [ingredientError, setIngredientError] = useState(false);
     const [ingredientSubmitted, setIngredientSubmitted] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [categoryToModifyError, setCategoryToModifyError] = useState(false);
+    const [categoryToModifyNameError, setCategoryToModifyNameError] = useState(false);
+    const [modifyCategory, setModifyCategory] = useState(false);
+    const [deleteCategory, setDeleteCategory] = useState(false);
+    const [showDeleteCategory, setShowDeleteCategory] = useState(true);
+    const [showModifyCategory, setShowModifyCategory] = useState(true);
+    const [showCancelCategory, setShowCancelCategory] = useState(false);
+    const [showVerificationModifyCategory, setShowVerificationModifyCategory] = useState(false);
+    const [showFirstSubmitModifyCategory, setShowFirstSubmitModifyCategory] = useState(true);
+    const [showVerificationDeleteCategory, setShowVerificationDeleteCategory] = useState(false);
+    const [showFirstSubmitDeleteCategory, setShowFirstSubmitDeleteCategory] = useState(true);
+    const [categoryToModify, setCategoryToModify] = useState('Please select value.');
+    const [categoryNewName, setCategoryNewName] = useState('');
     
     //const history = useHistory();
 
@@ -34,6 +47,8 @@ function P_Stock() {
     const changeRecipeIngredients = (event) => { setRecipeIngredients(event.target.value);};
     const changeCategoryType = (event) => { setCategoryType(event.target.value);};
     const changeQuantityType = (event) => { setQuantityType(event.target.value);};
+    const changeCategoryToModify = (event) => { setCategoryToModify(event.target.value);};
+    const changeCategoryNewName = (event) => { setCategoryNewName(event.target.value);};
 
     const handleCategorySubmit = () => {
         setCategorySubmitted(true);
@@ -183,6 +198,7 @@ function P_Stock() {
             setDeleteCategory(true);
             setCategoryToModifyError(false);
             setShowDeleteCategory(false);
+            setShowCancelCategory(true);
             setShowFirstSubmitDeleteCategory(false);
             setShowVerificationDeleteCategory(true);
         }
@@ -190,11 +206,32 @@ function P_Stock() {
     }
 
     const handleCategoryDeleteSubmit = () => {
+        const modifiedCategory = {
+            categoryToModify: categoryToModify
+        }
+        fetch('http://localhost:5000/api/delete-category', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(modifiedCategory)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); 
+            setCategoryToModify('Please select value.');
+            setShowVerificationDeleteCategory(false);
+            setShowDeleteCategory(true);
+            setShowModifyCategory(true);
+            setShowCancelCategory(false);
+            updateDropdowns();
+        });
     }
 
     const handleVerificationCategoryDelete = () => {
         setShowVerificationDeleteCategory(true);
         setShowFirstSubmitDeleteCategory(false);
+        setShowCancelCategory(true);
     }
     
     const handleCategoryModify = () => {
@@ -213,6 +250,24 @@ function P_Stock() {
     }
 
     const handleCategoryModifySubmit = () => {
+        const modifiedCategory = {
+            categoryToModify: categoryToModify,
+            categoryNewName: categoryNewName
+        }
+        fetch('http://localhost:5000/api/modift-category', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(modifiedCategory)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); 
+            setCategoryToModify('Please select value.');
+            setCategoryNewName('New category name')
+            updateDropdowns();
+        });
     }
 
     const handleVerificationCategoryModify = () => {
@@ -223,6 +278,7 @@ function P_Stock() {
             setCategoryToModifyNameError(false);
             setShowVerificationModifyCategory(true);
             setShowFirstSubmitModifyCategory(false);
+            setShowCancelCategory(true);
         }
     } 
 
@@ -234,23 +290,9 @@ function P_Stock() {
         setDeleteCategory(false);
         setModifyCategory(false);
         setShowVerificationModifyCategory(false);
+        setCategoryToModify('Please select value.')
     }
 
-    const changeCategoryToModify = (event) => { setCategoryToModify(event.target.value);};
-    const changeCategoryNewName = (event) => { setCategoryNewName(event.target.value);};
-    const [categoryToModifyError, setCategoryToModifyError] = useState(false);
-    const [categoryToModifyNameError, setCategoryToModifyNameError] = useState(false);
-    const [modifyCategory, setModifyCategory] = useState(false);
-    const [deleteCategory, setDeleteCategory] = useState(false);
-    const [showDeleteCategory, setShowDeleteCategory] = useState(true);
-    const [showModifyCategory, setShowModifyCategory] = useState(true);
-    const [showCancelCategory, setShowCancelCategory] = useState(false);
-    const [showVerificationModifyCategory, setShowVerificationModifyCategory] = useState(false);
-    const [showFirstSubmitModifyCategory, setShowFirstSubmitModifyCategory] = useState(true);
-    const [showVerificationDeleteCategory, setShowVerificationDeleteCategory] = useState(false);
-    const [showFirstSubmitDeleteCategory, setShowFirstSubmitDeleteCategory] = useState(true);
-    const [categoryToModify, setCategoryToModify] = useState('Please select value.');
-    const [categoryNewName, setCategoryNewName] = useState('');
 
     return (
         <div>

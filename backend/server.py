@@ -141,6 +141,37 @@ def add_category():
         return jsonify(message='Category added successfully')
     except Exception as e:
         return jsonify(error=str(e))
+    
+
+@app.route('/api/delete-category', methods=['POST'])
+def delete_category():
+    data = request.json
+    category = data.get('categoryToModify')  
+
+    try:
+        categoryToDelete = Category.query.filter(Category.name == category).first()
+        if categoryToDelete:
+            db.session.delete(categoryToDelete)
+            db.session.commit()
+            return jsonify(message='Category deleted successfully')
+
+    except SQLAlchemyError as e:
+        db.session.rollback()  
+        return jsonify(error=str(e))
+    except Exception as e:
+        return jsonify(error=str(e))
+
+@app.route('/api/modify-category', methods=['POST'])
+def modify_category():
+    data = request.json
+    category_name = data.get('nameCategory')  
+    category_type = data.get('categoryType')
+
+    try:
+        
+        return jsonify(message='Category deleted successfully')
+    except Exception as e:
+        return jsonify(error=str(e))
 
 
     
