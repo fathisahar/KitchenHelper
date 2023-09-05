@@ -110,8 +110,10 @@ function P_Stock() {
         .then(data => {
             console.log(data.message); 
             setNameIngredient('');
+            setQuantityType('Please select value.');
             setQuantityIngredient('');
-            setCategoryIngredient('');
+            setCategoryIngredient('Please select value.');
+            fetchIngredients();
         });
     };
 
@@ -152,6 +154,17 @@ function P_Stock() {
             setCategoryIngredient('Please select value.');
     };
 
+    const fetchIngredients = () => {
+        fetch('http://localhost:5000/api/get-ingredients')
+            .then(response => response.json())
+            .then(data => {
+                setIngredients(data.ingredients);
+            })
+            .catch(error => {
+                console.error('Error fetching ingredient categories:', error);
+            });
+    };
+
     const fetchRecipeCategories = () => {
         fetch('http://localhost:5000/api/get-recipe-categories')
             .then(response => response.json())
@@ -168,7 +181,7 @@ function P_Stock() {
         fetch('http://localhost:5000/api/get-categories')
             .then(response => response.json())
             .then(data => {
-                console.log('Received data:', data);
+                //console.log('Received data:', data);
                 setCategories(data.categories);
             })
             .catch(error => {
@@ -185,6 +198,8 @@ function P_Stock() {
         fetchIngredientCategories();
         fetchRecipeCategories();
         fetchCategories();
+        fetchIngredients();
+        console.log('Everything fetched.')
     }
 
     const handleCategoryDelete = () => {
@@ -292,6 +307,31 @@ function P_Stock() {
     }
 
 
+    const [newNameIngredient, setNewNameIngredient] = useState('');
+    const [newCategoryIngredient, setNewCategoryIngredient] = useState('Please select value.');
+    const [newQuantityType, setNewQuantityType] = useState('Please select value.');
+    const [newQuantityIngredient, setNewQuantityIngredient] = useState('');
+    const [ingredientToModify, setIngredientToModify] = useState('Please select value.');
+    const [ingredients, setIngredients] = useState([]);
+    const [newNameIngredientPlaceholder, setNewNameIngredientPlaceholder] = useState('Name');
+    const [newQuantityIngredientPlaceholder, setNewQuantityIngredientPlaceholder] = useState('Quantity');
+    
+    const changeNewNameIngredient = (event) => { setNewNameIngredient(event.target.value);};
+    const changeNewCategoryIngredient = (event) => { setNewCategoryIngredient(event.target.value);};
+    const changeNewQuantityIngredient = (event) => { setNewQuantityIngredient(event.target.value);};
+    const changeNewQuantityType = (event) => { setNewQuantityType(event.target.value);};
+    
+    const changeSelectedIngredient = (event) => {
+        const selectedIndex = event.target.value; 
+        const selectedIngredient = ingredients[selectedIndex];
+        setIngredientToModify(selectedIngredient.id);
+        console.log(selectedIngredient);
+        setNewNameIngredientPlaceholder(selectedIngredient.name);
+        setNewQuantityIngredientPlaceholder(selectedIngredient.stock_quantity);
+        setNewQuantityType(selectedIngredient.stock_type)
+        setNewCategoryIngredient(selectedIngredient.category_id);
+      };
+      
     return (
         <div>
             <div className="top">
@@ -471,19 +511,30 @@ function P_Stock() {
                         )}
                     </div>
                     <div className="box">
+                        <p> Ingredient</p>
+                        <select id="choiceBox" value={ingredientToModify} onChange={changeSelectedIngredient}>
+                            <option value="Please select value." disabled>
+                                Select ingredient
+                            </option>
+                            {ingredients.map((ingredient, index) => (
+                                <option key={ingredient.id} value={index}>
+                                    {ingredient.name}
+                                </option>
+                            ))}
+                        </select>
                         <input
                             type="text"
-                            value={nameIngredient}
-                            onChange={changeNameIngredient}
-                            placeholder="Name"
+                            value={newNameIngredient}
+                            onChange={changeNewNameIngredient}
+                            placeholder={newNameIngredientPlaceholder}
                         />
                         <input
                             type="text"
-                            value={quantityIngredient}
-                            onChange={changeQuantityIngredient}
-                            placeholder="Quantity"
+                            value={newQuantityIngredient}
+                            onChange={changeNewQuantityIngredient}
+                            placeholder={newQuantityIngredientPlaceholder}
                         />
-                        <select id="choiceBox" value={quantityType} onChange={changeQuantityType}>
+                        <select id="choiceBox" value={newQuantityType} onChange={changeNewQuantityType}>
                             <option value="Please select value." disabled>
                                 Select unit
                             </option>
@@ -500,7 +551,7 @@ function P_Stock() {
                             <option value="teaspoon">tsp</option>
                             <option value="tablespoon">tbsp</option>
                         </select>
-                        <select id="choiceBox" value={categoryIngredient} onChange={changeCategoryIngredient}>
+                        <select id="choiceBox" value={newCategoryIngredient} onChange={changeNewCategoryIngredient}>
                             <option value="Please select value." disabled>
                                 Select category
                             </option>

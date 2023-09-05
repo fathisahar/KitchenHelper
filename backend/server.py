@@ -54,6 +54,15 @@ def get_categories():
     except SQLAlchemyError as e:
         return jsonify(error=str(e))
     
+@app.route('/api/get-ingredients', methods=['GET'])
+def get_ingredients():
+    try:
+        ingredients = Ingredient.query.all()
+        ingredient_list = [{'id': ingredient.id, 'name': ingredient.name, 'category_id': ingredient.category_id, 'stock_quantity': ingredient.stock_quantity, 'stock_type': ingredient.stock_type} for ingredient in ingredients]
+        return jsonify(ingredients=ingredient_list) 
+    except SQLAlchemyError as e:
+        return jsonify(error=str(e))
+    
 
 @app.route('/api/get-ingredient-categories', methods=['GET'])
 def get_ingredient_categories():
