@@ -186,6 +186,8 @@ def modify_category():
         return jsonify(error=str(e))
     except Exception as e:
         return jsonify(error=str(e))
+    
+
 
 
     

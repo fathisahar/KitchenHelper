@@ -17,9 +17,10 @@ exit;
  - have restrictions on usernames, passwords (validation) 
  - send email to confirm account creation
  
-
-
-
  - emails:
     - username
     - password
+
+
+- cant have repeat inputs (verify names)
+- make all names lower caps when submitting

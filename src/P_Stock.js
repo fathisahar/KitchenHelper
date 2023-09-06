@@ -306,6 +306,61 @@ function P_Stock() {
         setCategoryToModify('Please select value.')
     }
 
+    const handleIngredientModify = () => {
+        if (ingredientToModify === 'Please select value.'){
+            setIngredientModifyError(true);
+            setShowIngredientDelete(false);
+            setShowIngredientCancel(true);
+        } else {
+            setIngredientModifyError(false);
+            setIngredientModify(true);
+            setShowIngredientModify(false);
+            setShowIngredientDelete(false);
+            setShowIngredientCancel(true);
+            setShowIngredientModifyVerification(true);
+        }
+        
+    }
+    
+    const handleIngredientDelete = () => {
+
+    }
+    
+    const handleIngredientModifySubmit = () => {
+
+    }
+    const handleIngredientDeleteSubmit = () => {
+
+    }
+
+    const handleIngredientModifyVerification = () => {
+
+    } 
+    const handleIngredientDeleteVerification = () => {
+
+    } 
+    
+    const handleIngredientCancel = () => {
+        setIngredientToModify('Please select value.')
+        setIngredientModifyError(false);
+        setIngredientModify(false);
+        setShowIngredientModify(true);
+        setShowIngredientDelete(true);
+        setShowIngredientCancel(false);
+        setShowIngredientModifyVerification(false);
+    }
+
+    const [ingredientModify, setIngredientModify] = useState(false);
+    const [showIngredientModify, setShowIngredientModify] = useState(true);
+    const [ingredientDelete, setIngredientDelete] = useState(false);
+    const [showIngredientDelete, setShowIngredientDelete] = useState(true);
+    const [showIngredientCancel, setShowIngredientCancel] = useState(false);
+    const [ingredientModifyError, setIngredientModifyError] = useState(false);
+
+    const [showIngredientModifyVerification, setShowIngredientModifyVerification] = useState(false);
+    const [showIngredientDeleteVerification, setShowIngredientDeleteVerification] = useState(false);
+    const [showIngredientModifySubmit, setShowIngredientModifySubmit] = useState(false);
+    const [showIngredientDeleteVSubmit, setShowIngredientDeleteSubmit] = useState(false);
 
     const [newNameIngredient, setNewNameIngredient] = useState('');
     const [newCategoryIngredient, setNewCategoryIngredient] = useState('Please select value.');
@@ -391,6 +446,7 @@ function P_Stock() {
                             <option value="leaves">leaves</option>
                             <option value="teaspoon">tsp</option>
                             <option value="tablespoon">tbsp</option>
+                            <option value="bag">bag</option>
                         </select>
                         <select id="choiceBox" value={categoryIngredient} onChange={changeCategoryIngredient}>
                             <option value="Please select value." disabled>
@@ -522,49 +578,68 @@ function P_Stock() {
                                 </option>
                             ))}
                         </select>
-                        <input
-                            type="text"
-                            value={newNameIngredient}
-                            onChange={changeNewNameIngredient}
-                            placeholder={newNameIngredientPlaceholder}
-                        />
-                        <input
-                            type="text"
-                            value={newQuantityIngredient}
-                            onChange={changeNewQuantityIngredient}
-                            placeholder={newQuantityIngredientPlaceholder}
-                        />
-                        <select id="choiceBox" value={newQuantityType} onChange={changeNewQuantityType}>
-                            <option value="Please select value." disabled>
-                                Select unit
-                            </option>
-                            <option value="grams">g </option>
-                            <option value="miligrams">mg</option>
-                            <option value="kilograms">kg</option>
-                            <option value="pound">lb</option>
-                            <option value="ounces">oz</option>
-                            <option value="militers">ml</option>
-                            <option value="liters">L</option>
-                            <option value="units">units</option>
-                            <option value="cloves">cloves</option>
-                            <option value="leaves">leaves</option>
-                            <option value="teaspoon">tsp</option>
-                            <option value="tablespoon">tbsp</option>
-                        </select>
-                        <select id="choiceBox" value={newCategoryIngredient} onChange={changeNewCategoryIngredient}>
-                            <option value="Please select value." disabled>
-                                Select category
-                            </option>
-                            {ingredientCategories && ingredientCategories.map((category, index) => (
-                            <option key={index} value={category}>
-                                    {category}
-                                </option>
-                            ))}
-                        </select>
-                        {ingredientSubmitted && ingredientError && (
-                            <p className="error-message">Please select a value for all fields.</p>
+                        {ingredientModifyError && (
+                            <p className="error-message">Please select a value for the ingredient.</p>
                         )}
-                        <button onClick={handleIngredientSubmit}>Submit</button>
+                        {showIngredientModify && (
+                            <button onClick={handleIngredientModify}>Modify</button>
+                        )}
+                        {showIngredientDelete && (
+                            <button onClick={handleIngredientDelete}>Delete</button>
+                        )}
+                        {ingredientModify && (
+                            <div className="nomatter">
+                                <input
+                                type="text"
+                                value={newNameIngredient}
+                                onChange={changeNewNameIngredient}
+                                placeholder={newNameIngredientPlaceholder}
+                            />
+                            <input
+                                type="text"
+                                value={newQuantityIngredient}
+                                onChange={changeNewQuantityIngredient}
+                                placeholder={newQuantityIngredientPlaceholder}
+                            />
+                            <select id="choiceBox" value={newQuantityType} onChange={changeNewQuantityType}>
+                                <option value="Please select value." disabled>
+                                    Select unit
+                                </option>
+                                <option value="grams">g </option>
+                                <option value="miligrams">mg</option>
+                                <option value="kilograms">kg</option>
+                                <option value="pound">lb</option>
+                                <option value="ounces">oz</option>
+                                <option value="militers">ml</option>
+                                <option value="liters">L</option>
+                                <option value="units">units</option>
+                                <option value="cloves">cloves</option>
+                                <option value="leaves">leaves</option>
+                                <option value="teaspoon">tsp</option>
+                                <option value="tablespoon">tbsp</option>
+                                <option value="bag">bag</option>
+                            </select>
+                            <select id="choiceBox" value={newCategoryIngredient} onChange={changeNewCategoryIngredient}>
+                                <option value="Please select value." disabled>
+                                    Select category
+                                </option>
+                                {ingredientCategories && ingredientCategories.map((category, index) => (
+                                <option key={index} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        )}
+                        {showIngredientCancel && (
+                            <button onClick={handleIngredientCancel}>Cancel</button>
+                        )}
+                        {showIngredientModifyVerification && (
+                            <button onClick={handleIngredientModifyVerification}>Submit</button>
+                        )}
+                        {showIngredientDeleteVerification && (
+                            <button onClick={handleIngredientDeleteVerification}>Delete</button>
+                        )}
                     </div>
                     <div className="box">
                         <input
