@@ -334,8 +334,14 @@ function P_Stock() {
     }
 
     const handleIngredientModifyVerification = () => {
-
+        setShowIngredientModifyVerificationSubmit(true);
+        setShowIngredientModifyVerification(false);
     } 
+
+    const handleIngredientModifyVerificationSubmit = () => {
+        
+    } 
+
     const handleIngredientDeleteVerification = () => {
 
     } 
@@ -348,6 +354,7 @@ function P_Stock() {
         setShowIngredientDelete(true);
         setShowIngredientCancel(false);
         setShowIngredientModifyVerification(false);
+        setShowIngredientModifyVerificationSubmit(false);
     }
 
     const [ingredientModify, setIngredientModify] = useState(false);
@@ -358,6 +365,7 @@ function P_Stock() {
     const [ingredientModifyError, setIngredientModifyError] = useState(false);
 
     const [showIngredientModifyVerification, setShowIngredientModifyVerification] = useState(false);
+    const [showIngredientModifyVerificationSubmit, setShowIngredientModifyVerificationSubmit] = useState(false);
     const [showIngredientDeleteVerification, setShowIngredientDeleteVerification] = useState(false);
     const [showIngredientModifySubmit, setShowIngredientModifySubmit] = useState(false);
     const [showIngredientDeleteVSubmit, setShowIngredientDeleteSubmit] = useState(false);
@@ -631,14 +639,20 @@ function P_Stock() {
                             </select>
                         </div>
                         )}
-                        {showIngredientCancel && (
-                            <button onClick={handleIngredientCancel}>Cancel</button>
-                        )}
                         {showIngredientModifyVerification && (
                             <button onClick={handleIngredientModifyVerification}>Submit</button>
                         )}
+                        {showIngredientModifyVerificationSubmit && (
+                            <div className="nomatter">
+                                <p className="error-message">Are you sure you want to submit?</p>
+                                <button onClick={handleIngredientModifyVerificationSubmit}>Submit</button>
+                            </div>
+                        )}
                         {showIngredientDeleteVerification && (
                             <button onClick={handleIngredientDeleteVerification}>Delete</button>
+                        )}
+                        {showIngredientCancel && (
+                            <button onClick={handleIngredientCancel}>Cancel</button>
                         )}
                     </div>
                     <div className="box">
