@@ -169,6 +169,24 @@ def delete_category():
         return jsonify(error=str(e))
     except Exception as e:
         return jsonify(error=str(e))
+    
+@app.route('/api/delete-ingredient', methods=['POST'])
+def delete_ingredient():
+    data = request.json
+    ingredientToModify = data.get('ingredientToModify')  
+
+    try:
+        ingredientToDelete = Ingredient.query.filter(Ingredient.id == ingredientToModify).first()
+        if ingredientToDelete:
+            db.session.delete(ingredientToDelete)
+            db.session.commit()
+            return jsonify(message='Ingredient deleted successfully')
+
+    except SQLAlchemyError as e:
+        db.session.rollback()  
+        return jsonify(error=str(e))
+    except Exception as e:
+        return jsonify(error=str(e))
 
 @app.route('/api/modify-category', methods=['POST'])
 def modify_category():
@@ -181,6 +199,31 @@ def modify_category():
         category.name = categoryNewName
         db.session.commit()
         return jsonify(message='Category modified successfully')
+    except SQLAlchemyError as e:
+        db.session.rollback()  
+        return jsonify(error=str(e))
+    except Exception as e:
+        return jsonify(error=str(e))
+    
+@app.route('/api/modify-ingredient', methods=['POST'])
+def modify_ingredient():
+    data = request.json
+    oldId = data.get('ingredientToModify')
+    newName = data.get('newNameIngredient')  
+    newQuantity = data.get('newQuantityIngredient')
+    newQuantityType = data.get('newQuantityType')
+    newCategory = data.get('newCategoryIngredient')
+
+    try:
+        categoryID = Category.query.filter_by(name=newCategory).first()
+        
+        ingredient = Ingredient.query.filter(Ingredient.id == oldId).first()
+        ingredient.name = newName
+        ingredient.category_id = categoryID.id
+        ingredient.stock_quantity = newQuantity
+        ingredient.stock_type = newQuantityType
+        db.session.commit()
+        return jsonify(message='Ingredient modified successfully')
     except SQLAlchemyError as e:
         db.session.rollback()  
         return jsonify(error=str(e))

@@ -319,31 +319,82 @@ function P_Stock() {
             setShowIngredientCancel(true);
             setShowIngredientModifyVerification(true);
         }
-        
     }
     
     const handleIngredientDelete = () => {
-
+        if (ingredientToModify === 'Please select value.'){
+            setIngredientDeleteError(true);
+        } else {
+            setIngredientDeleteError(false);
+            setShowIngredientCancel(true);
+            setIngredientDelete(true);
+            setShowIngredientDeleteVerification(true);
+            setShowIngredientDelete(false);
+            setShowIngredientModify(false);
+        }
     }
     
     const handleIngredientModifySubmit = () => {
-
+        const modifiedIngredient = {
+            ingredientToModify: ingredientToModify,
+            newNameIngredient: newNameIngredient,
+            newQuantityIngredient: newQuantityIngredient,
+            newQuantityType: newQuantityType,
+            newCategoryIngredient: newCategoryIngredient
+        }
+        fetch('http://localhost:5000/api/modify-ingredient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(modifiedIngredient)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); 
+            handleIngredientCancel();
+            updateDropdowns();
+            setNewNameIngredient('');
+            setNewCategoryIngredient('Please select value.');
+            setNewQuantityType('Please select value.');
+            setNewQuantityIngredient('');
+        });
     }
+
     const handleIngredientDeleteSubmit = () => {
-
+        const modifiedIngredient = {
+            ingredientToModify: ingredientToModify
+        }
+        fetch('http://localhost:5000/api/delete-ingredient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(modifiedIngredient)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); 
+            setIngredientToModify('Please select value.');
+            setShowIngredientDeleteVerificationSubmit(false);
+            setShowIngredientDelete(true);
+            setShowIngredientModify(true);
+            setShowIngredientCancel(false);
+            updateDropdowns();
+        });
     }
+    
 
     const handleIngredientModifyVerification = () => {
+        setShowIngredientCancel(true);
         setShowIngredientModifyVerificationSubmit(true);
         setShowIngredientModifyVerification(false);
     } 
 
-    const handleIngredientModifyVerificationSubmit = () => {
-        
-    } 
-
     const handleIngredientDeleteVerification = () => {
-
+        setShowIngredientCancel(true);
+        setShowIngredientDeleteVerification(false);
+        setShowIngredientDeleteVerificationSubmit(true);
     } 
     
     const handleIngredientCancel = () => {
@@ -355,6 +406,9 @@ function P_Stock() {
         setShowIngredientCancel(false);
         setShowIngredientModifyVerification(false);
         setShowIngredientModifyVerificationSubmit(false);
+        setShowIngredientDeleteVerification(false);
+        setShowIngredientDeleteVerificationSubmit(false);
+        setIngredientDeleteError(false);
     }
 
     const [ingredientModify, setIngredientModify] = useState(false);
@@ -363,12 +417,14 @@ function P_Stock() {
     const [showIngredientDelete, setShowIngredientDelete] = useState(true);
     const [showIngredientCancel, setShowIngredientCancel] = useState(false);
     const [ingredientModifyError, setIngredientModifyError] = useState(false);
+    const [ingredientDeleteError, setIngredientDeleteError] = useState(false);
 
     const [showIngredientModifyVerification, setShowIngredientModifyVerification] = useState(false);
     const [showIngredientModifyVerificationSubmit, setShowIngredientModifyVerificationSubmit] = useState(false);
     const [showIngredientDeleteVerification, setShowIngredientDeleteVerification] = useState(false);
+    const [showIngredientDeleteVerificationSubmit, setShowIngredientDeleteVerificationSubmit] = useState(false);
     const [showIngredientModifySubmit, setShowIngredientModifySubmit] = useState(false);
-    const [showIngredientDeleteVSubmit, setShowIngredientDeleteSubmit] = useState(false);
+    const [showIngredientDeleteSubmit, setShowIngredientDeleteSubmit] = useState(false);
 
     const [newNameIngredient, setNewNameIngredient] = useState('');
     const [newCategoryIngredient, setNewCategoryIngredient] = useState('Please select value.');
@@ -522,14 +578,15 @@ function P_Stock() {
                                     </option>
                                 ))}
                         </select>
+                        {categoryToModifyError && (
+                            <p className="error-message">Please select a category to modify.</p>
+                        )}
                         {showModifyCategory && (
                             <div className='nomatter'>
                                 <button onClick={handleCategoryModify}>Modify</button>
                             </div>
                         )}
-                        {categoryToModifyError && (
-                            <p className="error-message">Please select a category to modify.</p>
-                        )}
+                    
                         {modifyCategory && (
                             <div className="nomatter">
                                 <input
@@ -644,12 +701,21 @@ function P_Stock() {
                         )}
                         {showIngredientModifyVerificationSubmit && (
                             <div className="nomatter">
-                                <p className="error-message">Are you sure you want to submit?</p>
-                                <button onClick={handleIngredientModifyVerificationSubmit}>Submit</button>
+                                <p className="verification-message">Are you sure you want to submit to modify?</p>
+                                <button onClick={handleIngredientModifySubmit}>Submit</button>
                             </div>
                         )}
                         {showIngredientDeleteVerification && (
-                            <button onClick={handleIngredientDeleteVerification}>Delete</button>
+                            <button onClick={handleIngredientDeleteVerification}>Submit</button>
+                        )}
+                        {ingredientDeleteError && (
+                            <p className="error-message">Please select a value for the ingredient.</p>
+                        )}
+                        {showIngredientDeleteVerificationSubmit && (
+                            <div className="nomatter">
+                                <p className="verification-message">Are you sure you want to submit to delete?</p>
+                                <button onClick={handleIngredientDeleteSubmit}>Submit</button>
+                            </div>
                         )}
                         {showIngredientCancel && (
                             <button onClick={handleIngredientCancel}>Cancel</button>
