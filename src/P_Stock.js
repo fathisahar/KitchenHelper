@@ -1,7 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './CSS_Stock.css'; 
-import Select from 'react-select';
 
 function P_Stock() {
     const [nameCategory, setNameCategory] = useState('');
@@ -423,8 +422,6 @@ function P_Stock() {
     const [showIngredientModifyVerificationSubmit, setShowIngredientModifyVerificationSubmit] = useState(false);
     const [showIngredientDeleteVerification, setShowIngredientDeleteVerification] = useState(false);
     const [showIngredientDeleteVerificationSubmit, setShowIngredientDeleteVerificationSubmit] = useState(false);
-    const [showIngredientModifySubmit, setShowIngredientModifySubmit] = useState(false);
-    const [showIngredientDeleteSubmit, setShowIngredientDeleteSubmit] = useState(false);
 
     const [newNameIngredient, setNewNameIngredient] = useState('');
     const [newCategoryIngredient, setNewCategoryIngredient] = useState('Please select value.');
@@ -456,6 +453,8 @@ function P_Stock() {
             <div className="top">
                 <h1>insert information</h1>
                 <Link to="/login">Go to the login page</Link>
+                <p></p>
+                <Link to="/recipe">Go to the recipe page</Link>
             </div>
             <div className="row">
                 <div className="container">
@@ -526,38 +525,6 @@ function P_Stock() {
                             <p className="error-message">Please select a value for all fields.</p>
                         )}
                         <button onClick={handleIngredientSubmit}>Submit</button>
-                    </div>
-                    <div className="box">
-                        <p>Recipe</p>
-                        <input
-                            type="text"
-                            value={nameRecipe}
-                            onChange={changeNameRecipe}
-                            placeholder="Name"
-                        />
-                        <input
-                            type="text"
-                            value={instructionsRecipe}
-                            onChange={changeInstructionsRecipe}
-                            placeholder="Instructions"
-                        />
-                        <input
-                            type="text"
-                            value={recipeIngredients}
-                            onChange={changeRecipeIngredients}
-                            placeholder="Ingredients"
-                        />
-                        <select id="choiceBox" value={categoryRecipe} onChange={changeCategoryRecipe}>
-                            <option value="Please select value." disabled>
-                                Select category
-                            </option>
-                            {recipeCategories && recipeCategories.map((category, index) => (
-                            <option key={index} value={category}>
-                                    {category}
-                                </option>
-                            ))}
-                        </select>
-                        <button onClick={handleRecipeSubmit}>Submit</button>
                     </div>
                 </div>
             </div>
@@ -720,37 +687,6 @@ function P_Stock() {
                         {showIngredientCancel && (
                             <button onClick={handleIngredientCancel}>Cancel</button>
                         )}
-                    </div>
-                    <div className="box">
-                        <input
-                            type="text"
-                            value={nameRecipe}
-                            onChange={changeNameRecipe}
-                            placeholder="Name"
-                        />
-                        <input
-                            type="text"
-                            value={instructionsRecipe}
-                            onChange={changeInstructionsRecipe}
-                            placeholder="Instructions"
-                        />
-                        <input
-                            type="text"
-                            value={recipeIngredients}
-                            onChange={changeRecipeIngredients}
-                            placeholder="Ingredients"
-                        />
-                        <select id="choiceBox" value={categoryRecipe} onChange={changeCategoryRecipe}>
-                            <option value="Please select value." disabled>
-                                Select category
-                            </option>
-                            {recipeCategories && recipeCategories.map((category, index) => (
-                            <option key={index} value={category}>
-                                    {category}
-                                </option>
-                            ))}
-                        </select>
-                        <button onClick={handleRecipeSubmit}>Submit</button>
                     </div>
                 </div>
             </div>

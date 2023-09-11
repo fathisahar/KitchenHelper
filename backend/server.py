@@ -11,7 +11,6 @@ db = SQLAlchemy(app)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
 
-
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
