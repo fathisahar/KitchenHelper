@@ -422,6 +422,8 @@ function P_Stock() {
     const [showIngredientModifyVerificationSubmit, setShowIngredientModifyVerificationSubmit] = useState(false);
     const [showIngredientDeleteVerification, setShowIngredientDeleteVerification] = useState(false);
     const [showIngredientDeleteVerificationSubmit, setShowIngredientDeleteVerificationSubmit] = useState(false);
+    const [showIngredientModifySubmit, setShowIngredientModifySubmit] = useState(false);
+    const [showIngredientDeleteSubmit, setShowIngredientDeleteSubmit] = useState(false);
 
     const [newNameIngredient, setNewNameIngredient] = useState('');
     const [newCategoryIngredient, setNewCategoryIngredient] = useState('Please select value.');
@@ -688,6 +690,7 @@ function P_Stock() {
                             <button onClick={handleIngredientCancel}>Cancel</button>
                         )}
                     </div>
+
                 </div>
             </div>
         </div>
