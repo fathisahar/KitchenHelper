@@ -15,7 +15,6 @@ function P_Stock() {
     const [categoryError, setCategoryError] = useState(false);
     const [categorySubmitted, setCategorySubmitted] = useState(false);
     const [ingredientCategories, setIngredientCategories] = useState([]);
-    const [recipeCategories, setRecipeCategories] = useState([]); 
     const [quantityType, setQuantityType] = useState(''); 
     const [ingredientError, setIngredientError] = useState(false);
     const [ingredientSubmitted, setIngredientSubmitted] = useState(false);
@@ -164,18 +163,6 @@ function P_Stock() {
             });
     };
 
-    const fetchRecipeCategories = () => {
-        fetch('http://localhost:5000/api/get-recipe-categories')
-            .then(response => response.json())
-            .then(data => {
-                setRecipeCategories(data.categories);
-            })
-            .catch(error => {
-                console.error('Error fetching recipe categories:', error);
-            });
-            setCategoryRecipe('Please select value.');
-    };
-
     const fetchCategories = () => {
         fetch('http://localhost:5000/api/get-categories')
             .then(response => response.json())
@@ -195,7 +182,6 @@ function P_Stock() {
 
     const updateDropdowns = () => {
         fetchIngredientCategories();
-        fetchRecipeCategories();
         fetchCategories();
         fetchIngredients();
         console.log('Everything fetched.')
@@ -517,11 +503,13 @@ function P_Stock() {
                             <option value="Please select value." disabled>
                                 Select category
                             </option>
-                            {ingredientCategories && ingredientCategories.map((category, index) => (
-                            <option key={index} value={category}>
-                                    {category}
-                                </option>
-                            ))}
+                            {categories
+                                .filter(category => category.type === 'ingredient')
+                                .map((category) => (
+                                    <option key={category.id} value={category.id}>
+                                        {category.name}
+                                    </option>
+                                ))}
                         </select>
                         {ingredientSubmitted && ingredientError && (
                             <p className="error-message">Please select a value for all fields.</p>
@@ -539,13 +527,13 @@ function P_Stock() {
                         <p>Category</p>
                         <select id="choiceBox" value={categoryToModify} onChange={changeCategoryToModify}>
                             <option value="Please select value." disabled>
-                                    Select category
+                                Select category
+                            </option>
+                            {categories.map((category) => (
+                                <option key={category.id} value={category.id}>
+                                    {category.name}
                                 </option>
-                                {categories && categories.map((category, index) => (
-                                <option key={index} value={category}>
-                                        {category}
-                                    </option>
-                                ))}
+                            ))}
                         </select>
                         {categoryToModifyError && (
                             <p className="error-message">Please select a category to modify.</p>

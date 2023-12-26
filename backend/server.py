@@ -38,22 +38,14 @@ recipe_ingredient = db.Table(
     db.Column('ingredient_id', db.Integer, db.ForeignKey('ingredient.id'), primary_key=True)
 )
 
-
 @app.route('/api/get-categories', methods=['GET'])
 def get_categories():
     try:
-        categories = db.session.execute(
-            db.select(Category)
-            .filter(or_(Category.categoryType == 'ingredient', Category.categoryType == 'recipe'))
-            .order_by(Category.categoryType)
-        ).scalars()
-
-        category_names = [category.name for category in categories]
-        
-        return jsonify(categories=category_names)
+        categories = Category.query.all()
+        category_list = [{'id': category.id, 'type': category.categoryType, 'name': category.name} for category in categories]
+        return jsonify(categories=category_list)
     except SQLAlchemyError as e:
         return jsonify(error=str(e))
-    
 
 @app.route('/api/get-ingredients', methods=['GET'])
 def get_ingredients():
@@ -78,21 +70,6 @@ def get_ingredient_categories():
     except Exception as e:
         return jsonify(error=str(e))
     
-
-@app.route('/api/get-recipe-categories', methods=['GET'])
-def get_recipe_categories():
-    try:
-        categories = db.session.execute(db.select(Category)
-                .filter_by(categoryType='recipe')
-                .order_by(Category.categoryType)).scalars()
-
-        category_names = [category.name for category in categories]
-
-        return jsonify(categories=category_names)
-    except Exception as e:
-        return jsonify(error=str(e))
-
-
 @app.route('/api/add-ingredient', methods=['POST'])
 def add_ingredient():
     data = request.json
@@ -235,30 +212,6 @@ def modify_ingredient():
     except Exception as e:
         return jsonify(error=str(e))
     
-
-@app.route('/api/get-all-ingredients', methods=['GET'])
-def get_all_ingredients():
-    try:
-        categories = db.session.execute(db.select(Category)
-                .filter_by(categoryType='ingredient')
-                .order_by(Category.categoryType)).scalars()
-
-        ids = [category.id for category in categories]
-
-        ingredients = []
-
-        for category_id in ids:
-            category_ingredients = db.session.execute(db.select(Ingredient)
-                .filter_by(category_id=category_id)
-                .order_by(Ingredient.category_id)).scalars()
-            
-            ingredient_list = [{'id': ingredient.id, 'name': ingredient.name, 'category_id': ingredient.category_id, 'stock_quantity': ingredient.stock_quantity, 'stock_type': ingredient.stock_type} for ingredient in category_ingredients]
-            ingredients.append(ingredient_list)
-
-        return jsonify(ingredients=ingredients)
-    except Exception as e:
-        return jsonify(error=str(e))
-
     
 if __name__ == '__main__':
     app.run(debug=True)
