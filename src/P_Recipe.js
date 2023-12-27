@@ -1,74 +1,209 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import './CSS_Recipe.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'popper.js';
+import 'jquery';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 function P_Recipe() {
-  const [recipeName, setRecipeName] = useState('');
-  const changeRecipeName = (event) => { setRecipeName(event.target.value); };
-  const [recipeInstructions, setRecipeInstructions] = useState('Please insert recipe instructions here.');
-  const changeRecipeInstructions = (event) => { setRecipeInstructions(event.target.value); };
+  const [name, setName] = useState('');
+  const changeRecipeName = (event) => { setName(event.target.value); };
+  const [instructions, setInstructions] = useState('');
+  const [description, setDescription] = useState('');
+  const changeInstructions = (event) => { setInstructions(event.target.value); };
+  const changeDescription = (event) => { setDescription(event.target.value); };
   const [ingredients, setIngredients] = useState([]);
+  const [category, setCategory] = useState('');
+  const changeCategory = (event) => { setCategory(event.target.value); };
+  const [categories, setCategories] = useState([]);
+  const [ingredientCategories, setIngredientCategories] = useState([]);
+  const [checkedState, setCheckedState] = useState({});
 
-    const fetchIngredients = () => {
-        fetch('http://localhost:5000/api/get-all-ingredients')
-            .then(response => response.json())
-            .then(data => {
-                 console.log('Received data:', data);
-                setIngredients(data.categories);
-            })
-            .catch(error => {
-                console.error('Error fetching ingredients:', error);
-            });
+  const handleRecipeSubmit = () => {
+    const list = [];
+    const entries = Object.entries(checkedState);
+
+    for (let i = 0; i < entries.length; i++) {
+      if (entries[i][1] !== false) {
+        list.push(entries[i][0]);
+      }
+    }
+
+    const newRecipe = {
+        name: name,        
+        instructions: instructions, 
+        description: description,
+        category_id: category,
+        ingredient_ids: list
     };
 
+    fetch('http://localhost:5000/api/add-recipe', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newRecipe)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.message); 
+        setName('');
+        setCategory('');
+        setInstructions('');
+        setDescription('');
+    });
+  };
+
+  const fetchIngredientCategories = () => {
+    fetch('http://localhost:5000/api/get-ingredient-categories')
+        .then(response => response.json())
+        .then(data => {
+            setIngredientCategories(data.categories);
+        })
+        .catch(error => {
+            console.error('Error fetching ingredient categories:', error);
+        });
+};
+
+  const fetchCategories = () => {
+    fetch('http://localhost:5000/api/get-categories')
+        .then(response => response.json())
+        .then(data => {
+            setCategories(data.categories);
+        })
+        .catch(error => {
+            console.error('Error fetching categories:', error);
+        });
+};
+
+const fetchIngredients = () => {
+  fetch('http://localhost:5000/api/get-ingredients')
+    .then(response => response.json())
+    .then(data => {
+      const newCheckedState = {};
+      setIngredients(data.ingredients);
+      for (let i = 0; i < data.ingredients.length; i++) {
+        newCheckedState[data.ingredients[i].id] = false;
+      }
+      setCheckedState(newCheckedState);
+    })
+    .catch(error => {
+      console.error('Error fetching ingredient categories:', error);
+    });
+};
+
+const handleCheckboxChange = (ingredientId) => {
+  setCheckedState(prevState => ({
+    ...prevState,
+    [ingredientId]: !prevState[ingredientId],
+  }));
+};
+
+
 
     useEffect(() => {
-        //fetchIngredients();
+      fetchIngredients();
+      fetchCategories();
     }, []); 
 
-    useEffect(() => {
-        if (ingredients.length > 0) {
-            console.log(ingredients[0][0].name);
-        }
-    }, [ingredients]);
-
-  return (
-    <div className="top">
-      <h1>insert information</h1>
-      <Link to="/stock">Go to the stock page</Link>
-      <br></br><br></br>
-      <div className="containers">
-        <input
-          type="text"
-          value={recipeName}
-          onChange={changeRecipeName}
-          placeholder="New recipe name"
-        />
-        <br></br>
-        <textarea value={recipeInstructions} onChange={changeRecipeInstructions} rows="4" cols="50"></textarea>
+    return (
+      <div className="top">
+        <div className="left-side">
+        <h1>Insert Information</h1>
+        <Link to="/stock">Go to the stock page</Link>
         <br></br><br></br>
-
-
-
-
-
-
-
-
-
-
-        <div className="card" style={{ width: '18rem' }}>
-            <div className="card-body">
-                <h5 className="card-title">Card title</h5>
-                <h6 className="card-subtitle mb-2 text-muted">Card subtitle</h6>
-                <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" className="card-link">Card link</a>
-                <a href="#" className="card-link">Another link</a>
-            </div>
+          <input
+            type="text"
+            value={name}
+            onChange={changeRecipeName}
+            placeholder="New recipe name"
+            className="recipe-name"
+          ></input>
+          <textarea
+            value={description}
+            onChange={changeDescription}
+            placeholder="Please insert short description of recipe"
+            rows="2"
+            className="description"
+          ></textarea>
+          <textarea
+            value={instructions}
+            onChange={changeInstructions}
+            placeholder="Please insert instructions for the recipe"
+            rows="4"
+            className="instructions"
+          ></textarea>
+          <select id="choiceBox" value={category} onChange={changeCategory}>
+            <option value="" disabled>
+                Select category
+            </option>
+            {categories
+                .filter(category => category.type === 'recipe')
+                .map((category) => (
+                    <option key={category.id} value={category.id}>
+                        {category.name}
+                    </option>
+                ))}
+          </select>
+          <button onClick={handleRecipeSubmit}>Submit</button>
+          <p>
+            {Object.entries(checkedState)
+            .filter(([ids, isChecked]) => isChecked)
+            .map(([ids, isChecked]) => (
+              <span key={ids}>
+                Ingredient ID: {ids}, Checked: {isChecked.toString()}<br />
+              </span>
+            ))}
+          </p>
+        </div>
+        <div className="right-side">
+          <div className="accordion" id="accordionExample">
+            {categories
+            .filter(category => category.type === 'ingredient')
+            .map((category, index) => (
+              <div className="accordion-item" key={category.id}>
+                <h2 className="accordion-header">
+                  <button
+                    className="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#collapse${index + 1}`}
+                    aria-expanded="false" 
+                    aria-controls={`collapse${index + 1}`}
+                  >
+                    {category.name}
+                  </button>
+                </h2>
+                <div
+                  id={`collapse${index + 1}`}
+                  className="accordion-collapse collapse"
+                  data-bs-parent="#accordionExample"
+                >
+                  <div className="accordion-body">
+                  <p>This is the ingredients within the {category.name} category.</p>
+                  {ingredients
+                    .filter(ingredient => ingredient.category_id === category.id)
+                    .map(ingredient => (
+                      <div className="list-group" key={ingredient.id}>
+                        <label className="list-group-item">
+                          <input
+                            className="form-check-input me-1"
+                            type="checkbox"
+                            checked={checkedState[ingredient.id]}
+                            onChange={() => handleCheckboxChange(ingredient.id)}
+                          />
+                          {ingredient.name}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
-      
-    </div>
-  )
+    );
 }
 export default P_Recipe;

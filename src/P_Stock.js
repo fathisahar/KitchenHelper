@@ -115,31 +115,6 @@ function P_Stock() {
         });
     };
 
-    const handleRecipeSubmit = () => {
-        const newIngredient = {
-            nameRecipe: nameRecipe,        
-            instructionsRecipe: instructionsRecipe, 
-            categoryRecipe: categoryRecipe,
-            recipeIngredients: recipeIngredients
-
-        };
-
-        fetch('http://localhost:5000/api/add-recipe', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(newIngredient)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.message); 
-            setNameRecipe('');
-            setCategoryRecipe('');
-            setInstructionsRecipe('');
-        });
-    };
-
     const fetchIngredientCategories = () => {
         fetch('http://localhost:5000/api/get-ingredient-categories')
             .then(response => response.json())
@@ -167,7 +142,6 @@ function P_Stock() {
         fetch('http://localhost:5000/api/get-categories')
             .then(response => response.json())
             .then(data => {
-                //console.log('Received data:', data);
                 setCategories(data.categories);
             })
             .catch(error => {
@@ -594,8 +568,8 @@ function P_Stock() {
                             <option value="Please select value." disabled>
                                 Select ingredient
                             </option>
-                            {ingredients.map((ingredient, index) => (
-                                <option key={ingredient.id} value={index}>
+                            {ingredients.map((ingredient) => (
+                                <option key={ingredient.id} value={ingredient.id}>
                                     {ingredient.name}
                                 </option>
                             ))}
@@ -645,11 +619,13 @@ function P_Stock() {
                                 <option value="Please select value." disabled>
                                     Select category
                                 </option>
-                                {ingredientCategories && ingredientCategories.map((category, index) => (
-                                <option key={index} value={category}>
-                                        {category}
-                                    </option>
-                                ))}
+                                {categories
+                                    .filter(category => category.type === 'ingredient')
+                                    .map((category) => (
+                                        <option key={category.id} value={category.id}>
+                                            {category.name}
+                                        </option>
+                                    ))}
                             </select>
                         </div>
                         )}

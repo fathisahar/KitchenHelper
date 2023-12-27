@@ -3,20 +3,22 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import or_
-
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Table
+from sqlalchemy.orm import relationship
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://saharfathi:fathiSahar4321@localhost/kitchen'
 db = SQLAlchemy(app)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
-
 class Recipe(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     instructions = db.Column(db.Text, nullable=False)
+    description = db.Column(db.Text, nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     ingredients = db.relationship('Ingredient', secondary='recipe_ingredient', backref='recipes')
+    ingredient_ids = db.Column(db.String(255))  # Change the data type if needed
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -70,52 +72,34 @@ def get_ingredient_categories():
     except Exception as e:
         return jsonify(error=str(e))
     
+from flask import jsonify
+
 @app.route('/api/add-ingredient', methods=['POST'])
 def add_ingredient():
     data = request.json
-    ingredient_name = data.get('nameIngredient')
-    category_name = data.get('categoryIngredient') 
-    stock_quantity = data.get('quantityIngredient') 
-    stock_type = data.get('quantityType')
+
+    required_fields = ['nameIngredient', 'categoryIngredient', 'quantityIngredient', 'quantityType']
+    if not all(field in data for field in required_fields):
+        return jsonify(error='Missing required fields'), 400
+
+    ingredient_name = data['nameIngredient']
+    category_id = data['categoryIngredient']
+    stock_quantity = data['quantityIngredient']
+    stock_type = data['quantityType']
 
     try:
-        category_instance = db.session.execute(db.select(Category)
-            .filter_by(name=category_name)).scalar()
-
-        if category_instance:
-            category_id = category_instance.id
-        else:
-            return jsonify(error='Category not found')
-
         new_ingredient = Ingredient(
-            name=ingredient_name, 
-            category_id=category_id, 
-            stock_quantity=stock_quantity, 
+            name=ingredient_name,
+            category_id=category_id,
+            stock_quantity=stock_quantity,
             stock_type=stock_type
         )
-
         db.session.add(new_ingredient)
         db.session.commit()
+
         return jsonify(message='Ingredient added successfully')
     except Exception as e:
-        return jsonify(error=str(e))
-
-
-@app.route('/api/add-recipe', methods=['POST'])
-def add_recipe():
-    data = request.json
-    name = data.get('nameRecipe')
-    instructions = data.get('instructionsRecipe')  
-    category_id = data.get('categoryRecipe')  
-
-    try:
-        new_recipe = Recipe(name=name, instructions=instructions, category_id=category_id)
-        db.session.add(new_recipe)
-        db.session.commit()
-        return jsonify(message='Recipe added successfully')
-    except Exception as e:
-        return jsonify(error=str(e))
-    
+        return jsonify(error=str(e)), 500
 
 @app.route('/api/add-category', methods=['POST'])
 def add_category():
@@ -130,7 +114,6 @@ def add_category():
         return jsonify(message='Category added successfully')
     except Exception as e:
         return jsonify(error=str(e))
-
 
 @app.route('/api/delete-category', methods=['POST'])
 def delete_category():
@@ -168,7 +151,6 @@ def delete_ingredient():
     except Exception as e:
         return jsonify(error=str(e))
 
-
 @app.route('/api/modify-category', methods=['POST'])
 def modify_category():
     data = request.json
@@ -186,7 +168,6 @@ def modify_category():
     except Exception as e:
         return jsonify(error=str(e))
     
-
 @app.route('/api/modify-ingredient', methods=['POST'])
 def modify_ingredient():
     data = request.json
@@ -212,6 +193,42 @@ def modify_ingredient():
     except Exception as e:
         return jsonify(error=str(e))
     
+from flask import request, jsonify
+
+@app.route('/api/add-recipe', methods=['POST'])
+def add_recipe():
+    data = request.json
+
+    required_fields = ['name', 'instructions', 'category_id', 'ingredient_ids']
+    if not all(field in data for field in required_fields):
+        return jsonify(error='Missing required fields'), 400
+
+    recipe_name = data['name']
+    instructions = data['instructions']
+    category_id = data['category_id']
+    description = data['description']
+    ingredient_ids = data['ingredient_ids']
+
+    try:
+        # Validate ingredient existence
+        ingredients = Ingredient.query.filter(Ingredient.id.in_(ingredient_ids)).all()
+        if len(ingredients) != len(ingredient_ids):
+            return jsonify(error='One or more ingredients not found'), 404
+
+        new_recipe = Recipe(
+            name=recipe_name,
+            instructions=instructions,
+            category_id=category_id,
+            ingredients=ingredients,
+            description=description
+        )
+
+        db.session.add(new_recipe)
+        db.session.commit()
+
+        return jsonify(message='Recipe added successfully')
+    except Exception as e:
+        return jsonify(error=str(e)), 500
     
 if __name__ == '__main__':
     app.run(debug=True)
