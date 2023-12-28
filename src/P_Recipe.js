@@ -176,7 +176,6 @@ const handleCheckboxChange = (ingredientId) => {
                   <div
                     id={`collapse${index + 1}`}
                     className="accordion-collapse collapse"
-                    data-bs-parent="#accordionExample"
                   >
                     <div className="accordion-body">
                     {ingredients
