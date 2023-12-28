@@ -1,116 +1,149 @@
-.top {
-    display: flex;
-    align-items: flex-start; /* Align items at the start of the cross axis (top) */
-  }
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ensure body covers the full height of the viewport */
   
-  .left-side {
-    width: 300px; /* Adjust the width as needed */
-    padding: 20px; /* Adjust the padding as needed */
-    border-right: 1px solid #ccc; /* Add a border to separate left and right sides */
-    flex-direction: column;
-  }
-  
-  .right-side {
-    flex: 1; /* Take remaining space in the container */
-    padding: 20px; /* Adjust the padding as needed */
-  }
-  
-  /* Add additional styling for input, textarea, and button as needed */
-  .recipe-name,
-  .description,
-  .instructions {
-    width: 100%;
-    margin-bottom: 10px;
-  }  
+}
 
-:root {
-    --accordion-padding-y: 1rem;
-    --accordion-padding-x: 1.25rem;
-    --accordion-color: var(--body-color);
-    --accordion-bg: var(--body-bg);
-    --accordion-border-width: var(--border-width);
-    --accordion-border-color: rgba(0, 0, 0, 0.125);
-    --accordion-border-radius: var(--border-radius);
-    --accordion-inner-border-radius: calc(var(--accordion-border-radius) - var(--accordion-border-width));
-  
-    --accordion-body-padding-y: var(--accordion-padding-y);
-    --accordion-body-padding-x: var(--accordion-padding-x);
-  
-    --accordion-button-padding-y: var(--accordion-padding-y);
-    --accordion-button-padding-x: var(--accordion-padding-x);
-    --accordion-button-color: var(--accordion-color);
-    --accordion-button-bg: var(--accordion-bg);
-    --accordion-transition: var(--btn-transition), border-radius 0.15s ease;
-    --accordion-button-active-bg: rgba(0, 123, 255, 0.9);
-    --accordion-button-active-color: rgba(0, 123, 255, 0.1);
-  
-    --accordion-button-focus-border-color: var(--input-focus-border-color);
-    --accordion-button-focus-box-shadow: var(--btn-focus-box-shadow);
-  
-    --accordion-icon-width: 1.25rem;
-    --accordion-icon-color: var(--accordion-color);
-    --accordion-icon-active-color: var(--accordion-button-active-color);
-    --accordion-icon-transition: transform 0.2s ease-in-out;
-    --accordion-icon-transform: rotate(-180deg);
-  
-    --accordion-button-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
-    --accordion-button-active-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#{$accordion-icon-active-color}'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
-  }
-  
-  .accordion {
-    padding: var(--accordion-padding-y) var(--accordion-padding-x);
-    color: var(--accordion-color);
-    background-color: var(--accordion-bg);
-    border-width: var(--accordion-border-width);
-    border-color: var(--accordion-border-color);
-    border-radius: var(--accordion-border-radius);
-  }
-  
-  .accordion-button {
-    padding: var(--accordion-button-padding-y) var(--accordion-button-padding-x);
-    color: var(--accordion-button-color);
-    background-color: var(--accordion-button-bg);
-    transition: var(--accordion-transition);
-  }
-  
-  .accordion-button.active {
-    background-color: var(--accordion-button-active-bg);
-    color: var(--accordion-button-active-color);
-  }
-  
-  .accordion-button:focus {
-    border-color: var(--accordion-button-focus-border-color);
-    box-shadow: var(--accordion-button-focus-box-shadow);
-  }
-  
-  .accordion-button::after {
-    width: var(--accordion-icon-width);
-    height: var(--accordion-icon-width);
-    content: var(--accordion-button-icon);
-    transition: var(--accordion-icon-transition);
-  }
-  
-  .accordion-button.active::after {
-    content: var(--accordion-button-active-icon);
-  }
-  
-  .accordion-button.collapsed::after {
-    transform: var(--accordion-icon-transform);
-  }
-  
-  .accordion-collapse {
-    border-width: var(--accordion-border-width);
-    border-color: var(--accordion-border-color);
-    border-radius: var(--accordion-inner-border-radius);
-    overflow: hidden;
-    transition: max-height 0.35s ease;
-  }
-  
-  .accordion-collapse.show {
-    max-height: 1000px; 
-  }
-  
-  .accordion-body {
-    padding: var(--accordion-body-padding-y) var(--accordion-body-padding-x);
-  }
-  
+.background {
+  width: 80%;
+  display: flex;
+  padding:25px;
+  background:#c5c5e0;
+  border-radius: 50px;
+  align-items: center;
+}
+
+.top {
+  height: 100vh;
+  justify-content: center;
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  background: linear-gradient(214deg, rgba(200,147,138,1) 0%, rgba(182,184,233,1) 100%);
+}
+
+.left-side {
+  width: 300px; /* Adjust the width as needed */
+  padding: 20px; /* Adjust the padding as needed */
+  border-right: 1px solid #ccc; /* Add a border to separate left and right sides */
+  flex-direction: column;
+  background-color: #D5C8D7;
+  border-radius: 15px; 
+  margin: 10px;
+}
+
+.right-side {
+  flex: 1; 
+  padding: 20px; 
+  background-color: #D5C8D7;
+  border-radius: 15px; 
+  margin: 10px;
+}
+
+/* Add additional styling for input, textarea, and button as needed */
+.recipe-name,
+.description,
+.instructions {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.form-check-input {
+  position: relative;
+  width: 15px; 
+  height: 15px; 
+  margin-right: 5px; 
+  appearance: none;
+  background-color: #fff; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  outline: none;
+  cursor: pointer;
+}
+
+.form-check-input::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 15px; 
+  height: 15px; 
+  background-color: #D36A60; 
+  border-radius: 2px; 
+  opacity: 0; 
+  transition: opacity 0.1s ease-in-out;
+}
+
+.form-check-input:checked::before {
+  opacity: 1;
+}
+
+.accordion {
+  color: #333;
+  background-color: #fff;
+  transition: all 0.15s ease-in-out;
+  border-color: rgba(0, 0, 0, 0.125);
+  border-width: 1px;
+  border-radius: 4px;
+}
+
+.accordion-button {
+  padding: 1rem 1.25rem;
+  color: #0f0e0e;
+  background: linear-gradient(214deg, rgba(244,200,167,1) 0%, rgba(236,208,199,1) 25%, rgba(182,184,233,1) 100%);
+}
+
+.accordion-button::after {
+  width: 1.25rem;
+  content: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#333'><path fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/></svg>");
+  transition: transform 0.2s ease-in-out;
+}
+.accordion-button.active {
+  background-color: #dca26e;
+  color: #0f0e0e;
+  box-shadow: 0 0 0 0.2rem #F0B0AB;
+}
+.accordion-collapse {
+  border-width: 1px;
+  border-radius: 3px; /* Adjust as needed */
+  overflow: hidden;
+}
+
+.accordion-body {
+  padding: 1rem 1.25rem;
+  background: linear-gradient(214deg, rgba(200,147,138,1) 0%, rgba(182,184,233,1) 100%);
+  color: #F0B0AB !important;
+}
+
+.recipe-name,
+.description,
+.instructions {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(241deg, rgba(234,198,187,1) 0%, rgba(215,184,187,1) 25%, rgba(194,184,215,1) 100%);
+  box-sizing: border-box;
+  transition: background-color 0.3s ease-in-out;
+  border: 1px solid #b19ede;
+}
+
+.title {
+  background-color: #B8B7E7;
+  border: 1px solid #d0a39f; 
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.recipe-name:hover,
+.description:hover,
+.instructions:hover {
+  background-color: #EBB8B5 !important;
+}
+
+

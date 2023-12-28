@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import './CSS_Recipe.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'popper.js';
 import 'jquery';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import './SCSS_Recipe.scss';
+import './CSS_Recipe.css'; 
 
 function P_Recipe() {
   const [name, setName] = useState('');
@@ -100,8 +101,6 @@ const handleCheckboxChange = (ingredientId) => {
   }));
 };
 
-
-
     useEffect(() => {
       fetchIngredients();
       fetchCategories();
@@ -109,98 +108,97 @@ const handleCheckboxChange = (ingredientId) => {
 
     return (
       <div className="top">
-        <div className="left-side">
-        <h1>Insert Information</h1>
-        <Link to="/stock">Go to the stock page</Link>
-        <br></br><br></br>
-          <input
-            type="text"
-            value={name}
-            onChange={changeRecipeName}
-            placeholder="New recipe name"
-            className="recipe-name"
-          ></input>
-          <textarea
-            value={description}
-            onChange={changeDescription}
-            placeholder="Please insert short description of recipe"
-            rows="2"
-            className="description"
-          ></textarea>
-          <textarea
-            value={instructions}
-            onChange={changeInstructions}
-            placeholder="Please insert instructions for the recipe"
-            rows="4"
-            className="instructions"
-          ></textarea>
-          <select id="choiceBox" value={category} onChange={changeCategory}>
-            <option value="" disabled>
-                Select category
-            </option>
-            {categories
-                .filter(category => category.type === 'recipe')
-                .map((category) => (
-                    <option key={category.id} value={category.id}>
-                        {category.name}
-                    </option>
-                ))}
-          </select>
-          <button onClick={handleRecipeSubmit}>Submit</button>
-          <p>
-            {Object.entries(checkedState)
-            .filter(([ids, isChecked]) => isChecked)
-            .map(([ids, isChecked]) => (
-              <span key={ids}>
-                Ingredient ID: {ids}, Checked: {isChecked.toString()}<br />
-              </span>
-            ))}
-          </p>
-        </div>
-        <div className="right-side">
-          <div className="accordion" id="accordionExample">
-            {categories
-            .filter(category => category.type === 'ingredient')
-            .map((category, index) => (
-              <div className="accordion-item" key={category.id}>
-                <h2 className="accordion-header">
-                  <button
-                    className="accordion-button"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target={`#collapse${index + 1}`}
-                    aria-expanded="false" 
-                    aria-controls={`collapse${index + 1}`}
+        <div className="background">
+          <div className="left-side">
+          <h1 className="title">Insert Information</h1>
+            <input
+              type="text"
+              value={name}
+              onChange={changeRecipeName}
+              placeholder="New recipe name"
+              className="recipe-name"
+            ></input>
+            <textarea
+              value={description}
+              onChange={changeDescription}
+              placeholder="Please insert short description of recipe"
+              rows="2"
+              className="description"
+            ></textarea>
+            <textarea
+              value={instructions}
+              onChange={changeInstructions}
+              placeholder="Please insert instructions for the recipe"
+              rows="4"
+              className="instructions"
+            ></textarea>
+            <select id="choiceBox" value={category} onChange={changeCategory}>
+              <option value="" disabled>
+                  Select category
+              </option>
+              {categories
+                  .filter(category => category.type === 'recipe')
+                  .map((category) => (
+                      <option key={category.id} value={category.id}>
+                          {category.name}
+                      </option>
+                  ))}
+            </select>
+            <button onClick={handleRecipeSubmit}>Submit</button>
+            <p>
+              {Object.entries(checkedState)
+              .filter(([ids, isChecked]) => isChecked)
+              .map(([ids, isChecked]) => (
+                <span key={ids}>
+                  Ingredient ID: {ids}, Checked: {isChecked.toString()}<br />
+                </span>
+              ))}
+            </p>
+          </div>
+          <div className="right-side">
+            <div className="accordion" id="accordionExample">
+              {categories
+              .filter(category => category.type === 'ingredient')
+              .map((category, index) => (
+                <div className="accordion-item" key={category.id}>
+                  <h2 className="accordion-header">
+                    <button
+                      className="accordion-button"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target={`#collapse${index + 1}`}
+                      aria-expanded="false" 
+                      aria-controls={`collapse${index + 1}`}
+                    >
+                      {category.name}
+                    </button>
+                  </h2>
+                  <div
+                    id={`collapse${index + 1}`}
+                    className="accordion-collapse collapse"
+                    data-bs-parent="#accordionExample"
                   >
-                    {category.name}
-                  </button>
-                </h2>
-                <div
-                  id={`collapse${index + 1}`}
-                  className="accordion-collapse collapse"
-                  data-bs-parent="#accordionExample"
-                >
-                  <div className="accordion-body">
-                  <p>This is the ingredients within the {category.name} category.</p>
-                  {ingredients
-                    .filter(ingredient => ingredient.category_id === category.id)
-                    .map(ingredient => (
-                      <div className="list-group" key={ingredient.id}>
-                        <label className="list-group-item">
-                          <input
-                            className="form-check-input me-1"
-                            type="checkbox"
-                            checked={checkedState[ingredient.id]}
-                            onChange={() => handleCheckboxChange(ingredient.id)}
-                          />
-                          {ingredient.name}
-                        </label>
-                      </div>
-                    ))}
+                    <div className="accordion-body">
+                    {ingredients
+                      .filter(ingredient => ingredient.category_id === category.id)
+                      .map(ingredient => (
+                        <div className="list-group" key={ingredient.id}>
+                          <label className="list-group-item">
+                            <input
+                              className="form-check-input me-1"
+                              type="checkbox"
+                              checked={checkedState[ingredient.id]}
+                              onChange={() => handleCheckboxChange(ingredient.id)}
+                            />
+                            {ingredient.name}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>

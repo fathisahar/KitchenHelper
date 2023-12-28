@@ -414,9 +414,6 @@ function P_Stock() {
         <div>
             <div className="top">
                 <h1>insert information</h1>
-                <Link to="/login">Go to the login page</Link>
-                <p></p>
-                <Link to="/recipe">Go to the recipe page</Link>
             </div>
             <div className="row">
                 <div className="container">
