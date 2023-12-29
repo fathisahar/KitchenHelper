@@ -14,8 +14,59 @@
   align-items: flex-start;
 }
 
+.bottom-part {
+  justify-content: center;
+  flex: 1;
+}
+
+.choiceBox {
+  width: 100%;
+  margin-bottom: 2px;
+  border: 2px solid black;
+  border-radius: 5px;
+  color: black;
+  background-color: white;
+  transition: color 0.3s, background-color 0.3s, border 0.3s;
+}
+
+.choiceBox:hover {
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.choiceBox:focus {
+  outline: none;
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.submit {
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.submit:hover {
+  background-color: black;
+  color: white;
+  border-color: black;
+}
+
+.submit:focus {
+  outline: none;
+  background-color: black;
+  color: white;
+  border-color: black;
+}
+
+
 .left-side {
-  width: 350px; 
+  width: 400px; 
   padding: 20px;
   flex-direction: column;
   border-radius: 0px; 
@@ -157,7 +208,7 @@ p {
   border: 1px solid black;
   margin: 20px;
   float: left;
-  width: 300px;
+  width: 350px;
   padding: 10px;
   
   table {

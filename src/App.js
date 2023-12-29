@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import P_Home from './P_Home';
 import P_Stock from './P_Stock';
 import P_Recipe from './P_Recipe.js';
+import './CSS_App.css';
 
 
 function App() {
   return (
     <Router>
       <>
-        <header>
+        <header class="main-header">
           <Link to="/">Home</Link>
           <Link to="/stock">Add Stock</Link>
           <Link to="/recipe">Add Recipe</Link>

@@ -7,6 +7,24 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './SCSS_Recipe.scss';
 import './CSS_Recipe.css'; 
 
+const randomPercentage = () => {
+  return Math.floor(Math.random() * 100) + 1;
+};
+
+const randomUnit = () => {
+  const units = [
+    'grams', 'miligrams', 'kilograms', 'pound',
+    'ounces', 'militers', 'liters', 'units',
+    'cloves', 'leaves', 'teaspoon', 'tablespoon', 'bag'
+  ];
+
+  return units[Math.floor(Math.random() * units.length)];
+};
+
+const randomMeasure = () => {
+  return Math.floor(Math.random() * 500) + 5;
+};
+
 function P_Recipe() {
   const [name, setName] = useState('');
   const changeRecipeName = (event) => { setName(event.target.value); };
@@ -94,12 +112,12 @@ const fetchIngredients = () => {
     });
 };
 
-const handleCheckboxChange = (ingredientId) => {
-  setCheckedState(prevState => ({
-    ...prevState,
-    [ingredientId]: !prevState[ingredientId],
-  }));
-};
+    const handleCheckboxChange = (ingredientId) => {
+      setCheckedState(prevState => ({
+        ...prevState,
+        [ingredientId]: !prevState[ingredientId],
+      }));
+    };
 
     const autoResize = (element, textareaName) => {
 
@@ -120,6 +138,7 @@ const handleCheckboxChange = (ingredientId) => {
     }, []); 
 
     return (
+
       <div className="top">
         <div className="background">
           <div className="left-side">
@@ -146,21 +165,11 @@ const handleCheckboxChange = (ingredientId) => {
                 <thead>
                   <tr>
                     <th colspan="3" class="small-info">
-                      Amount Per Serving
+                      Ingredients Per Serving
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th colspan="2">
-                      <b>Calories</b>
-                      200
-                    </th>
-                    <td>
-                      Calories from Fat
-                      130
-                    </td>
-                  </tr>
                   <tr class="thick-row">
                     <td colspan="3" class="small-info">
                       <b>% Daily Value*</b>
@@ -173,10 +182,10 @@ const handleCheckboxChange = (ingredientId) => {
                   <tr>
                     <th colSpan="2">
                       <b>{category.name}</b>
-                      7mg
+                      {randomMeasure()} {randomUnit()}
                     </th>
                     <td>
-                      4%
+                      {randomPercentage()} %
                     </td>
                   </tr>
                   {ingredients
@@ -192,30 +201,6 @@ const handleCheckboxChange = (ingredientId) => {
               ))}
               </tbody>
               </table>
-              <table class="performance-facts__table--grid">
-                <tbody>
-                  <tr>
-                    <td colspan="2">
-                      Vitamin A
-                      10%
-                    </td>
-                    <td>
-                      Vitamin C
-                      0%
-                    </td>
-                  </tr>
-                  <tr class="thin-end">
-                    <td colspan="2">
-                      Calcium
-                      10%
-                    </td>
-                    <td>
-                      Iron
-                      6%
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
               <p class="small-info">* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs. </p>
               <textarea
               value={instructions}
@@ -225,7 +210,7 @@ const handleCheckboxChange = (ingredientId) => {
               className="instructions"
               onInput={(e) => autoResize(e.target)}
             ></textarea>
-          </section>
+            <div className="bottom-part">
             <select id="choiceBox" value={category} onChange={changeCategory}>
               <option value="" disabled>
                   Select category
@@ -238,7 +223,9 @@ const handleCheckboxChange = (ingredientId) => {
                       </option>
                   ))}
             </select>
-            <button onClick={handleRecipeSubmit}>Submit</button>
+            <button onClick={handleRecipeSubmit} className="submit">Submit</button>
+            </div>
+          </section>
           </div>
           <div className="right-side">
             <div className="accordion" id="accordionExample">
