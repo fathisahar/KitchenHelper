@@ -13,4 +13,5 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 <img width="1288" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/f313b525-bd31-4e82-a9e1-0f46dd098437">
 
-<img width="1288" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/a2a23b0d-9ba1-4c9b-af10-f3a8b3cc3345">
+<img width="1288" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/59a49275-0bf6-403f-bbe0-5dbc7d868391">
+
