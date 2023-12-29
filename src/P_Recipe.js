@@ -65,7 +65,7 @@ function P_Recipe() {
         .catch(error => {
             console.error('Error fetching ingredient categories:', error);
         });
-};
+  };
 
   const fetchCategories = () => {
     fetch('http://localhost:5000/api/get-categories')
@@ -76,7 +76,7 @@ function P_Recipe() {
         .catch(error => {
             console.error('Error fetching categories:', error);
         });
-};
+  };
 
 const fetchIngredients = () => {
   fetch('http://localhost:5000/api/get-ingredients')
@@ -101,6 +101,19 @@ const handleCheckboxChange = (ingredientId) => {
   }));
 };
 
+    const autoResize = (element, textareaName) => {
+
+      element.style.height = (element.scrollHeight) + 'px';
+
+      const isEmpty = element.value.trim() === '';
+
+      if (isEmpty) {
+        element.style.border = '2px solid black';
+      } else {
+        element.style.border = 'none';
+      }
+    };
+
     useEffect(() => {
       fetchIngredients();
       fetchCategories();
@@ -110,28 +123,109 @@ const handleCheckboxChange = (ingredientId) => {
       <div className="top">
         <div className="background">
           <div className="left-side">
-          <h1 className="title">Insert Information</h1>
-            <input
-              type="text"
-              value={name}
-              onChange={changeRecipeName}
-              placeholder="New recipe name"
-              className="recipe-name"
-            ></input>
-            <textarea
-              value={description}
-              onChange={changeDescription}
-              placeholder="Please insert short description of recipe"
-              rows="2"
-              className="description"
-            ></textarea>
-            <textarea
+            <section class="performance-facts">
+              <header class="performance-facts__header">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={changeRecipeName}
+                  placeholder="Recipe name"
+                  className="recipe-name"
+                  onInput={(e) => autoResize(e.target)}
+                ></input>
+                <textarea
+                  value={description}
+                  onChange={changeDescription}
+                  placeholder="Please insert short description of recipe"
+                  rows="1"
+                  className="description"
+                  onInput={(e) => autoResize(e.target)}
+                ></textarea>
+              </header>
+              <table class="performance-facts__table">
+                <thead>
+                  <tr>
+                    <th colspan="3" class="small-info">
+                      Amount Per Serving
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th colspan="2">
+                      <b>Calories</b>
+                      200
+                    </th>
+                    <td>
+                      Calories from Fat
+                      130
+                    </td>
+                  </tr>
+                  <tr class="thick-row">
+                    <td colspan="3" class="small-info">
+                      <b>% Daily Value*</b>
+                    </td>
+                  </tr>
+                  {categories
+                  .filter(category => category.type === 'ingredient')
+                  .map((category) => (
+                <React.Fragment key={category.id}>
+                  <tr>
+                    <th colSpan="2">
+                      <b>{category.name}</b>
+                      7mg
+                    </th>
+                    <td>
+                      4%
+                    </td>
+                  </tr>
+                  {ingredients
+                    .filter((ingredient) => checkedState[ingredient.id] && category.id === ingredient.category_id)
+                    .map((ingredient) => (
+                      <tr key={ingredient.id}>
+                        <td className="blank-cell"></td>
+                        <th>{ingredient.name}</th>
+                        <td></td>
+                      </tr>
+                    ))}
+                </React.Fragment>
+              ))}
+              </tbody>
+              </table>
+              <table class="performance-facts__table--grid">
+                <tbody>
+                  <tr>
+                    <td colspan="2">
+                      Vitamin A
+                      10%
+                    </td>
+                    <td>
+                      Vitamin C
+                      0%
+                    </td>
+                  </tr>
+                  <tr class="thin-end">
+                    <td colspan="2">
+                      Calcium
+                      10%
+                    </td>
+                    <td>
+                      Iron
+                      6%
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <p class="small-info">* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs. </p>
+              <textarea
               value={instructions}
               onChange={changeInstructions}
               placeholder="Please insert instructions for the recipe"
               rows="4"
               className="instructions"
+              onInput={(e) => autoResize(e.target)}
             ></textarea>
+          </section>
             <select id="choiceBox" value={category} onChange={changeCategory}>
               <option value="" disabled>
                   Select category
@@ -145,15 +239,6 @@ const handleCheckboxChange = (ingredientId) => {
                   ))}
             </select>
             <button onClick={handleRecipeSubmit}>Submit</button>
-            <p>
-              {Object.entries(checkedState)
-              .filter(([ids, isChecked]) => isChecked)
-              .map(([ids, isChecked]) => (
-                <span key={ids}>
-                  Ingredient ID: {ids}, Checked: {isChecked.toString()}<br />
-                </span>
-              ))}
-            </p>
           </div>
           <div className="right-side">
             <div className="accordion" id="accordionExample">
