@@ -48,6 +48,21 @@ function P_Stock() {
     const changeCategoryToModify = (event) => { setCategoryToModify(event.target.value);};
     const changeCategoryNewName = (event) => { setCategoryNewName(event.target.value);};
 
+    const Select = ({ id, value, onChange, options, defaultOption }) => (
+        <select id={id} value={value} onChange={onChange}>
+            {defaultOption && (
+                <option value={defaultOption.value} disabled={defaultOption.disabled}>
+                    {defaultOption.label}
+                </option>
+            )}
+            {options.map((option) => (
+                <option key={option.value} value={option.value}>
+                    {option.label}
+                </option>
+            ))}
+        </select>
+    );
+
     const handleCategorySubmit = () => {
         setCategorySubmitted(true);
 
@@ -412,7 +427,7 @@ function P_Stock() {
       
     return (
         <div>
-            <div className="top">
+            <div className="section1">
                 <h1>insert information</h1>
             </div>
             <div className="row">
@@ -425,18 +440,15 @@ function P_Stock() {
                             onChange={changeNameCategory}
                             placeholder="Category"
                         />
-                        <select id="choiceBox" value={categoryType} onChange={changeCategoryType}>
-                            <option value="Please select value." disabled>
-                                Select a type
-                            </option>
-                            <option value="ingredient">Ingredient</option>
-                            <option value="recipe">Recipe</option>
-                        </select>
+                        <Select id="choiceBox" value={categoryType} onChange={changeCategoryType} options={[
+                            { value: 'Please select value.', label: 'Select a type' },
+                            { value: 'ingredient', label: 'Ingredient' },
+                            { value: 'recipe', label: 'Recipe' },
+                        ]} />
                         {categorySubmitted && categoryError && (
                             <p className="error-message">Please select a value for both fields.</p>
                         )}
                         <button onClick={handleCategorySubmit}>Submit</button>
-                        <div dangerouslySetInnerHTML={{ __html: ingredientCategories }}></div>
                     </div>
                     <div className="box">
                         <p>Ingredient</p>
@@ -470,18 +482,16 @@ function P_Stock() {
                             <option value="tablespoon">tbsp</option>
                             <option value="bag">bag</option>
                         </select>
-                        <select id="choiceBox" value={categoryIngredient} onChange={changeCategoryIngredient}>
-                            <option value="Please select value." disabled>
-                                Select category
-                            </option>
-                            {categories
+                        <Select
+                            id="choiceBox"
+                            value={categoryIngredient}
+                            onChange={changeCategoryIngredient}
+                            options={categories
                                 .filter(category => category.type === 'ingredient')
-                                .map((category) => (
-                                    <option key={category.id} value={category.id}>
-                                        {category.name}
-                                    </option>
-                                ))}
-                        </select>
+                                .map(category => ({ value: category.id, label: category.name }))
+                            }
+                            defaultOption={{ value: 'Please select value.', label: 'Select category', disabled: true }}
+                        />
                         {ingredientSubmitted && ingredientError && (
                             <p className="error-message">Please select a value for all fields.</p>
                         )}
@@ -489,7 +499,7 @@ function P_Stock() {
                     </div>
                 </div>
             </div>
-            <div className="top">
+            <div className="section2">
                 <h1>modify information</h1>
             </div>
             <div className="row">

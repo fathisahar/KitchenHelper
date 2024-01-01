@@ -165,7 +165,7 @@ const fetchIngredients = () => {
                 <thead>
                   <tr>
                     <th colspan="3" class="small-info">
-                      Ingredients Per Serving
+                      Ingredients For Recipe
                     </th>
                   </tr>
                 </thead>
