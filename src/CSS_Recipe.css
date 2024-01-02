@@ -80,7 +80,6 @@
   margin: 10px;
 }
 
-/* Add additional styling for input, textarea, and button as needed */
 .recipe-name,
 .description,
 .instructions {
@@ -187,7 +186,7 @@
 }
 .accordion-collapse {
   border-width: 1px;
-  border-radius: 3px; /* Adjust as needed */
+  border-radius: 3px;
   overflow: hidden;
 }
 

@@ -164,14 +164,14 @@ const fetchIngredients = () => {
               <table className="performance-facts__table">
                 <thead>
                   <tr>
-                    <th colspan="3" className="small-info">
+                    <th colSpan="3" className="small-info">
                       Ingredients For Recipe
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="thick-row">
-                    <td colspan="3" className="small-info">
+                    <td colSpan="3" className="small-info">
                       <b>% Daily Value*</b>
                     </td>
                   </tr>
