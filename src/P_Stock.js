@@ -661,7 +661,6 @@ function P_Stock() {
                             <button onClick={handleIngredientCancel}>Cancel</button>
                         )}
                     </div>
-
                 </div>
             </div>
         </div>

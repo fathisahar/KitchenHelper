@@ -142,8 +142,8 @@ const fetchIngredients = () => {
       <div className="top">
         <div className="background">
           <div className="left-side">
-            <section class="performance-facts">
-              <header class="performance-facts__header">
+            <section className="performance-facts">
+              <header className="performance-facts__header">
                 <input
                   type="text"
                   value={name}
@@ -161,17 +161,17 @@ const fetchIngredients = () => {
                   onInput={(e) => autoResize(e.target)}
                 ></textarea>
               </header>
-              <table class="performance-facts__table">
+              <table className="performance-facts__table">
                 <thead>
                   <tr>
-                    <th colspan="3" class="small-info">
+                    <th colspan="3" className="small-info">
                       Ingredients For Recipe
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr class="thick-row">
-                    <td colspan="3" class="small-info">
+                  <tr className="thick-row">
+                    <td colspan="3" className="small-info">
                       <b>% Daily Value*</b>
                     </td>
                   </tr>
@@ -201,7 +201,7 @@ const fetchIngredients = () => {
               ))}
               </tbody>
               </table>
-              <p class="small-info">* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs. </p>
+              <p className="small-info">* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs. </p>
               <textarea
               value={instructions}
               onChange={changeInstructions}
