@@ -1,19 +1,21 @@
 .container {
     display: flex;
-    justify-content: space-between;
-    margin: 20px;
+    flex-direction: column;
 }
 
-.row {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px;
+.section {
+    margin-bottom: 20px;
 }
 
 .box {
-    border: 2px solid black;
-    padding: 20px;
-    text-align: center;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
 }
 
-  
+.error-message {
+    color: red;
+}
+
+
+

@@ -1,10 +1,7 @@
-
-
 .background {
   width: 80%;
   display: flex;
   padding:25px;
-  background:#c5c5e0;
   border-radius: 50px;
   align-items: center;
 }
@@ -15,33 +12,122 @@
   flex: 1;
   display: flex;
   align-items: flex-start;
-  background: linear-gradient(214deg, rgba(200,147,138,1) 0%, rgba(182,184,233,1) 100%);
 }
 
+.bottom-part {
+  justify-content: center;
+  flex: 1;
+}
+
+.choiceBox {
+  width: 100%;
+  margin-bottom: 2px;
+  border: 2px solid black;
+  border-radius: 5px;
+  color: black;
+  background-color: white;
+  transition: color 0.3s, background-color 0.3s, border 0.3s;
+}
+
+.choiceBox:hover {
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.choiceBox:focus {
+  outline: none;
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.submit {
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.submit:hover {
+  background-color: black;
+  color: white;
+  border-color: black;
+}
+
+.submit:focus {
+  outline: none;
+  background-color: black;
+  color: white;
+  border-color: black;
+}
+
+
 .left-side {
-  width: 300px; /* Adjust the width as needed */
-  padding: 20px; /* Adjust the padding as needed */
-  border-right: 1px solid #ccc; /* Add a border to separate left and right sides */
+  width: 400px; 
+  padding: 20px;
   flex-direction: column;
-  background-color: #D5C8D7;
-  border-radius: 15px; 
+  border-radius: 0px; 
   margin: 10px;
 }
 
 .right-side {
   flex: 1; 
   padding: 20px; 
-  background-color: #D5C8D7;
   border-radius: 15px; 
   margin: 10px;
 }
 
-/* Add additional styling for input, textarea, and button as needed */
 .recipe-name,
 .description,
 .instructions {
   width: 100%;
   margin-bottom: 10px;
+}
+
+.recipe-name,
+.description,
+.instructions {
+  width: 100%;
+  margin-bottom: 2px;
+  border: 2px solid black;
+  border-radius: 5px;
+  color: black;
+  background-color: white;
+  transition: color 0.3s, background-color 0.3s, border 0.3s;
+  overflow: hidden;
+  resize: none; 
+}
+
+.recipe-name:hover,
+.description:hover,
+.instructions:hover {
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.recipe-name:focus,
+.description:focus,
+.instructions:focus {
+  outline: none; 
+  color: white;
+  background-color: black;
+  border-color: black;
+}
+
+.recipe-name {
+  font-weight: bold;
+  font-size: 2rem;
+  margin: 0 0 0.25rem 0;
+}
+
+.title {
+  box-sizing: border-box;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .form-check-input {
@@ -65,7 +151,6 @@
   transform: translate(-50%, -50%);
   width: 15px; 
   height: 15px; 
-  background-color: #D36A60; 
   border-radius: 2px; 
   opacity: 0; 
   transition: opacity 0.1s ease-in-out;
@@ -87,7 +172,6 @@
 .accordion-button {
   padding: 1rem 1.25rem;
   color: #0f0e0e;
-  background: linear-gradient(214deg, rgba(244,200,167,1) 0%, rgba(236,208,199,1) 25%, rgba(182,184,233,1) 100%);
 }
 
 .accordion-button::after {
@@ -102,43 +186,135 @@
 }
 .accordion-collapse {
   border-width: 1px;
-  border-radius: 3px; /* Adjust as needed */
+  border-radius: 3px;
   overflow: hidden;
 }
 
 .accordion-body {
   padding: 1rem 1.25rem;
-  background: linear-gradient(214deg, rgba(200,147,138,1) 0%, rgba(182,184,233,1) 100%);
   color: #F0B0AB !important;
 }
 
-.recipe-name,
-.description,
-.instructions {
-  display: block;
+body {
+  font-size: small;
+  line-height: 1.4;
+}
+p {
+  margin: 0;
+}
+
+.performance-facts {
+  border: 1px solid black;
+  margin: 20px;
+  float: left;
+  width: 350px;
+  padding: 10px;
+  
+  table {
+    border-collapse: collapse;
+  }
+}
+.performance-facts__title {
+  font-weight: bold;
+  font-size: 2rem;
+  margin: 0 0 0.25rem 0;
+}
+.performance-facts__header {
+  border-bottom: 10px solid black;
+  padding: 0 0 0.25rem 0;
+  margin: 0 0 0.5rem 0;
+  p {
+    margin: 0;
+  }
+}
+.performance-facts__table {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(241deg, rgba(234,198,187,1) 0%, rgba(215,184,187,1) 25%, rgba(194,184,215,1) 100%);
-  box-sizing: border-box;
-  transition: background-color 0.3s ease-in-out;
-  border: 1px solid #b19ede;
+  thead tr {
+    th,
+    td {
+      border: 0;
+    }
+  }
+  th,
+  td {
+    font-weight: normal;
+    text-align: left;
+    padding: 0.25rem 0;
+    border-top: 1px solid black;
+    white-space: nowrap;
+  }
+  td {
+    &:last-child {
+      text-align: right;
+    }
+  }
+  .blank-cell {
+    width: 1rem;
+    border-top: 0;
+  }
+  .thick-row {
+    th,
+    td {
+      border-top-width: 5px;
+    }
+  }
+}
+.small-info {
+  margin: 0 0 0.5rem 0;
+  border-bottom: 1px solid black;
 }
 
-.title {
-  background-color: #B8B7E7;
-  border: 1px solid #d0a39f; 
-  box-sizing: border-box;
-  padding: 10px;
-  border-radius: 10px;
+.performance-facts__table--small {
+  @extend .performance-facts__table;
+  border-bottom: 1px solid #999;
+  margin: 0 0 0.5rem 0;
+  thead {
+    tr {
+      border-bottom: 1px solid black;
+    }
+  }
+  td {
+    &:last-child {
+      text-align: left;
+    }
+  }
+  th,
+  td {
+    border: 0;
+    padding: 0;
+  }
 }
 
-.recipe-name:hover,
-.description:hover,
-.instructions:hover {
-  background-color: #EBB8B5 !important;
+.performance-facts__table--grid {
+  @extend .performance-facts__table;
+  margin: 0 0 0.5rem 0;
+  td {
+    &:last-child {
+      text-align: left;
+      &::before {
+        content: "•";
+        font-weight: bold;
+        margin: 0 0.25rem 0 0;
+      }
+    }
+  }
+}
+
+.text-center {
+  text-align: center;
+}
+.thick-end {
+  border-bottom: 10px solid black;
+}
+.thin-end {
+  border-bottom: 1px solid black;
+}
+.accordion-body {
+  border-radius: 0px;
+}
+
+.accordion-button {
+  border-bottom: 1px solid black;
 }
 
 
