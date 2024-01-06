@@ -1,9 +1,10 @@
-.container {
+.row {
     display: flex;
     flex-direction: column;
+    padding:20px;
 }
 
-.section {
+.row {
     margin-bottom: 20px;
 }
 
@@ -17,5 +18,44 @@
     color: red;
 }
 
+.ingredients-table {
+    display: flex;
+    flex-direction: column;
+}
+  
+.ingredient-info {
+    margin-left: 10px;
+    display: flex;  
+    margin-bottom: 10px;
+}
+  
+.ingredient-id,
+.ingredient-name,
+.ingredient-quantity,
+.confirm,
+.ingredient-category,
+.ingredient-stock-type {
+    margin-right: 10px; /* Apply margin to all child elements */
+}
 
+.ingredient-category {
+    margin-left: 15px;
+}
+
+.category-info {
+    margin-left: 10px;
+    display: flex;  
+    margin-bottom: 10px;
+}
+
+.category-id,
+.category-name,
+.category-quantity {
+    margin-right: 10px; /* Apply margin to all child elements */
+}
+  
+.add-category,
+.add-ingredient {
+    margin: 10px;
+}
 
