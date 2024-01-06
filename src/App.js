@@ -6,28 +6,27 @@ import P_Recipe from './P_Recipe.js';
 import P_RecipeView from './P_RecipeView.js';
 import './CSS_App.css';
 
-
 function App() {
   return (
     <Router>
-      <>
-        <header className="main-header">
+      <div className="container">
+        <nav className="main-nav">
           <Link to="/">Home</Link>
           <Link to="/stock">Add Stock</Link>
           <Link to="/recipe">Add Recipe</Link>
           <Link to="/recipes">Recipes</Link>
-        </header>
-
-        <Routes>
-          <Route path="/" element={<P_Home />} />
-          <Route path="/stock" element={<P_Stock />} />
-          <Route path="/recipe" element={<P_Recipe />} />
-          <Route path="/recipes" element={<P_RecipeView />} />
-        </Routes>
-      </>
+        </nav>
+        <div className="content">
+          <Routes>
+            <Route path="/" element={<P_Home />} />
+            <Route path="/stock" element={<P_Stock />} />
+            <Route path="/recipe" element={<P_Recipe />} />
+            <Route path="/recipes" element={<P_RecipeView />} />
+          </Routes>
+        </div>
+      </div>
     </Router>
   );
 }
-
 
 export default App;
