@@ -78,14 +78,10 @@ from flask import jsonify
 def add_ingredient():
     data = request.json
 
-    required_fields = ['nameIngredient', 'categoryIngredient', 'quantityIngredient', 'quantityType']
-    if not all(field in data for field in required_fields):
-        return jsonify(error='Missing required fields'), 400
-
-    ingredient_name = data['nameIngredient']
-    category_id = data['categoryIngredient']
-    stock_quantity = data['quantityIngredient']
-    stock_type = data['quantityType']
+    ingredient_name = data['name']
+    category_id = data['category']
+    stock_quantity = data['quantity']
+    stock_type = data['type']
 
     try:
         new_ingredient = Ingredient(
@@ -104,8 +100,8 @@ def add_ingredient():
 @app.route('/api/add-category', methods=['POST'])
 def add_category():
     data = request.json
-    category_name = data.get('nameCategory')  
-    category_type = data.get('categoryType')
+    category_name = data.get('name')  
+    category_type = data.get('type')
 
     try:
         new_category = Category(categoryType = category_type, name=category_name)
@@ -118,7 +114,7 @@ def add_category():
 @app.route('/api/delete-category', methods=['POST'])
 def delete_category():
     data = request.json
-    categoryToModify = data.get('categoryToModify')  
+    categoryToModify = data.get('name')  
 
     try:
         categoryToDelete = Category.query.filter(Category.name == categoryToModify).first()
@@ -136,10 +132,10 @@ def delete_category():
 @app.route('/api/delete-ingredient', methods=['POST'])
 def delete_ingredient():
     data = request.json
-    ingredientToModify = data.get('ingredientToModify')  
+    ingredientToModify = data.get('name')  
 
     try:
-        ingredientToDelete = Ingredient.query.filter(Ingredient.id == ingredientToModify).first()
+        ingredientToDelete = Ingredient.query.filter(Ingredient.name == ingredientToModify).first()
         if ingredientToDelete:
             db.session.delete(ingredientToDelete)
             db.session.commit()
@@ -171,18 +167,16 @@ def modify_category():
 @app.route('/api/modify-ingredient', methods=['POST'])
 def modify_ingredient():
     data = request.json
-    oldId = data.get('ingredientToModify')
-    newName = data.get('newNameIngredient')  
-    newQuantity = data.get('newQuantityIngredient')
-    newQuantityType = data.get('newQuantityType')
-    newCategory = data.get('newCategoryIngredient')
+    oldId = data.get('id')
+    newName = data.get('name')  
+    newQuantity = data.get('quantity')
+    newQuantityType = data.get('type')
+    newCategory = data.get('category')
 
     try:
-        categoryID = Category.query.filter_by(name=newCategory).first()
-        
         ingredient = Ingredient.query.filter(Ingredient.id == oldId).first()
         ingredient.name = newName
-        ingredient.category_id = categoryID.id
+        ingredient.category_id = newCategory
         ingredient.stock_quantity = newQuantity
         ingredient.stock_type = newQuantityType
         db.session.commit()
