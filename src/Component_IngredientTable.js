@@ -78,19 +78,20 @@ const increment = (index) => {
   
     const updatedIngredient = updatedIngredients[index];
   
-    updateIngredientQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
+    updateQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
   };
   
   const decrement = (index) => {
     const updatedIngredients = [...ingredients];
-    updatedIngredients[index].stock_quantity--;
-    setIngredients(updatedIngredients);
-  
-    const updatedIngredient = updatedIngredients[index];
-    updateIngredientQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
+    if (updatedIngredients[index].stock_quantity > 0){
+        updatedIngredients[index].stock_quantity--;
+        setIngredients(updatedIngredients);
+        const updatedIngredient = updatedIngredients[index];
+        updateQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
+    }
   };
   
-  const updateIngredientQuantity = (ingredientId, newQuantity) => {
+  const updateQuantity = (ingredientId, newQuantity) => {
     fetch(`http://localhost:5000/api/update-ingredient-quantity/${ingredientId}`, {
         method: 'POST',
         headers: {
@@ -173,76 +174,89 @@ const increment = (index) => {
         fetchCategories();
     }, []); 
 
+
     return (
         <div>
-            <button className="add-ingredient" onClick={addNewIngredient}>+ ingredient</button>
+            <button className="add-ingredient" onClick={addNewIngredient}>
+                + ingredient
+            </button>
             <div className="ingredients-table">
-                {ingredients.map((ingredient, index) => (
-                    <div className="ingredient-element" key={ingredient.id}>
-                        <div className="ingredient-info" key={ingredient.id}>
-                            <p className="ingredient-id">{ingredient.id}</p>
-                            <input
-                                className="ingredient-name"
-                                value={ingredient.name}
-                                onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
-                            />
-                            <input
-                                className="ingredient-quantity"
-                                value={ingredient.stock_quantity}
-                                onChange={(e) => handleIngredientChange(index, 'stock_quantity', e.target.value)}
-                            />
-                            <button className='increment' onClick={() => increment(index)}>+</button>
-                            <button className='decrement' onClick={() => decrement(index)}>-</button>
-                            <select 
-                                id="ingredient-stock-type" 
-                                value={ingredient.stock_type} 
-                                onChange={(e) => handleIngredientChange(index, 'stock_type', e.target.value)}
-                            >
-                                <option>
-                                    Select unit
-                                </option>
-                                <option value="grams">g </option>
-                                <option value="miligrams">mg</option>
-                                <option value="kilograms">kg</option>
-                                <option value="pound">lb</option>
-                                <option value="ounces">oz</option>
-                                <option value="militers">ml</option>
-                                <option value="liters">L</option>
-                                <option value="units">units</option>
-                                <option value="cloves">cloves</option>
-                                <option value="leaves">leaves</option>
-                                <option value="teaspoon">tsp</option>
-                                <option value="tablespoon">tbsp</option>
-                                <option value="bag">bag</option>
-                            </select>
-                            <select
-                                className="ingredient-category"
-                                value={ingredient.category_id}
-                                onChange={(e) => handleIngredientChange(index, 'category_id', e.target.value)}
-                                >
-                            <option value="" disabled>Select category</option>
-                            {categories
-                                .filter(category => category.type === 'ingredient')
-                                .map(category => (
-                                <option key={category.id} value={category.id}>
-                                    {category.name}
-                                </option>
-                                ))
-                            }
-                            </select>
-                            <button className='delete' onClick={() => handleIngredientDelete(ingredient.name)}>X</button>
-                            {modifiedIngredient && modifiedIngredient.id === ingredient.id && (
-                            <div className="confirm">
-                                <button onClick={confirmIngredientChange}>Confirm</button>
-                                <button onClick={cancelIngredientChange}>Cancel</button>
+                <div className="ingredient-cards-container">
+                    {ingredients.map((ingredient, index) => (
+                        <div className="ingredient-card" key={ingredient.id}>
+                            <div className="ingredient-info" key={ingredient.id}>
+                                <div className="left-section">
+                                    <img className="image" src={ingredient.url} height={200} width={200} />
+                                </div>
+                                <div className="right-section">
+                                    <input
+                                        className="ingredient-name"
+                                        value={ingredient.name}
+                                        onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
+                                    />
+                                    <div className="quantity-section">
+                                        <p className="title-card"> 1) quantity and unit</p>
+                                        <input
+                                            className="ingredient-quantity"
+                                            value={ingredient.stock_quantity}
+                                            onChange={(e) => handleIngredientChange(index, 'stock_quantity', e.target.value)}
+                                        />
+                                        <button className='increment' onClick={() => increment(index)}>+</button>
+                                        <button className='decrement' onClick={() => decrement(index)}>-</button>
+                                        <select
+                                            className="ingredient-stock-type"
+                                            value={ingredient.stock_type}
+                                            onChange={(e) => handleIngredientChange(index, 'stock_type', e.target.value)}
+                                        >
+                                            <option>
+                                                Select unit
+                                            </option>
+                                            <option value="grams">g </option>
+                                            <option value="miligrams">mg</option>
+                                            <option value="kilograms">kg</option>
+                                            <option value="pound">lb</option>
+                                            <option value="ounces">oz</option>
+                                            <option value="militers">ml</option>
+                                            <option value="liters">L</option>
+                                            <option value="units">units</option>
+                                            <option value="cloves">cloves</option>
+                                            <option value="leaves">leaves</option>
+                                            <option value="teaspoon">tsp</option>
+                                            <option value="tablespoon">tbsp</option>
+                                            <option value="bag">bag</option>
+                                        </select>
+                                    </div>
+                                    <p className="title-card"> 2) category</p>
+                                    <select
+                                        className="ingredient-category"
+                                        value={ingredient.category_id}
+                                        onChange={(e) => handleIngredientChange(index, 'category_id', e.target.value)}
+                                    >
+                                        <option value="" disabled>Select category</option>
+                                        {categories
+                                            .filter(category => category.type === 'ingredient')
+                                            .map(category => (
+                                                <option key={category.id} value={category.id}>
+                                                    {category.name}
+                                                </option>
+                                            ))}
+                                    </select>
+                                    <button className='delete' onClick={() => handleIngredientDelete(ingredient.name)}>X</button>
+                                    {modifiedIngredient && modifiedIngredient.id === ingredient.id && (
+                                        <div className="confirm">
+                                            <button onClick={confirmIngredientChange}>Confirm</button>
+                                            <button onClick={cancelIngredientChange}>Cancel</button>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
-                        )}
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
         </div>
     );
+    
 };
-
+  
 export default Component_IngredientTable;

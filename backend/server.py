@@ -26,6 +26,7 @@ class Ingredient(db.Model):
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     stock_quantity = db.Column(db.Float, nullable=False)
     stock_type = db.Column(db.String(255), nullable=False)
+    url = db.Column(db.Text, nullable=True)
 
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -53,7 +54,7 @@ def get_categories():
 def get_ingredients():
     try:
         ingredients = Ingredient.query.all()
-        ingredient_list = [{'id': ingredient.id, 'name': ingredient.name, 'category_id': ingredient.category_id, 'stock_quantity': ingredient.stock_quantity, 'stock_type': ingredient.stock_type} for ingredient in ingredients]
+        ingredient_list = [{'id': ingredient.id, 'name': ingredient.name, 'category_id': ingredient.category_id, 'stock_quantity': ingredient.stock_quantity, 'stock_type': ingredient.stock_type, 'url': ingredient.url} for ingredient in ingredients]
         return jsonify(ingredients=ingredient_list) 
     except SQLAlchemyError as e:
         return jsonify(error=str(e))
