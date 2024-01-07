@@ -78,10 +78,10 @@ from flask import jsonify
 def add_ingredient():
     data = request.json
 
-    ingredient_name = data['nameIngredient']
-    category_id = data['categoryIngredient']
-    stock_quantity = data['quantityIngredient']
-    stock_type = data['quantityType']
+    ingredient_name = data['name']
+    category_id = data['category']
+    stock_quantity = data['quantity']
+    stock_type = data['type']
 
     try:
         new_ingredient = Ingredient(
@@ -132,10 +132,10 @@ def delete_category():
 @app.route('/api/delete-ingredient', methods=['POST'])
 def delete_ingredient():
     data = request.json
-    ingredientToModify = data.get('ingredientToModify')  
+    ingredientToModify = data.get('name')  
 
     try:
-        ingredientToDelete = Ingredient.query.filter(Ingredient.id == ingredientToModify).first()
+        ingredientToDelete = Ingredient.query.filter(Ingredient.name == ingredientToModify).first()
         if ingredientToDelete:
             db.session.delete(ingredientToDelete)
             db.session.commit()
@@ -167,18 +167,16 @@ def modify_category():
 @app.route('/api/modify-ingredient', methods=['POST'])
 def modify_ingredient():
     data = request.json
-    oldId = data.get('ingredientToModify')
-    newName = data.get('newNameIngredient')  
-    newQuantity = data.get('newQuantityIngredient')
-    newQuantityType = data.get('newQuantityType')
-    newCategory = data.get('newCategoryIngredient')
+    oldId = data.get('id')
+    newName = data.get('name')  
+    newQuantity = data.get('quantity')
+    newQuantityType = data.get('type')
+    newCategory = data.get('category')
 
     try:
-        categoryID = Category.query.filter_by(name=newCategory).first()
-        
         ingredient = Ingredient.query.filter(Ingredient.id == oldId).first()
         ingredient.name = newName
-        ingredient.category_id = categoryID.id
+        ingredient.category_id = newCategory
         ingredient.stock_quantity = newQuantity
         ingredient.stock_type = newQuantityType
         db.session.commit()

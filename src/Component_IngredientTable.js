@@ -9,7 +9,7 @@ const Component_IngredientTable = () => {
         stock_quantity: '',
         stock_type: 'Select unit',
         category_id:'',
-      });
+    });
 
     const [isCreating, setIsCreating] = useState(false);
     
@@ -64,16 +64,72 @@ const Component_IngredientTable = () => {
         setIsCreating(true);
         setModifiedIngredient(true);
         setNewIngredient({
-          name: '',
-          stock_quantity: '',
-          stock_type: 'Select unit',
-          category_id:'',
-        });
-      };
+            name: '',
+            stock_quantity: '',
+            stock_type: 'Select unit',
+            category_id:'',
+            });
+        };
     
     const confirmIngredientChange = () => {
         setModifiedIngredient(null);
-    };
+    
+        const updatedIngredient = ingredients[modifiedIngredient.index];
+    
+        const newIngredient = {
+            id: updatedIngredient.id,
+            name: updatedIngredient.name.toLowerCase(),
+            quantity: updatedIngredient.stock_quantity,
+            type: updatedIngredient.stock_type,
+            category: updatedIngredient.category_id
+        };
+    
+        if (isCreating){
+            fetch('http://localhost:5000/api/add-ingredient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newIngredient)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message); 
+                fetchIngredients();
+            });
+        } else {
+            fetch('http://localhost:5000/api/modify-ingredient', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newIngredient)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message); 
+                fetchIngredients();
+            });
+        };
+    }
+
+    const handleIngredientDelete = (ingredientName) => {
+        const ingredient = {
+            name: ingredientName
+          };
+        fetch('http://localhost:5000/api/delete-ingredient', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(ingredient)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message); 
+            fetchIngredients();
+        });
+    }
 
     useEffect(() => {
         fetchIngredients();
@@ -135,6 +191,7 @@ const Component_IngredientTable = () => {
                                 ))
                             }
                             </select>
+                            <button className='delete' onClick={() => handleIngredientDelete(ingredient.name)}>X</button>
                             {modifiedIngredient && modifiedIngredient.id === ingredient.id && (
                             <div className="confirm">
                                 <button onClick={confirmIngredientChange}>Confirm</button>
