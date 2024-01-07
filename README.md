@@ -17,3 +17,12 @@ This was my original idea for the interface to add recipes but I ended up decidi
 
 <img width="1288" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/59a49275-0bf6-403f-bbe0-5dbc7d868391">
 
+
+How ingredients are currently displayed:
+<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/c1193a86-a336-498e-8c44-f9ed022b950d">
+
+To add an ingredient:
+<img width="1705" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/7408c13c-3336-49fe-834f-cb2d0fe04ffa">
+
+
+
