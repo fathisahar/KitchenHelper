@@ -7,6 +7,24 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './SCSS_Recipe.scss';
 import './CSS_Recipe.css'; 
 
+const randomPercentage = () => {
+  return Math.floor(Math.random() * 100) + 1;
+};
+
+const randomUnit = () => {
+  const units = [
+    'grams', 'miligrams', 'kilograms', 'pound',
+    'ounces', 'militers', 'liters', 'units',
+    'cloves', 'leaves', 'teaspoon', 'tablespoon', 'bag'
+  ];
+
+  return units[Math.floor(Math.random() * units.length)];
+};
+
+const randomMeasure = () => {
+  return Math.floor(Math.random() * 500) + 5;
+};
+
 function P_Recipe() {
   const [name, setName] = useState('');
   const changeRecipeName = (event) => { setName(event.target.value); };
@@ -65,7 +83,7 @@ function P_Recipe() {
         .catch(error => {
             console.error('Error fetching ingredient categories:', error);
         });
-};
+  };
 
   const fetchCategories = () => {
     fetch('http://localhost:5000/api/get-categories')
@@ -76,7 +94,7 @@ function P_Recipe() {
         .catch(error => {
             console.error('Error fetching categories:', error);
         });
-};
+  };
 
 const fetchIngredients = () => {
   fetch('http://localhost:5000/api/get-ingredients')
@@ -94,12 +112,25 @@ const fetchIngredients = () => {
     });
 };
 
-const handleCheckboxChange = (ingredientId) => {
-  setCheckedState(prevState => ({
-    ...prevState,
-    [ingredientId]: !prevState[ingredientId],
-  }));
-};
+    const handleCheckboxChange = (ingredientId) => {
+      setCheckedState(prevState => ({
+        ...prevState,
+        [ingredientId]: !prevState[ingredientId],
+      }));
+    };
+
+    const autoResize = (element, textareaName) => {
+
+      element.style.height = (element.scrollHeight) + 'px';
+
+      const isEmpty = element.value.trim() === '';
+
+      if (isEmpty) {
+        element.style.border = '2px solid black';
+      } else {
+        element.style.border = 'none';
+      }
+    };
 
     useEffect(() => {
       fetchIngredients();
@@ -107,31 +138,79 @@ const handleCheckboxChange = (ingredientId) => {
     }, []); 
 
     return (
+
       <div className="top">
         <div className="background">
           <div className="left-side">
-          <h1 className="title">Insert Information</h1>
-            <input
-              type="text"
-              value={name}
-              onChange={changeRecipeName}
-              placeholder="New recipe name"
-              className="recipe-name"
-            ></input>
-            <textarea
-              value={description}
-              onChange={changeDescription}
-              placeholder="Please insert short description of recipe"
-              rows="2"
-              className="description"
-            ></textarea>
-            <textarea
+            <section className="performance-facts">
+              <header className="performance-facts__header">
+                <input
+                  type="text"
+                  value={name}
+                  onChange={changeRecipeName}
+                  placeholder="Recipe name"
+                  className="recipe-name"
+                  onInput={(e) => autoResize(e.target)}
+                ></input>
+                <textarea
+                  value={description}
+                  onChange={changeDescription}
+                  placeholder="Please insert short description of recipe"
+                  rows="1"
+                  className="description"
+                  onInput={(e) => autoResize(e.target)}
+                ></textarea>
+              </header>
+              <table className="performance-facts__table">
+                <thead>
+                  <tr>
+                    <th colSpan="3" className="small-info">
+                      Ingredients For Recipe
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="thick-row">
+                    <td colSpan="3" className="small-info">
+                      <b>% Daily Value*</b>
+                    </td>
+                  </tr>
+                  {categories
+                  .filter(category => category.type === 'ingredient')
+                  .map((category) => (
+                <React.Fragment key={category.id}>
+                  <tr>
+                    <th colSpan="2">
+                      <b>{category.name}</b>
+                      {randomMeasure()} {randomUnit()}
+                    </th>
+                    <td>
+                      {randomPercentage()} %
+                    </td>
+                  </tr>
+                  {ingredients
+                    .filter((ingredient) => checkedState[ingredient.id] && category.id === ingredient.category_id)
+                    .map((ingredient) => (
+                      <tr key={ingredient.id}>
+                        <td className="blank-cell"></td>
+                        <th>{ingredient.name}</th>
+                        <td></td>
+                      </tr>
+                    ))}
+                </React.Fragment>
+              ))}
+              </tbody>
+              </table>
+              <p className="small-info">* Percent Daily Values are based on a 2,000 calorie diet. Your daily values may be higher or lower depending on your calorie needs. </p>
+              <textarea
               value={instructions}
               onChange={changeInstructions}
               placeholder="Please insert instructions for the recipe"
               rows="4"
               className="instructions"
+              onInput={(e) => autoResize(e.target)}
             ></textarea>
+            <div className="bottom-part">
             <select id="choiceBox" value={category} onChange={changeCategory}>
               <option value="" disabled>
                   Select category
@@ -144,16 +223,9 @@ const handleCheckboxChange = (ingredientId) => {
                       </option>
                   ))}
             </select>
-            <button onClick={handleRecipeSubmit}>Submit</button>
-            <p>
-              {Object.entries(checkedState)
-              .filter(([ids, isChecked]) => isChecked)
-              .map(([ids, isChecked]) => (
-                <span key={ids}>
-                  Ingredient ID: {ids}, Checked: {isChecked.toString()}<br />
-                </span>
-              ))}
-            </p>
+            <button onClick={handleRecipeSubmit} className="submit">Submit</button>
+            </div>
+          </section>
           </div>
           <div className="right-side">
             <div className="accordion" id="accordionExample">

@@ -210,10 +210,7 @@ def add_recipe():
     ingredient_ids = data['ingredient_ids']
 
     try:
-        # Validate ingredient existence
         ingredients = Ingredient.query.filter(Ingredient.id.in_(ingredient_ids)).all()
-        if len(ingredients) != len(ingredient_ids):
-            return jsonify(error='One or more ingredients not found'), 404
 
         new_recipe = Recipe(
             name=recipe_name,
@@ -228,7 +225,29 @@ def add_recipe():
 
         return jsonify(message='Recipe added successfully')
     except Exception as e:
-        return jsonify(error=str(e)), 500
+        return jsonify(error=str(e))
+    
+@app.route('/api/get-recipes', methods=['GET'])
+def get_recipes():
+    try:
+        recipes = db.session.query(Recipe).join(recipe_ingredient).join(Ingredient).\
+            filter(Ingredient.stock_quantity > 0).all()
+
+        recipe_data = [
+            {
+                'id': recipe.id,
+                'name': recipe.name,
+                'instructions': recipe.instructions,
+                'description': recipe.description,
+                'category_id': recipe.category_id,
+                'ingredients': [ingredient.name for ingredient in recipe.ingredients],
+            }
+            for recipe in recipes
+        ]
+
+        return jsonify(recipes=recipe_data)
+    except Exception as e:
+        return jsonify(error=str(e))
     
 if __name__ == '__main__':
     app.run(debug=True)
