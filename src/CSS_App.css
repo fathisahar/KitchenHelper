@@ -9,7 +9,7 @@ body {
   font-family: 'Arial', sans-serif;
 }
 
-.container {
+.main-screen {
   display: flex;
   height: 100%;
 }
@@ -39,5 +39,4 @@ body {
   flex-grow: 1;
   padding: 20px;
   height: 100%;
-  margin-left: 220px; 
 }

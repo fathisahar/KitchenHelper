@@ -10,7 +10,7 @@ import './CSS_App.css';
 function App() {
   return (
     <Router>
-      <div className="container">
+      <div className="main-screen">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap"/>
         <nav className="main-nav">
           <Link to="/">Home</Link>

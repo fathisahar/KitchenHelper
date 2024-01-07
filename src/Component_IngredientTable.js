@@ -186,7 +186,7 @@ const increment = (index) => {
     }, []); 
     
     return (
-        <div className="row">
+        <div className="main-section">
             <div className="category-filter">
                 <button className="add-ingredient" onClick={addNewIngredient}>
                     + ingredient
