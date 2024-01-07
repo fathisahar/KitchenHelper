@@ -78,10 +78,6 @@ from flask import jsonify
 def add_ingredient():
     data = request.json
 
-    required_fields = ['nameIngredient', 'categoryIngredient', 'quantityIngredient', 'quantityType']
-    if not all(field in data for field in required_fields):
-        return jsonify(error='Missing required fields'), 400
-
     ingredient_name = data['nameIngredient']
     category_id = data['categoryIngredient']
     stock_quantity = data['quantityIngredient']
@@ -104,8 +100,8 @@ def add_ingredient():
 @app.route('/api/add-category', methods=['POST'])
 def add_category():
     data = request.json
-    category_name = data.get('nameCategory')  
-    category_type = data.get('categoryType')
+    category_name = data.get('name')  
+    category_type = data.get('type')
 
     try:
         new_category = Category(categoryType = category_type, name=category_name)
@@ -118,7 +114,7 @@ def add_category():
 @app.route('/api/delete-category', methods=['POST'])
 def delete_category():
     data = request.json
-    categoryToModify = data.get('categoryToModify')  
+    categoryToModify = data.get('name')  
 
     try:
         categoryToDelete = Category.query.filter(Category.name == categoryToModify).first()

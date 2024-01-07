@@ -10,7 +10,30 @@ const Component_IngredientTable = () => {
         stock_type: 'Select unit',
         category_id:'',
       });
-      const [isCreating, setIsCreating] = useState(false);
+
+    const [isCreating, setIsCreating] = useState(false);
+    
+    const fetchIngredients = () => {
+    fetch('http://localhost:5000/api/get-ingredients')
+        .then(response => response.json())
+        .then(data => {
+            setIngredients(data.ingredients);
+        })
+        .catch(error => {
+            console.error('Error fetching ingredient categories:', error);
+        });
+    };
+
+    const fetchCategories = () => {
+        fetch('http://localhost:5000/api/get-categories')
+            .then(response => response.json())
+            .then(data => {
+                setCategories(data.categories);
+            })
+            .catch(error => {
+                console.error('Error fetching categories:', error);
+            });
+    };
 
     const handleIngredientChange = (index, key, value) => {
         const updatedIngredients = [...ingredients];
@@ -20,13 +43,6 @@ const Component_IngredientTable = () => {
         updatedIngredients[index][key] = value;
         setIngredients(updatedIngredients);
     };
-
-    const handleNewIngredientChange = (key, value) => {
-        setNewIngredient((prevIngredient) => ({
-          ...prevIngredient,
-          [key]: value,
-        }));
-      };
 
     const cancelIngredientChange = () => {
         if (modifiedIngredient) {
@@ -43,19 +59,8 @@ const Component_IngredientTable = () => {
         }
     };
 
-    const fetchIngredients = () => {
-        fetch('http://localhost:5000/api/get-ingredients')
-            .then(response => response.json())
-            .then(data => {
-                setIngredients(data.ingredients);
-            })
-            .catch(error => {
-                console.error('Error fetching ingredient categories:', error);
-            });
-    };
-
     const addNewIngredient = () => {
-        setIngredients([{ ...newIngredient },...ingredients, ]);
+        setIngredients([{ ...newIngredient },...ingredients]);
         setIsCreating(true);
         setModifiedIngredient(true);
         setNewIngredient({
@@ -66,17 +71,6 @@ const Component_IngredientTable = () => {
         });
       };
     
-    const fetchCategories = () => {
-        fetch('http://localhost:5000/api/get-categories')
-            .then(response => response.json())
-            .then(data => {
-                setCategories(data.categories);
-            })
-            .catch(error => {
-                console.error('Error fetching categories:', error);
-            });
-    };
-
     const confirmIngredientChange = () => {
         setModifiedIngredient(null);
     };

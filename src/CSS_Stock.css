@@ -50,8 +50,12 @@
 
 .category-id,
 .category-name,
-.category-quantity {
+.delete {
     margin-right: 10px; /* Apply margin to all child elements */
+}
+
+.delete {
+    margin-left: 10px;
 }
   
 .add-category,
