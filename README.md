@@ -19,11 +19,12 @@ This was my original idea for the interface to add recipes but I ended up decidi
 
 
 How ingredients are currently displayed:
-<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/c5de8b12-06d3-44c1-bdd2-41035c6fcbc7">
+<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/a3e8b4d5-9a60-440f-8618-d62bdb431327">
 
 
 To add an ingredient:
-<img width="1695" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/1848d2d0-2c4f-49bb-8068-f236d2038c26">
+<img width="1695" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/08984417-3337-483c-ae89-b1625a32c829">
+
 
 
 
