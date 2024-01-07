@@ -17,8 +17,7 @@ function P_Stock() {
                 </div>
             </div>
         </div>
-    );
-    
+    ); 
 }
 
 export default P_Stock;

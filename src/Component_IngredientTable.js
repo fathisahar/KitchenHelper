@@ -69,8 +69,45 @@ const Component_IngredientTable = () => {
             stock_type: 'Select unit',
             category_id:'',
             });
-        };
-    
+    };
+
+const increment = (index) => {
+    const updatedIngredients = [...ingredients];
+    updatedIngredients[index].stock_quantity++;
+    setIngredients(updatedIngredients);
+  
+    const updatedIngredient = updatedIngredients[index];
+  
+    updateIngredientQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
+  };
+  
+  const decrement = (index) => {
+    const updatedIngredients = [...ingredients];
+    updatedIngredients[index].stock_quantity--;
+    setIngredients(updatedIngredients);
+  
+    const updatedIngredient = updatedIngredients[index];
+    updateIngredientQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
+  };
+  
+  const updateIngredientQuantity = (ingredientId, newQuantity) => {
+    fetch(`http://localhost:5000/api/update-ingredient-quantity/${ingredientId}`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quantity: newQuantity }),
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);
+            fetchIngredients();
+        })
+        .catch(error => {
+            console.error('Error updating ingredient quantity:', error);
+        });
+    };
+
     const confirmIngredientChange = () => {
         setModifiedIngredient(null);
     
@@ -154,6 +191,8 @@ const Component_IngredientTable = () => {
                                 value={ingredient.stock_quantity}
                                 onChange={(e) => handleIngredientChange(index, 'stock_quantity', e.target.value)}
                             />
+                            <button className='increment' onClick={() => increment(index)}>+</button>
+                            <button className='decrement' onClick={() => decrement(index)}>-</button>
                             <select 
                                 id="ingredient-stock-type" 
                                 value={ingredient.stock_type} 

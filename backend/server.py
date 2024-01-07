@@ -186,8 +186,23 @@ def modify_ingredient():
         return jsonify(error=str(e))
     except Exception as e:
         return jsonify(error=str(e))
-    
-from flask import request, jsonify
+
+@app.route('/api/update-ingredient-quantity/<int:ingredient_id>', methods=['POST'])
+def update_ingredient_quantity(ingredient_id):
+    data = request.json
+    new_quantity = data.get('quantity')
+
+    try:
+        ingredient = Ingredient.query.get(ingredient_id)
+        ingredient.stock_quantity = new_quantity
+        db.session.commit()
+        return jsonify(message='Ingredient quantity updated successfully')
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify(error=str(e))
+    except Exception as e:
+        return jsonify(error=str(e))
+
 
 @app.route('/api/add-recipe', methods=['POST'])
 def add_recipe():

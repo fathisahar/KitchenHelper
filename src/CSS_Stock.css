@@ -33,6 +33,8 @@
 .ingredient-name,
 .ingredient-quantity,
 .confirm,
+.decrement,
+.increment,
 .ingredient-category,
 .ingredient-stock-type {
     margin-right: 10px; /* Apply margin to all child elements */
