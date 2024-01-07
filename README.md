@@ -11,7 +11,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ## Screenshots of the application
 
-This was my original idea for the interface to add recipe's but I ended up deciding against it (too cluttered). However, I definitely spent too much time on it so I still wanted to include a screenshot of it.
+This was my original idea for the interface to add recipes but I ended up deciding against it (too cluttered). However, I definitely spent too much time on it so I still wanted to include a screenshot of it.
 
 <img width="1288" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/f313b525-bd31-4e82-a9e1-0f46dd098437">
 
