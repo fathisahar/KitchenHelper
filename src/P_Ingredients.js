@@ -1,11 +1,10 @@
-import './CSS_Stock.css'; 
 import Component_IngredientTable from './Component_IngredientTable'; 
 
 function P_Ingredients() {
     
     return (
         <div>
-            <div className="row">
+            <div className="main">
                 <div>
                     <Component_IngredientTable />
                 </div>

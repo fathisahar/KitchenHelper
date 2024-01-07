@@ -1,15 +1,16 @@
 import React, { useState , useEffect } from 'react';
+import './CSS_Stock.css'; 
 
 const Component_IngredientTable = () => {
     const [ingredients, setIngredients] = useState([]);
     const [modifiedIngredient, setModifiedIngredient] = useState(null);
     const [categories, setCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState([]);
     const [newIngredient, setNewIngredient] = useState({
         name: '',
         stock_quantity: '',
         stock_type: 'Select unit',
-        category_id:'',
-    });
+        category_id:'', });
 
     const [isCreating, setIsCreating] = useState(false);
     
@@ -169,20 +170,53 @@ const increment = (index) => {
         });
     }
 
+    const handleCategoryToggle = (categoryId) => {
+        if (selectedCategories.includes(categoryId)) {
+            setSelectedCategories((prevSelected) =>
+                prevSelected.filter((id) => id !== categoryId)
+            );
+        } else {
+          setSelectedCategories((prevSelected) => [...prevSelected, categoryId]);
+        }
+    };
+
     useEffect(() => {
         fetchIngredients();
         fetchCategories();
     }, []); 
-
-
+    
     return (
-        <div>
-            <button className="add-ingredient" onClick={addNewIngredient}>
-                + ingredient
-            </button>
+        <div className="row">
+            <div className="category-filter">
+                <button className="add-ingredient" onClick={addNewIngredient}>
+                    + ingredient
+                </button>
+                {categories
+                .filter((category) => category.type === 'ingredient')
+                .map((category) => (
+                    <div className="choice" key={category.id}>
+                        <input 
+                            className="check"
+                            type="checkbox"
+                            id={`category-${category.id}`}
+                            checked={selectedCategories.includes(category.id)}
+                            onChange={() => handleCategoryToggle(category.id)}
+                        />
+                        <label htmlFor={`category-${category.id}`}>
+                            {category.name}
+                        </label>
+                    </div>
+                ))}
+            </div>
             <div className="ingredients-table">
                 <div className="ingredient-cards-container">
-                    {ingredients.map((ingredient, index) => (
+                    {ingredients
+                    .filter(
+                        (ingredient) =>
+                            selectedCategories.length === 0 ||
+                            selectedCategories.includes(ingredient.category_id)
+                    )
+                    .map((ingredient, index) => (
                         <div className="ingredient-card" key={ingredient.id}>
                             <div className="ingredient-info" key={ingredient.id}>
                                 <div className="left-section">
@@ -243,9 +277,9 @@ const increment = (index) => {
                                     </select>
                                     <button className='delete' onClick={() => handleIngredientDelete(ingredient.name)}>X</button>
                                     {modifiedIngredient && modifiedIngredient.id === ingredient.id && (
-                                        <div className="confirm">
-                                            <button onClick={confirmIngredientChange}>Confirm</button>
-                                            <button onClick={cancelIngredientChange}>Cancel</button>
+                                        <div className="verifications">
+                                            <button className="confirm" onClick={confirmIngredientChange}>Confirm</button>
+                                            <button className="cancel" onClick={cancelIngredientChange}>Cancel</button>
                                         </div>
                                     )}
                                 </div>
@@ -255,8 +289,7 @@ const increment = (index) => {
                 </div>
             </div>
         </div>
-    );
-    
+    );  
 };
   
 export default Component_IngredientTable;

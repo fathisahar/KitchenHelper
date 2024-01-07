@@ -168,6 +168,9 @@ const Component_CategoryTable = () => {
       </div>
     </div>
   );
+
+
+
 };
 
 export default Component_CategoryTable;

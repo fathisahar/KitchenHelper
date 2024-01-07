@@ -1,53 +1,144 @@
 .row {
     display: flex;
-    flex-direction: column;
-    padding:20px;
+    justify-content: space-between;
+}
+
+/*
+.category-filter {
+    position: sticky;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    width: 200px;
+    max-width: 200px; 
+    padding: 10px;
+    z-index: 2;
 }
 
 .ingredient-cards-container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 20px;
+    margin-left: 220px; 
 }
 
+
 .ingredient-card {
-    flex: 0 0 calc(33.33% - 20px); 
-    border: 2px solid #000;
-    border-radius: 50px;
-    margin: 10px;
+    flex: 0 0 calc(33.33% - 20px);
+    max-width: calc(33.33% - 20px);
     box-sizing: border-box;
+    margin: 10px;
+    border: 2px solid #000;
+    border-radius: 20px;
+    overflow: hidden; 
+    position: relative;
+    transition: all 0.3s ease; 
+}
+
+.ingredient-card img {
+    width: 100%; 
+    height: auto; 
+    border-bottom: 2px solid #000; 
+}
+
+.ingredient-info {
+    padding: 10px;
+}
+
+*/
+
+@media (max-width: 1200px) {
+    .ingredient-cards-container {
+        margin-left: 0; 
+    }
+
+    .ingredient-card {
+        flex: 0 0 calc(50% - 20px);
+        max-width: calc(50% - 20px);
+    }
 }
 
 @media (max-width: 768px) {
     .ingredient-card {
-        flex: 0 0 calc(50% - 20px); 
+        flex: 0 0 calc(100% - 20px);
+        max-width: calc(100% - 20px);
     }
 }
 
-.ingredients-table {
-    display: flex;
-    flex-direction: column;
+
+
+.choice {
+    border: 2px solid #000;
+    border-radius: 50px;
+    width: 130px;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px;
+    font-family: 'Rubik', sans-serif;
+    font-size: 15px; 
+}
+
+.check {
+    margin-right: 10px;
+}
+
+input[type="checkbox"] {
+    appearance: none; 
+    width: 20px; 
+    height: 20px; 
+    border: 2px solid #000; 
+    border-radius: 4px; 
+    cursor: pointer;
+    outline: none; 
+    margin-right: 5px;
+}
+
+input[type="checkbox"]:checked {
+    background-color: #000;
+    border-color: #000; 
+}
+
+label {
+    cursor: pointer; 
 }
 
 .confirm,
 .decrement,
 .increment,
 .delete,
+.cancel,
 .add-ingredient {
     margin-right: 10px;
-    padding: 6px 12px; 
-    border: 2px solid #000000; 
-    border-radius: 10px; 
-    cursor: pointer; 
-    background-color: #fff; 
-    color: #333; 
+    padding: 6px 12px;
+    border: 2px solid #000000;
+    border-radius: 50px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    font-family: 'Rubik', sans-serif;
+    font-size: 15px; 
+}
+  
+.add-ingredient{
+    margin-bottom:10px;
+    font-size: 18px; 
+    width:150px;
+    height:70px;
 }
 
 .confirm:hover,
 .decrement:hover,
-.increment:hover {
-    background-color: #f0f0f0; /* Change background color on hover */
+.increment:hover,
+.delete:hover,
+.cancel:hover,
+.add-ingredient:hover,
+.ingredient-name:hover,
+.ingredient-quantity:hover,
+.ingredient-stock-type:hover,
+.ingredient-category:hover {
+    background-color: #f0f0f0; 
 }
-
 
 body {
     font-family: 'Rubik', sans-serif;
@@ -92,7 +183,7 @@ body {
 .ingredient-stock-type {
     text-align: center;
     margin-right: 10px; 
-    width: 50px;
+    width: 80px;
     margin-bottom: 10px;
     border-radius: 50px; 
     border: 2px solid rgb(67, 62, 62);  
@@ -103,12 +194,10 @@ body {
     text-align: center;
     margin-right: 10px; 
     width: 100px;
-    margin-bottom: 10px;
     border-radius: 50px; 
     border: 2px solid rgb(67, 62, 62);  
     padding: 5px; 
 }
-
 
 .category-info {
     margin-left: 10px;

@@ -39,5 +39,5 @@ body {
   flex-grow: 1;
   padding: 20px;
   height: 100%;
-  margin-left: 220px; /* Adjust this margin to leave space for the main-nav */
+  margin-left: 220px; 
 }
