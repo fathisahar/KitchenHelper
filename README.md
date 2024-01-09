@@ -23,7 +23,11 @@ How ingredients are currently displayed:
 
 
 To add an ingredient:
-<img width="1695" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/08984417-3337-483c-ae89-b1625a32c829">
+<img width="1707" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/0a2b259a-5406-4258-ad49-672b433a7d2a">
+
+To edit an image, the user can click on the image, which toggles the URL field. To remove the URL field (unedited, other the user can click the confirm button which appears upon any change to the ingredient), the user can reclick the image.
+<img width="734" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/c3f78f72-c051-479d-a556-94d2d2da0add">
+
 
 
 
