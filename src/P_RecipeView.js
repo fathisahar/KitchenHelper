@@ -1,6 +1,7 @@
 import React, { useState , useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './CSS_RecipeView.css'; 
+import './SCSS_RecipeView.scss';
 
 function P_RecipeView() {
 
@@ -27,17 +28,19 @@ function P_RecipeView() {
             <div className="card text-center" key={recipe.id}>
               <div className="card-body">
                 <div className="card-title">
-                  <h5>{recipe.name}</h5>
+                  <p>{recipe.name}</p>
+                  <img className="image" src={recipe.url} height={200} width={200}/>
                 </div>
                 <div className="seperation">
                     <div className="left">
-                    <strong>{recipe.description}</strong>
+                    <p className="recipe-description">{recipe.description}</p>
                     <br></br>
                     <br></br>
                     <p className="card-text">{recipe.instructions}</p>
                     </div>
                     <div className="right">
-                    <ul>
+                      <p className="ingredients-title"> ingredients in recipe!</p>
+                    <ul className="ingredients-list">
                         {recipe.ingredients.map((ingredient, index) => (
                         <li key={index}>{ingredient}</li>
                         ))}

@@ -18,7 +18,8 @@ class Recipe(db.Model):
     description = db.Column(db.Text, nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     ingredients = db.relationship('Ingredient', secondary='recipe_ingredient', backref='recipes')
-    ingredient_ids = db.Column(db.String(255))  # Change the data type if needed
+    ingredient_ids = db.Column(db.String(255))  
+    url = db.Column(db.Text, nullable=True)
 
 class Ingredient(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -34,6 +35,7 @@ class Category(db.Model):
     name = db.Column(db.String(255), nullable=False)
     ingredients = db.relationship('Ingredient', backref='category', lazy=True)
     recipes = db.relationship('Recipe', backref='category', lazy=True)
+    url = db.Column(db.Text, nullable=True)
 
 recipe_ingredient = db.Table(
     'recipe_ingredient',
@@ -45,7 +47,7 @@ recipe_ingredient = db.Table(
 def get_categories():
     try:
         categories = Category.query.all()
-        category_list = [{'id': category.id, 'type': category.categoryType, 'name': category.name} for category in categories]
+        category_list = [{'id': category.id, 'type': category.categoryType, 'name': category.name, 'url': category.url} for category in categories]
         return jsonify(categories=category_list)
     except SQLAlchemyError as e:
         return jsonify(error=str(e))
@@ -93,7 +95,6 @@ def add_ingredient():
         )
         db.session.add(new_ingredient)
         db.session.commit()
-
         return jsonify(message='Ingredient added successfully')
     except Exception as e:
         return jsonify(error=str(e)), 500
@@ -203,21 +204,33 @@ def update_ingredient_quantity(ingredient_id):
         return jsonify(error=str(e))
     except Exception as e:
         return jsonify(error=str(e))
+    
+@app.route('/api/update-url/<int:ingredient_id>', methods =['POST'])
+def update_url(ingredient_id):
+    data = request.json
+    new_url = data.get('newURL')
 
+    try:
+        ingredient = Ingredient.query.get(ingredient_id)
+        ingredient.url = new_url
+        db.session.commit()
+        return jsonify(message='Ingredient URL updated successfully')
+    except SQLAlchemyError as e:
+        db.session.rollback()
+        return jsonify(error=str(e))
+    except Exception as e:
+        return jsonify(error=str(e))
 
 @app.route('/api/add-recipe', methods=['POST'])
 def add_recipe():
     data = request.json
-
-    required_fields = ['name', 'instructions', 'category_id', 'ingredient_ids']
-    if not all(field in data for field in required_fields):
-        return jsonify(error='Missing required fields'), 400
 
     recipe_name = data['name']
     instructions = data['instructions']
     category_id = data['category_id']
     description = data['description']
     ingredient_ids = data['ingredient_ids']
+    url = data['url']
 
     try:
         ingredients = Ingredient.query.filter(Ingredient.id.in_(ingredient_ids)).all()
@@ -227,7 +240,8 @@ def add_recipe():
             instructions=instructions,
             category_id=category_id,
             ingredients=ingredients,
-            description=description
+            description=description,
+            url=url
         )
 
         db.session.add(new_recipe)
@@ -251,6 +265,7 @@ def get_recipes():
                 'description': recipe.description,
                 'category_id': recipe.category_id,
                 'ingredients': [ingredient.name for ingredient in recipe.ingredients],
+                'url': recipe.url
             }
             for recipe in recipes
         ]

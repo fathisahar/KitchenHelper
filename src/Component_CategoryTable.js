@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './CSS_Stock.css'; 
 
 const Component_CategoryTable = () => {
   const [categories, setCategories] = useState([]);
@@ -10,6 +11,7 @@ const Component_CategoryTable = () => {
     type: '',
   });
   const [isCreating, setIsCreating] = useState(false);
+  const [selectedTypes, setSelectedTypes] = useState([]);
 
   const fetchCategories = () => {
     fetch('http://localhost:5000/api/get-categories')
@@ -123,44 +125,91 @@ const Component_CategoryTable = () => {
     });
 }
 
+const handleTypeToggle = (type) => {
+  if (selectedTypes.includes(type)) {
+    setSelectedTypes((prevSelected) =>
+      prevSelected.filter((selectedType) => selectedType !== type)
+    );
+  } else {
+    setSelectedTypes((prevSelected) => [...prevSelected, type]);
+  }
+};
+
+
   useEffect(() => {
     fetchCategories();
   }, []);
 
   return (
-    <div className="category-table">
-      <div>
+    <div className="main-section">
+      <div className="category-filter">
         <button className="add-category" onClick={addNewCategory}>
-          + category
-        </button>
-        <div className="categories-table">
-          {categories.map((category, index) => (
-            <div className="category-element" key={category.id}>
+            + category
+          </button>
+          <div className="filter-box">
+            <p className="filter-text">filter by type!</p>
+            <div className='choice'>
+              <input
+                className="check"
+                type="checkbox"
+                id='ingredient'
+                checked={selectedTypes.includes('ingredient')}
+                onChange={() => handleTypeToggle('ingredient')}
+              />
+              <label>Ingredient</label>
+            </div>
+            <div className='choice'>
+              <input
+                className="check"
+                type="checkbox"
+                id='recipe'
+                checked={selectedTypes.includes('recipe')}
+                onChange={() => handleTypeToggle('recipe')}
+              />
+              <label>Recipe</label>
+            </div>
+          </div>
+      </div>
+      <div className="categories-table">
+        <div className="category-cards-container">
+          {categories
+          .filter(
+            (category) =>
+            selectedTypes.length === 0 ||
+            selectedTypes.includes(category.type)
+          )
+          .map((category, index) => (
+            <div className="category-card" key={category.id}>
               <div className="category-info" key={category.id}>
-                <p className="category-id">{category.id}</p>
-                <input
-                  className="category-name"
-                  defaultValue={category.name}
-                  onChange={e => handleCategoryChange(index, 'name', e.target.value)}
-                />
-                <select
-                  id="choiceBox"
-                  value={category.type || 'Please select value.'}
-                  onChange={e => handleCategoryChange(index, 'type', e.target.value)}
-                >
-                  <option value="Please select value." disabled>
-                    Select a type
-                  </option>
-                  <option value="ingredient">Ingredient</option>
-                  <option value="recipe">Recipe</option>
-                </select>
-                <button className='delete' onClick={() => handleCategoryDelete(category.name)}>X</button>
-                {modifiedCategory && modifiedCategory.id === category.id && (
-                  <div className="confirm">
-                    <button onClick={confirmCategoryChange}>Confirm</button>
-                    <button onClick={cancelCategoryChange}>Cancel</button>
-                  </div>
-                )}
+                <div className="left-section">
+                  <img className="image" src={category.url} height={200} width={200} />
+                </div>
+                <div className="right-section-category">
+                  <input
+                    className="category-name"
+                    defaultValue={category.name}
+                    onChange={e => handleCategoryChange(index, 'name', e.target.value)}
+                  />
+                  <select
+                    id="choicebox-category"
+                    className="choicebox-category"
+                    value={category.type || 'Please select value.'}
+                    onChange={e => handleCategoryChange(index, 'type', e.target.value)}
+                  >
+                    <option value="Please select value." disabled>
+                      Select a type
+                    </option>
+                    <option value="ingredient">Ingredient</option>
+                    <option value="recipe">Recipe</option>
+                  </select>
+                  <button className='delete' onClick={() => handleCategoryDelete(category.name)}> delete </button>
+                  {modifiedCategory && modifiedCategory.id === category.id && (
+                    <div className="verifications">
+                      <button className="confirm" onClick={confirmCategoryChange}>Confirm</button>
+                      <button className="cancel" onClick={cancelCategoryChange}>Cancel</button>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}

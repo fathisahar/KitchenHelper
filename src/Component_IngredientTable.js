@@ -4,13 +4,15 @@ import './CSS_Stock.css';
 const Component_IngredientTable = () => {
     const [ingredients, setIngredients] = useState([]);
     const [modifiedIngredient, setModifiedIngredient] = useState(null);
+    const [modifiedURL, setModifiedURL] = useState(null);
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [newIngredient, setNewIngredient] = useState({
         name: '',
         stock_quantity: '',
         stock_type: 'Select unit',
-        category_id:'', });
+        category_id:'',
+        url:'' });
 
     const [isCreating, setIsCreating] = useState(false);
     
@@ -64,11 +66,13 @@ const Component_IngredientTable = () => {
         setIngredients([{ ...newIngredient },...ingredients]);
         setIsCreating(true);
         setModifiedIngredient(true);
+        setModifiedURL(true);
         setNewIngredient({
             name: '',
             stock_quantity: '',
             stock_type: 'Select unit',
             category_id:'',
+            url:''
             });
     };
 
@@ -76,7 +80,6 @@ const increment = (index) => {
     const updatedIngredients = [...ingredients];
     updatedIngredients[index].stock_quantity++;
     setIngredients(updatedIngredients);
-  
     const updatedIngredient = updatedIngredients[index];
   
     updateQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
@@ -120,7 +123,8 @@ const increment = (index) => {
             name: updatedIngredient.name.toLowerCase(),
             quantity: updatedIngredient.stock_quantity,
             type: updatedIngredient.stock_type,
-            category: updatedIngredient.category_id
+            category: updatedIngredient.category_id,
+            url: updatedIngredient.url
         };
     
         if (isCreating){
@@ -180,6 +184,49 @@ const increment = (index) => {
         }
     };
 
+    
+    const changeURL =  (index, key, value)  => {
+        if (modifiedURL){
+            setModifiedURL(null);
+        } else {
+            const updatedIngredients = [...ingredients];
+            setModifiedURL({ index, key, originalValue: updatedIngredients[index][key], id: updatedIngredients[index].id });
+        }
+    };
+
+
+    const updateURL = (ingredientId, newURL) => {
+        fetch(`http://localhost:5000/api/update-url/${ingredientId}`, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newURL),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.message);
+                fetchIngredients();
+            })
+            .catch(error => {
+                console.error('Error updating ingredient quantity:', error);
+            });
+        };
+    
+    const autoStyle = (element, textareaName) => {
+
+        element.style.height = (element.scrollHeight) + 'px';
+    
+        const isEmpty = element.value.trim() === '';
+    
+        if (isEmpty) {
+            element.style.border = '2px solid black';
+        } else {
+            element.style.border = 'none';
+        }
+    };
+        
+
     useEffect(() => {
         fetchIngredients();
         fetchCategories();
@@ -191,22 +238,25 @@ const increment = (index) => {
                 <button className="add-ingredient" onClick={addNewIngredient}>
                     + ingredient
                 </button>
-                {categories
-                .filter((category) => category.type === 'ingredient')
-                .map((category) => (
-                    <div className="choice" key={category.id}>
-                        <input 
-                            className="check"
-                            type="checkbox"
-                            id={`category-${category.id}`}
-                            checked={selectedCategories.includes(category.id)}
-                            onChange={() => handleCategoryToggle(category.id)}
-                        />
-                        <label htmlFor={`category-${category.id}`}>
-                            {category.name}
-                        </label>
-                    </div>
-                ))}
+                <div className="filter-box">
+                    <p className="filter-text">filter by category! </p>
+                    {categories
+                    .filter((category) => category.type === 'ingredient')
+                    .map((category) => (
+                        <div className="choice" key={category.id}>
+                            <input 
+                                className="check"
+                                type="checkbox"
+                                id={`category-${category.id}`}
+                                checked={selectedCategories.includes(category.id)}
+                                onChange={() => handleCategoryToggle(category.id)}
+                            />
+                            <label htmlFor={`category-${category.id}`}>
+                                {category.name}
+                            </label>
+                        </div>
+                    ))}
+                </div>
             </div>
             <div className="ingredients-table">
                 <div className="ingredient-cards-container">
@@ -220,7 +270,15 @@ const increment = (index) => {
                         <div className="ingredient-card" key={ingredient.id}>
                             <div className="ingredient-info" key={ingredient.id}>
                                 <div className="left-section">
-                                    <img className="image" src={ingredient.url} height={200} width={200} />
+                                    <img className="image" src={ingredient.url} height={200} width={200} onClick={(e) => changeURL(index, 'url', e.target.value)}/>
+                                    {modifiedURL && modifiedURL.id === ingredient.id &&
+                                        <input
+                                            className="ingredient-url"
+                                            placeholder='url?'
+                                            value={ingredient.url}
+                                            onInput={(e) => autoStyle(e.target)}
+                                        />
+                                    }
                                 </div>
                                 <div className="right-section">
                                     <input
@@ -243,7 +301,7 @@ const increment = (index) => {
                                             onChange={(e) => handleIngredientChange(index, 'stock_type', e.target.value)}
                                         >
                                             <option>
-                                                Select unit
+                                                unit?
                                             </option>
                                             <option value="grams">g </option>
                                             <option value="miligrams">mg</option>
@@ -266,7 +324,7 @@ const increment = (index) => {
                                         value={ingredient.category_id}
                                         onChange={(e) => handleIngredientChange(index, 'category_id', e.target.value)}
                                     >
-                                        <option value="" disabled>Select category</option>
+                                        <option value="" disabled>category?</option>
                                         {categories
                                             .filter(category => category.type === 'ingredient')
                                             .map(category => (
@@ -275,7 +333,7 @@ const increment = (index) => {
                                                 </option>
                                             ))}
                                     </select>
-                                    <button className='delete' onClick={() => handleIngredientDelete(ingredient.name)}>X</button>
+                                    <button className='delete' onClick={() => handleIngredientDelete(ingredient.name)}> delete </button>
                                     {modifiedIngredient && modifiedIngredient.id === ingredient.id && (
                                         <div className="verifications">
                                             <button className="confirm" onClick={confirmIngredientChange}>Confirm</button>
@@ -291,5 +349,6 @@ const increment = (index) => {
         </div>
     );  
 };
+
   
 export default Component_IngredientTable;
