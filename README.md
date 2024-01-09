@@ -2,7 +2,7 @@
 
 A React web-application which keeps track of ingredients available to the user and recipes which the user knows of. The application provides recipes which are possible to make considering the available ingredients. 
 
-<img width="1708" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/005026be-776d-4e47-b3c1-4b70156f120e">This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
