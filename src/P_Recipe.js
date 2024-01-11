@@ -20,6 +20,7 @@ function P_Recipe() {
   const [categories, setCategories] = useState([]);
   const [ingredientCategories, setIngredientCategories] = useState([]);
   const [checkedState, setCheckedState] = useState({});
+  const [url, setURL] = useState(null);
 
   const handleRecipeSubmit = () => {
     const list = [];
@@ -36,7 +37,8 @@ function P_Recipe() {
         instructions: instructions, 
         description: description,
         category_id: category,
-        ingredient_ids: list
+        ingredient_ids: list,
+        url: url
     };
 
     fetch('http://localhost:5000/api/add-recipe', {

@@ -9,6 +9,9 @@
     left: 0;
     padding: 10px;
     z-index: 3; 
+    align-items: center; 
+    justify-content: center; 
+    text-align: center;
 }
 
 .ingredient-card {
