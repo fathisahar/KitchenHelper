@@ -1,6 +1,6 @@
 # KitchenHelper 
 
-A React web-application which keeps track of ingredients available to the user and recipes which the user knows of. The application provides recipes which are possible to make considering the available ingredients. 
+The React web application serves as a user-friendly platform to manage and monitor available ingredients and user-curated recipes. It  suggests recipes based on the user's inventory of ingredients, ensuring to discover meals with the items at hand.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
