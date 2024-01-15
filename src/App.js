@@ -13,11 +13,11 @@ function App() {
       <div className="main-screen">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap"/>
         <nav className="main-nav">
-        <Link to="/" className="header" activeClassName="active"> Home </Link>
-        <Link to="/ingredients" className="header" activeClassName="active"> Ingredients </Link>
-        <Link to="/categories" className="header" activeClassName="active"> Categories </Link>
-        <Link to="/recipe" className="header" activeClassName="active"> Add Recipe </Link>
-        <Link to="/recipes" className="header" activeClassName="active"> Recipes </Link>
+        <Link to="/" className="header"> Home </Link>
+        <Link to="/ingredients" className="header" > Ingredients </Link>
+        <Link to="/categories" className="header"> Categories </Link>
+        <Link to="/recipe" className="header" > Add Recipe </Link>
+        <Link to="/recipes" className="header"> Recipes </Link>
       </nav>
         <div className="content-nav">
           <Routes>

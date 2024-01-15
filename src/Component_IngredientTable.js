@@ -7,14 +7,14 @@ const Component_IngredientTable = () => {
     const [modifiedURL, setModifiedURL] = useState(null);
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
+    const [isCreating, setIsCreating] = useState(false);
     const [newIngredient, setNewIngredient] = useState({
         name: '',
         stock_quantity: '',
         stock_type: 'Select unit',
         category_id:'',
-        url:'' });
-
-    const [isCreating, setIsCreating] = useState(false);
+        url:'' 
+    });
     
     const fetchIngredients = () => {
     fetch('http://localhost:5000/api/get-ingredients')
@@ -73,19 +73,19 @@ const Component_IngredientTable = () => {
             stock_type: 'Select unit',
             category_id:'',
             url:''
-            });
+        });
     };
 
-const increment = (index) => {
+    const increment = (index) => {
     const updatedIngredients = [...ingredients];
     updatedIngredients[index].stock_quantity++;
     setIngredients(updatedIngredients);
     const updatedIngredient = updatedIngredients[index];
   
     updateQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
-  };
+    };
   
-  const decrement = (index) => {
+    const decrement = (index) => {
     const updatedIngredients = [...ingredients];
     if (updatedIngredients[index].stock_quantity > 0){
         updatedIngredients[index].stock_quantity--;
@@ -93,7 +93,7 @@ const increment = (index) => {
         const updatedIngredient = updatedIngredients[index];
         updateQuantity(updatedIngredient.id, updatedIngredient.stock_quantity);
     }
-  };
+    };
   
   const updateQuantity = (ingredientId, newQuantity) => {
     fetch(`http://localhost:5000/api/update-ingredient-quantity/${ingredientId}`, {
@@ -173,17 +173,6 @@ const increment = (index) => {
             fetchIngredients();
         });
     }
-
-    const handleCategoryToggle = (categoryId) => {
-        if (selectedCategories.includes(categoryId)) {
-            setSelectedCategories((prevSelected) =>
-                prevSelected.filter((id) => id !== categoryId)
-            );
-        } else {
-          setSelectedCategories((prevSelected) => [...prevSelected, categoryId]);
-        }
-    };
-
     
     const changeURL =  (index, key, value)  => {
         if (modifiedURL){
@@ -193,7 +182,6 @@ const increment = (index) => {
             setModifiedURL({ index, key, originalValue: updatedIngredients[index][key], id: updatedIngredients[index].id });
         }
     };
-
 
     const updateURL = (ingredientId, newURL) => {
         fetch(`http://localhost:5000/api/update-url/${ingredientId}`, {
@@ -212,20 +200,16 @@ const increment = (index) => {
                 console.error('Error updating ingredient quantity:', error);
             });
         };
-    
-    const autoStyle = (element, textareaName) => {
 
-        element.style.height = (element.scrollHeight) + 'px';
-    
-        const isEmpty = element.value.trim() === '';
-    
-        if (isEmpty) {
-            element.style.border = '2px solid black';
+    const handleCategoryToggle = (categoryId) => {
+        if (selectedCategories.includes(categoryId)) {
+            setSelectedCategories((prevSelected) =>
+                prevSelected.filter((id) => id !== categoryId)
+            );
         } else {
-            element.style.border = 'none';
+            setSelectedCategories((prevSelected) => [...prevSelected, categoryId]);
         }
     };
-        
 
     useEffect(() => {
         fetchIngredients();
@@ -276,7 +260,6 @@ const increment = (index) => {
                                             className="ingredient-url"
                                             placeholder='url?'
                                             value={ingredient.url}
-                                            onInput={(e) => autoStyle(e.target)}
                                         />
                                     }
                                 </div>

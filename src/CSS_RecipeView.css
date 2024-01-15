@@ -1,16 +1,16 @@
 .view {
-    display: flex;
     flex-wrap: wrap;
-    justify-content: space-around;
     display: flex;
-    margin-top:100px;
+    justify-content: space-evenly;
+    margin-left: 10px;
   }
 
 .card-title {
     text-align: center;
-    margin-bottom: 16px; 
     font-family: 'Rubik', sans-serif;
     font-size: 17px; 
+    display: grid;
+    justify-items: center;
 }
   
 .card {
@@ -21,6 +21,17 @@
     overflow: hidden;
     display: flex;
     flex-direction: row;
+}
+
+.recipe-title{
+    border-radius: 20px; 
+    border: 2px solid black; 
+    margin-bottom:15px;
+    text-align: center;
+    height: 40px; 
+    margin-right:20px;
+    font-family: 'Rubik', sans-serif;
+    font-size: 26px; 
 }
 
 .left {
@@ -37,7 +48,9 @@
     flex:1;
     width: 50%;
     padding: 16px;
-    display:grid;
+    box-sizing: border-box;
+    justify-items: center;
+    align-content: center;
 }
 
 .seperation {
@@ -63,6 +76,7 @@ li {
 .ingredients-title {
     font-family: 'Rubik', sans-serif;
     font-size: 17px; 
+    height:30px;
     margin-bottom:10px;
     border-radius: 50px; 
     border: 2px solid rgb(67, 62, 62);  
@@ -71,9 +85,11 @@ li {
 .recipe-description {
     font-family: 'Rubik', sans-serif;
     font-size: 17px; 
-    margin-bottom:-20px;
     border-radius: 50px; 
-    border: 2px solid rgb(67, 62, 62);  
+    width:250px;
+    text-align: center;
+    border: 2px solid rgb(67, 62, 62); 
+    margin-bottom:-10px; 
 }
 
 .card-text-center{
@@ -82,24 +98,59 @@ li {
     text-align: center;
 }
 
+.recipe-category{
+    font-family: 'Rubik', sans-serif;
+    font-size: 17px; 
+    border: 2px solid #000000;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom:10px;
+}
+
+.card-text{
+    padding:20px;
+    margin-top:10px;
+    border: transparent;
+    text-align: center;
+}
+
 .ingredients-list {
     text-align: center;
-    margin-left: -30px;
+    padding: 0px;
+    margin-top:5px;
+}
+
+.image:hover{
+    cursor:pointer;
+}
+
+.ingredients-list:hover,
+.recipe-description:hover,
+.card-text:hover,
+.recipe-title:hover,
+.card-text:focus,
+.recipe-category:hover{
+    cursor: pointer;
+    background-color: #f0f0f0;
+    border-radius: 50px;
 }
 
 .top-view{
-    margin-top:100px;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
 }
 
 .filter {
-    width: 200px;
-    border-radius: 40px;
-    display: flex;
-    flex-direction: column; 
+    position: sticky;
+    top: 50%;
+    left: 0;
+    padding: 10px;
+    z-index: 3; 
     align-items: center; 
     justify-content: center; 
     text-align: center;
-    padding: 30px;
+    margin-top:100px;
 }
 
 .add-recipe{
@@ -120,3 +171,4 @@ li {
 .filter-box{
     margin:25px;
 }
+
