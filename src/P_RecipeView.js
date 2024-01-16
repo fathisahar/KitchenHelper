@@ -2,6 +2,9 @@ import React, { useState , useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import './CSS_RecipeView.css'; 
 import './SCSS_RecipeView.scss';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+import Accordion from 'react-bootstrap/Accordion'
 
 function P_RecipeView() {
 
@@ -111,16 +114,41 @@ function P_RecipeView() {
     }
   };
 
+  const setChecked = (index) => {
+    const newCheckedState = {};
+    for (let i = 0; i < ingredients.length; i++){
+        if (recipes[index].ingredients.includes(ingredients[i].name)){
+            newCheckedState[ingredients[i].id] = true;
+        }
+    }
+    setCheckedState(newCheckedState);
+  }
+
   const handleCheckboxChange = (ingredientId, index) => {
   };
   
-
-
     useEffect(() => {
       fetchRecipes();
       fetchCategories();
       fetchIngredients();
     }, []); 
+
+      const [show, setShow] = useState(false);
+
+      const handleClose = () => {
+        setShow(false);
+        const newCheckedState = {};
+        for (let i = 0; i < ingredients.length; i++){
+                newCheckedState[ingredients[i].id] = false;
+        }
+        setCheckedState(newCheckedState);
+        }
+
+      
+      const handleShow = (index) => {
+        setShow(true);
+        setChecked(index);
+      }
 
       return (
         <div className='top-view'>
@@ -202,56 +230,66 @@ function P_RecipeView() {
                       <div className="right">
                         <p className="ingredients-title"> ingredients in recipe!</p>
                         <ul className="ingredients-list" onClick={(e) => changeIngredients(index, 'ingredients', e.target.value)}>
-                          {recipe.ingredients.map((ingredient) => (
+                          {recipe.ingredients.map((ingredient,index) => (
                           <li key={ingredient.id}>{ingredient}</li>
                           ))}
                         </ul>
                         {showAccordion && modifiedRecipe.id === recipe.id &&
-                        <div className="right-side">
-                        <div className="accordion" id="accordionExample">
-                          {categories
-                          .filter(category => category.type === 'ingredient')
-                          .map((category, index) => (
-                            <div className="accordion-item" key={category.id}>
-                              <h2 className="accordion-header">
-                                <button
-                                  className="accordion-button"
-                                  type="button"
-                                  data-bs-toggle="collapse"
-                                  data-bs-target={`#collapse${index + 1}`}
-                                  aria-expanded="false" 
-                                  aria-controls={`collapse${index + 1}`}
-                                >
-                                  {category.name}
-                                </button>
-                              </h2>
-                              <div
-                                id={`collapse${index + 1}`}
-                                className="accordion-collapse collapse"
-                              >
-                                <div className="accordion-body">
-                                {ingredients
-                                  .filter(ingredient => ingredient.category_id === category.id)
-                                  .map(ingredient => (
-                                    <div className="list-group" key={ingredient.id}>
-                                      <label className="list-group-item">
-                                        <input
-                                          className="form-check-input me-1"
-                                          type="checkbox"
-                                          checked={checkedState[ingredient.id]}
-                                          onChange={() => handleCheckboxChange(ingredient.id,index)}
-                                        />
-                                        {ingredient.name}
-                                      </label>
-                                    </div>
-                                  ))}
+                        <div> 
+                        <Button bsPrefix='modal-button' variant="primary" onClick={() => handleShow(index)}>
+                          edit ingredients!
+                        </Button>
+                        <Modal scrollable='true' show={show} onHide={handleClose}>
+                          <Modal.Header closeButton>
+                            <Modal.Title>list of all ingredients</Modal.Title>
+                          </Modal.Header>
+                          <Modal.Body >
+                            <div className="right-side">
+                            <Accordion defaultActiveKey="0" flush>
+                                <p className="ingredients-checked">ingredients currently checked</p>
+                                <div className="list-ingredients-checked">
+                                {recipes[index].ingredients.map((ingredient, index) => (
+                                    <p key={index}>{ingredient}</p>
+                                ))}
                                 </div>
-                              </div>
+                            {categories
+                               .filter(category => category.type === 'ingredient')
+                                .map((category, index) => (
+                                <Accordion.Item eventKey={index}>
+                                <Accordion.Header bsPrefix='header-modal' >{category.name}</Accordion.Header>
+                                <Accordion.Body>
+                                {ingredients
+                                        .filter(ingredient => ingredient.category_id === category.id)
+                                        .map(ingredient => (
+                                          <div className="list-group" key={ingredient.id}>
+                                            <label className="list-group-item">
+                                              <input
+                                                className="form-check-input me-1"
+                                                type="checkbox"
+                                                checked={checkedState[ingredient.id]}
+                                                onChange={() => handleCheckboxChange(ingredient.id,index)}
+                                              />
+                                              {ingredient.name}
+                                            </label>
+                                          </div>
+                                        ))}
+                                </Accordion.Body>
+                            </Accordion.Item>
+                                ))}
+                            </Accordion>
                             </div>
-                          ))}
-                        </div>
-                        </div>
-                      }
+                          </Modal.Body>
+                          <Modal.Footer>
+                            <Button variant="secondary" bsPrefix='modal-close' onClick={handleClose}>
+                              Close
+                            </Button>
+                            <Button variant="primary" bsPrefix='modal-save' onClick={handleClose}>
+                              Save Ingredients
+                            </Button>
+                          </Modal.Footer>
+                        </Modal>
+                          </div>
+                        }
                       </div>
                   </div>
                 </div>

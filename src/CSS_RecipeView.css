@@ -34,6 +34,11 @@
     font-size: 26px; 
 }
 
+.card{
+    background-color: rgb(249, 246, 246);
+    box-shadow: 5px 5px 10px 2px #b8b7b7;
+}
+
 .left {
     flex:1;
     width: 50%;
@@ -129,7 +134,8 @@ li {
 .card-text:hover,
 .recipe-title:hover,
 .card-text:focus,
-.recipe-category:hover{
+.recipe-category:hover,
+.modal-button:hover{
     cursor: pointer;
     background-color: #f0f0f0;
     border-radius: 50px;
@@ -172,3 +178,50 @@ li {
     margin:25px;
 }
 
+.modal-button,
+.modal-save {
+    margin-right: 10px;
+    padding: 6px 12px;
+    border-radius: 500px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #333;
+    font-family: 'Rubik', sans-serif;
+    font-size: 15px; 
+    margin-bottom:10px;
+    width:150px;
+    height:50px;
+}
+
+.modal-close {
+    margin-right: 10px;
+    padding: 6px 12px;
+    border-radius: 500px;
+    cursor: pointer;
+    background-color: #cd6d6d;
+    border: 1px solid #000000;
+    color: #333;
+    font-family: 'Rubik', sans-serif;
+    font-size: 15px; 
+    margin-bottom:10px;
+    width:150px;
+    height:50px;
+}
+
+.ingredients-checked{
+    font-family: 'Rubik', sans-serif;
+    font-size: 17px; 
+    text-align: center;
+    height:30px;
+    margin-bottom:10px;
+    border-radius: 50px; 
+    border: 2px solid rgb(67, 62, 62); 
+}
+
+.list-ingredients-checked{
+    text-align: center;
+}
+
+.list-group-item{
+    text-align: center;
+}
