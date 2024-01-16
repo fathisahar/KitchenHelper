@@ -35,7 +35,8 @@ For categories of ingredients or recipes, the same design applies.
 The same functionality applies with the recipe displayal and creation:
 <img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/265bada7-1217-4334-9bb3-2a50894d336c">
 
-The only difference is the recipe ingredients updating, where the user can press the liss of ingredients and a modal-trigger button will appear:
+The only difference is the recipe ingredients updating, where the user can press the liss of ingredients and a modal-trigger button will appear.
+
 <img width="281" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/91d0e426-78f9-46d3-943d-b8b39a3322a2">
 
 The following modal is displayed which allows the user to modify the ingredients associated to the recipe.
