@@ -17,23 +17,23 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 ### Ingredients
 
-How ingredients are currently displayed:
-<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/a3e8b4d5-9a60-440f-8618-d62bdb431327">
+How ingredients are  displayed:
+<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/cc00ca73-3aae-4ff5-a33f-1972b12a60ed">
 
 To add an ingredient:
-<img width="1707" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/0a2b259a-5406-4258-ad49-672b433a7d2a">
+<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/bfe8ccd6-b0a3-47f7-8f05-e0471d521168">
 
 To edit an image, the user can click on the image, which toggles the URL field. To remove the URL field (unedited, otherwise the user can click the confirm button which appears upon any change to the ingredient), the user can reclick the image.
 
-<img width="734" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/c3f78f72-c051-479d-a556-94d2d2da0add">
+<img width="546" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/e5f680bc-c7ff-4bc3-96b9-62476c048a89">
 
 ### Categories
 
 For categories of ingredients or recipes, the same design applies. 
-<img width="1708" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/0aa2c366-c6de-42d7-92bb-28e58990b46b">
+<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/68f9921e-0575-4701-a04f-d35bedeea0e3">
 
 The same functionality applies with the recipe displayal and creation:
-<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/9bdadf1e-59bb-4914-9c5c-f8e436ac1179">
+<img width="1710" alt="image" src="https://github.com/fathisahar/KitchenHelper/assets/63174744/265bada7-1217-4334-9bb3-2a50894d336c">
 
 ### Previous designs
 This was my original idea for the interface to add recipes but I ended up deciding against it (too cluttered). However, I definitely spent too much time on it so I still wanted to include a screenshot of it.
