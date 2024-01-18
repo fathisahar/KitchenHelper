@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import P_Home from './P_Home';
-import P_Ingredients from './P_Ingredients';
-import P_Recipe from './P_Recipe.js';
-import P_Categories from './P_Categories.js';
-import P_RecipeView from './P_RecipeView.js';
+import P_Home from './P_Home.jsx';
+import P_Ingredients from './P_Ingredients.jsx';
+import P_Recipe from './P_Recipe.jsx';
+import P_Categories from './P_Categories.jsx';
+import P_RecipeView from './P_RecipeView.jsx';
 import './CSS_App.css';
 
 function App() {

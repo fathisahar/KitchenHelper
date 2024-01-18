@@ -1,8 +1,9 @@
 .view {
     flex-wrap: wrap;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: center;
     margin-left: 10px;
+    
   }
 
 .card-title {
@@ -145,6 +146,8 @@ li {
     display: flex;
     flex-direction: row;
     align-items: stretch;
+    height: 100%; 
+    background-color: #f8f8f8;
 }
 
 .filter {
@@ -220,6 +223,7 @@ li {
 
 .list-ingredients-checked{
     text-align: center;
+    border-bottom : 1px solid #000000;
 }
 
 .list-group-item{
