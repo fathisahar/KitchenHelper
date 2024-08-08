@@ -11,7 +11,7 @@ class Recipe(db.Model):
     instructions = db.Column(db.Text, nullable=False)
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
     ingredients = db.relationship('Ingredient', secondary='recipe_ingredient', backref='recipes')
-    ingredient_ids = db.Column(db.String(255))  # Change the data type if needed
+    ingredient_ids = db.Column(db.String(255))  
 
 class Ingredient(db.Model):
     __table_args__ = {'extend_existing': True} 
