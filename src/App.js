@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import P_Home from './P_Home.jsx';
 import P_Ingredients from './P_Ingredients.jsx';
-import P_Recipe from './P_Recipe.jsx';
 import P_Categories from './P_Categories.jsx';
 import P_RecipeView from './P_RecipeView.jsx';
 import './CSS_App.css';
@@ -16,7 +15,6 @@ function App() {
         <Link to="/" className="header"> Home </Link>
         <Link to="/ingredients" className="header" > Ingredients </Link>
         <Link to="/categories" className="header"> Categories </Link>
-        <Link to="/recipe" className="header" > Add Recipe </Link>
         <Link to="/recipes" className="header"> Recipes </Link>
       </nav>
         <div className="content-nav">
@@ -24,7 +22,6 @@ function App() {
             <Route path="/" element={<P_Home />} />
             <Route path="/ingredients" element={<P_Ingredients />} />
             <Route path="/categories" element={<P_Categories />} />
-            <Route path="/recipe" element={<P_Recipe />} />
             <Route path="/recipes" element={<P_RecipeView />} />
           </Routes>
         </div>

@@ -3,7 +3,6 @@
     display: flex;
     justify-content: center;
     margin-left: 10px;
-    
   }
 
 .card-title {
@@ -16,12 +15,15 @@
   
 .card {
     width: 600px;
-    margin: 20px;
     border: 1px solid #000000;
     border-radius: 8px;
     overflow: hidden;
     display: flex;
     flex-direction: row;
+    background-color: rgb(249, 246, 246);
+    box-shadow: 5px 5px 10px 2px #b8b7b7;
+    margin-left: 40px;
+    margin-bottom: 30px;
 }
 
 .recipe-title{
@@ -35,40 +37,36 @@
     font-size: 26px; 
 }
 
-.card{
-    background-color: rgb(249, 246, 246);
-    box-shadow: 5px 5px 10px 2px #b8b7b7;
+.content {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    box-sizing: border-box; 
 }
 
 .separation {
     display: flex;
-    width: 100%; 
-    flex-direction: row; 
-    box-sizing: border-box; 
+    width: 100%;
+    flex-direction: row;
+    box-sizing: border-box;
 }
 
 .left, .right {
     flex: 1; 
     padding: 16px;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
 .left {
-    border-right: 1px solid #000000; 
+    border-right: 1px solid #000; 
 }
 
-@media (max-width: 768px) {
-    .separation {
-        flex-direction: column;
-    }
-
-    .left, .right {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #000000; 
-    }
+.buttons {
+    margin-top: 16px; 
+    display: flex;
+    justify-content: center; 
+    gap: 10px; 
 }
-
 
 .card-title {
     font-size: 1.5rem;
@@ -130,7 +128,6 @@ li {
 .ingredients-list {
     text-align: center;
     padding: 0px;
-    margin-top:5px;
 }
 
 .image:hover{
@@ -236,3 +233,4 @@ li {
 .list-group-item{
     text-align: center;
 }
+

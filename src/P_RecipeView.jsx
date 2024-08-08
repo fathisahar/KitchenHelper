@@ -160,10 +160,12 @@ function P_RecipeView() {
 
   const confirmRecipeChange = () => {
     setModifiedRecipe(null);
+    recipes.shift();
   };
 
   const cancelRecipeChange = () => {
     setModifiedRecipe(null);
+    recipes.shift();
   };
 
   return (
@@ -224,98 +226,96 @@ function P_RecipeView() {
                   </select>
                   <img className="image" src={recipe.url} height={200} width={200} />
                 </div>
-                <div className="separation">
-                  <div className="left">
-                    <input
-                      className="recipe-description"
-                      value={recipe.description}
-                      onChange={(e) => handleRecipeChange(index, 'description', e.target.value)}
-                    />
-                    <textarea
-                      value={recipe.instructions}
-                      onChange={(e) => handleRecipeChange(index, 'instructions', e.target.value)}
-                      placeholder="Please insert instructions for the recipe"
-                      rows="4"
-                      className="card-text"
-                      onInput={(e) => {
-                        e.currentTarget.style.height = 'auto';
-                        e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
-                      }}
-                    ></textarea>
-                  </div>
-                  <div className="right">
-                    <p className="ingredients-title"> ingredients in recipe!</p>
-                    <ul className="ingredients-list" onClick={(e) => changeIngredients(index, 'ingredients', e.target.value)}>
-                      {recipe.ingredients.map((ingredient, idx) => (
-                        <li key={idx}>{ingredient}</li>
-                      ))}
-                    </ul>
-                    {showAccordion && modifiedRecipe && modifiedRecipe.id === recipe.id && (
-                      <div>
-                        <Button bsPrefix='modal-button' variant="primary" onClick={() => handleShow(index)}>
-                          edit ingredients!
-                        </Button>
-                        <Modal scrollable='true' show={show} onHide={handleClose}>
-                          <Modal.Header closeButton>
-                            <Modal.Title>list of all ingredients</Modal.Title>
-                          </Modal.Header>
-                          <Modal.Body>
-                            <div className="right-side">
-                              <Accordion defaultActiveKey="0" flush>
-                                <p className="ingredients-checked">ingredients currently checked</p>
-                                <div className="list-ingredients-checked">
-                                  {recipes[index].ingredients.map((ingredient, idx) => (
-                                    <p key={idx}>{ingredient}</p>
-                                  ))}
-                                </div>
-                                {categories
-                                  .filter(category => category.type === 'ingredient')
-                                  .map((category, idx) => (
-                                    <Accordion.Item eventKey={idx} key={category.id}>
-                                      <Accordion.Header bsPrefix='header-modal'>{category.name}</Accordion.Header>
-                                      <Accordion.Body>
-                                        {ingredients
-                                          .filter(ingredient => ingredient.category_id === category.id)
-                                          .map(ingredient => (
-                                            <div className="list-group" key={ingredient.id}>
-                                              <label className="list-group-item">
-                                                <input
-                                                  className="form-check-input me-1"
-                                                  type="checkbox"
-                                                  checked={checkedState[ingredient.id]}
-                                                  onChange={() => handleCheckboxChange(ingredient.id, index)}
-                                                />
-                                                {ingredient.name}
-                                              </label>
-                                            </div>
-                                          ))}
-                                      </Accordion.Body>
-                                    </Accordion.Item>
-                                  ))}
-                              </Accordion>
-                            </div>
-                          </Modal.Body>
-                          <Modal.Footer>
-                            <Button variant="secondary" bsPrefix='modal-close' onClick={handleClose}>
-                              Close
-                            </Button>
-                            <Button variant="primary" bsPrefix='modal-save' onClick={handleClose}>
-                              Save Ingredients
-                            </Button>
-                          </Modal.Footer>
-                        </Modal>
-                        {modifiedRecipe && modifiedRecipe.id === recipe.id && (
-                          <div>
-                            <button className="confirm" onClick={confirmRecipeChange}>Confirm</button>
-                            <button className="cancel" onClick={cancelRecipeChange}>Cancel</button>
-                          </div>
-                        )}
+                <div className="content">
+                  <div className="separation">
+                      <div className="left">
+                          <input
+                              className="recipe-description"
+                              value={recipe.description}
+                              onChange={(e) => handleRecipeChange(index, 'description', e.target.value)}
+                          />
+                          <textarea
+                              value={recipe.instructions}
+                              onChange={(e) => handleRecipeChange(index, 'instructions', e.target.value)}
+                              placeholder="Please insert instructions for the recipe"
+                              rows="4"
+                              className="card-text"
+                              onInput={(e) => {
+                                  e.currentTarget.style.height = 'auto';
+                                  e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';
+                              }}
+                          ></textarea>
                       </div>
-                    )}
+                      <div className="right">
+                          <p className="ingredients-title"> ingredients in recipe!</p>
+                          <ul className="ingredients-list" onClick={(e) => changeIngredients(index, 'ingredients', e.target.value)}>
+                              {recipe.ingredients.map((ingredient, idx) => (
+                                  <li key={idx}>{ingredient}</li>
+                              ))}
+                          </ul>
+                          {showAccordion && modifiedRecipe && modifiedRecipe.id === recipe.id && (
+                              <div>
+                                  <Button bsPrefix='modal-button' variant="primary" onClick={() => handleShow(index)}>
+                                      edit ingredients!
+                                  </Button>
+                                  <Modal scrollable='true' show={show} onHide={handleClose}>
+                                      <Modal.Header closeButton>
+                                          <Modal.Title>list of all ingredients</Modal.Title>
+                                      </Modal.Header>
+                                      <Modal.Body>
+                                          <div className="right-side">
+                                              <Accordion defaultActiveKey="0" flush>
+                                                  <p className="ingredients-checked">ingredients currently checked</p>
+                                                  <div className="list-ingredients-checked">
+                                                      {recipes[index].ingredients.map((ingredient, idx) => (
+                                                          <p key={idx}>{ingredient}</p>
+                                                      ))}
+                                                  </div>
+                                                  {categories.filter(category => category.type === 'ingredient').map((category, idx) => (
+                                                      <Accordion.Item eventKey={idx} key={category.id}>
+                                                          <Accordion.Header bsPrefix='header-modal'>{category.name}</Accordion.Header>
+                                                          <Accordion.Body>
+                                                              {ingredients.filter(ingredient => ingredient.category_id === category.id).map(ingredient => (
+                                                                  <div className="list-group" key={ingredient.id}>
+                                                                      <label className="list-group-item">
+                                                                          <input
+                                                                              className="form-check-input me-1"
+                                                                              type="checkbox"
+                                                                              checked={checkedState[ingredient.id]}
+                                                                              onChange={() => handleCheckboxChange(ingredient.id, index)}
+                                                                          />
+                                                                          {ingredient.name}
+                                                                      </label>
+                                                                  </div>
+                                                              ))}
+                                                          </Accordion.Body>
+                                                      </Accordion.Item>
+                                                  ))}
+                                              </Accordion>
+                                          </div>
+                                      </Modal.Body>
+                                      <Modal.Footer>
+                                          <Button variant="secondary" bsPrefix='modal-close' onClick={handleClose}>
+                                              Close
+                                          </Button>
+                                          <Button variant="primary" bsPrefix='modal-save' onClick={handleClose}>
+                                              Save Ingredients
+                                          </Button>
+                                      </Modal.Footer>
+                                  </Modal>
+                              </div>
+                          )}
+                      </div>
                   </div>
+                  {modifiedRecipe && modifiedRecipe.id === recipe.id && (
+                      <div className="buttons">
+                          <button className="confirm" onClick={confirmRecipeChange}>Confirm</button>
+                          <button className="cancel" onClick={cancelRecipeChange}>Cancel</button>
+                      </div>
+                  )}
+                </div>
                 </div>
               </div>
-            </div>
           ))}
       </div>
     </div>

@@ -5,12 +5,14 @@ body {
 .main-screen {
   height: 100%; 
   padding: 20px; 
+  margin-top: 90px;
   background-color: #f8f8f8;
+  
 }
 
 .main-nav {
   justify-content: center; 
-  margin-top:10px;
+  margin-top:10px; 
   position: fixed;
   display: flex;
   background-color: #e6e6e6;
