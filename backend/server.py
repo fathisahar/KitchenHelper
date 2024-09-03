@@ -204,22 +204,6 @@ def update_ingredient_quantity(ingredient_id):
         return jsonify(error=str(e))
     except Exception as e:
         return jsonify(error=str(e))
-    
-@app.route('/api/update-url/<int:ingredient_id>', methods =['POST'])
-def update_url(ingredient_id):
-    data = request.json
-    new_url = data.get('newURL')
-
-    try:
-        ingredient = Ingredient.query.get(ingredient_id)
-        ingredient.url = new_url
-        db.session.commit()
-        return jsonify(message='Ingredient URL updated successfully')
-    except SQLAlchemyError as e:
-        db.session.rollback()
-        return jsonify(error=str(e))
-    except Exception as e:
-        return jsonify(error=str(e))
 
 @app.route('/api/add-recipe', methods=['POST'])
 def add_recipe():

@@ -4,7 +4,6 @@ import './CSS_Stock.css';
 const Component_IngredientTable = () => {
     const [ingredients, setIngredients] = useState([]);
     const [modifiedIngredient, setModifiedIngredient] = useState(null);
-    const [modifiedURL, setModifiedURL] = useState(null);
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [isCreating, setIsCreating] = useState(false);
@@ -173,34 +172,6 @@ const Component_IngredientTable = () => {
             fetchIngredients();
         });
     }
-    
-    const changeURL =  (index, key, value)  => {
-        if (modifiedURL){
-            setModifiedURL(null);
-        } else {
-            const updatedIngredients = [...ingredients];
-            setModifiedURL({ index, key, originalValue: updatedIngredients[index][key], id: updatedIngredients[index].id });
-        }
-    };
-
-    const updateURL = (ingredientId, newURL) => {
-        fetch(`http://localhost:5000/api/update-url/${ingredientId}`, {
-            method: 'POST',
-            headers: {
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newURL),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.message);
-                fetchIngredients();
-            })
-            .catch(error => {
-                console.error('Error updating ingredient quantity:', error);
-            });
-        };
-
     const handleCategoryToggle = (categoryId) => {
         if (selectedCategories.includes(categoryId)) {
             setSelectedCategories((prevSelected) =>
@@ -210,6 +181,21 @@ const Component_IngredientTable = () => {
             setSelectedCategories((prevSelected) => [...prevSelected, categoryId]);
         }
     };
+
+    const [modifiedURL, setModifiedURL] = useState(null);
+
+    const changeURL = (index, key, value) => {
+      const updatedIngredients = [...ingredients];
+      updatedIngredients[index][key] = value; // Update the URL with the new value
+      setIngredients(updatedIngredients);
+    };
+  
+    const handleImageClick = (index) => {
+      setModifiedURL((prev) => 
+        prev && prev.index === index ? null : { index, id: ingredients[index].id }
+      );
+    };
+  
 
     useEffect(() => {
         fetchIngredients();
@@ -223,115 +209,169 @@ const Component_IngredientTable = () => {
                     + ingredient
                 </button>
                 <div className="filter-box">
-                    <p className="filter-text">filter by category! </p>
+                    <p className="filter-text">filter by category!</p>
                     {categories
-                    .filter((category) => category.type === 'ingredient')
-                    .map((category) => (
-                        <div className="choice" key={category.id}>
-                            <input 
-                                className="check"
-                                type="checkbox"
-                                id={`category-${category.id}`}
-                                checked={selectedCategories.includes(category.id)}
-                                onChange={() => handleCategoryToggle(category.id)}
-                            />
-                            <label htmlFor={`category-${category.id}`}>
-                                {category.name}
-                            </label>
-                        </div>
-                    ))}
+                        .filter((category) => category.type === 'ingredient')
+                        .map((category) => (
+                            <div className="choice" key={category.id}>
+                                <input
+                                    className="check"
+                                    type="checkbox"
+                                    id={`category-${category.id}`}
+                                    checked={selectedCategories.includes(category.id)}
+                                    onChange={() => handleCategoryToggle(category.id)}
+                                />
+                                <label htmlFor={`category-${category.id}`}>
+                                    {category.name}
+                                </label>
+                            </div>
+                        ))}
                 </div>
             </div>
             <div className="ingredients-table">
                 <div className="ingredient-cards-container">
                     {ingredients
-                    .filter(
-                        (ingredient) =>
-                            selectedCategories.length === 0 ||
-                            selectedCategories.includes(ingredient.category_id)
-                    )
-                    .map((ingredient, index) => (
-                        <div className="ingredient-card" key={ingredient.id}>
-                            <div className="ingredient-info" key={ingredient.id}>
-                                <div className="left-section">
-                                    <img className="image" src={ingredient.url} height={200} width={200} onClick={(e) => changeURL(index, 'url', e.target.value)}/>
-                                    {modifiedURL && modifiedURL.id === ingredient.id &&
-                                        <input
-                                            className="ingredient-url"
-                                            placeholder='url?'
-                                            value={ingredient.url}
+                        .filter(
+                            (ingredient) =>
+                                selectedCategories.length === 0 ||
+                                selectedCategories.includes(ingredient.category_id)
+                        )
+                        .map((ingredient, index) => (
+                            <div className="ingredient-card" key={ingredient.id}>
+                                <div className="ingredient-info">
+                                    <div className="left-section">
+                                        <img
+                                            className="image"
+                                            src={ingredient.url}
+                                            height={200}
+                                            width={200}
+                                            onClick={() => handleImageClick(index)}
                                         />
-                                    }
-                                </div>
-                                <div className="right-section">
-                                    <input
-                                        className="ingredient-name"
-                                        value={ingredient.name}
-                                        onChange={(e) => handleIngredientChange(index, 'name', e.target.value)}
-                                    />
-                                    <div className="quantity-section">
-                                        <p className="title-card"> 1) quantity and unit</p>
-                                        <input
-                                            className="ingredient-quantity"
-                                            value={ingredient.stock_quantity}
-                                            onChange={(e) => handleIngredientChange(index, 'stock_quantity', e.target.value)}
-                                        />
-                                        <button className='increment' onClick={() => increment(index)}>+</button>
-                                        <button className='decrement' onClick={() => decrement(index)}>-</button>
-                                        <select
-                                            className="ingredient-stock-type"
-                                            value={ingredient.stock_type}
-                                            onChange={(e) => handleIngredientChange(index, 'stock_type', e.target.value)}
-                                        >
-                                            <option>
-                                                unit?
-                                            </option>
-                                            <option value="grams">g </option>
-                                            <option value="miligrams">mg</option>
-                                            <option value="kilograms">kg</option>
-                                            <option value="pound">lb</option>
-                                            <option value="ounces">oz</option>
-                                            <option value="militers">ml</option>
-                                            <option value="liters">L</option>
-                                            <option value="units">units</option>
-                                            <option value="cloves">cloves</option>
-                                            <option value="leaves">leaves</option>
-                                            <option value="teaspoon">tsp</option>
-                                            <option value="tablespoon">tbsp</option>
-                                            <option value="bag">bag</option>
-                                        </select>
+                                        {modifiedURL && modifiedURL.index === index && (
+                                            <input
+                                                className="ingredient-url"
+                                                placeholder="url?"
+                                                value={ingredient.url}
+                                                onChange={(e) =>
+                                                    changeURL(index, 'url', e.target.value)
+                                                }
+                                            />
+                                        )}
                                     </div>
-                                    <p className="title-card"> 2) category</p>
-                                    <select
-                                        className="ingredient-category"
-                                        value={ingredient.category_id}
-                                        onChange={(e) => handleIngredientChange(index, 'category_id', e.target.value)}
-                                    >
-                                        <option value="" disabled>category?</option>
-                                        {categories
-                                            .filter(category => category.type === 'ingredient')
-                                            .map(category => (
-                                                <option key={category.id} value={category.id}>
-                                                    {category.name}
-                                                </option>
-                                            ))}
-                                    </select>
-                                    <button className='delete' onClick={() => handleIngredientDelete(ingredient.name)}> delete </button>
-                                    {modifiedIngredient && modifiedIngredient.id === ingredient.id && (
-                                        <div className="verifications">
-                                            <button className="confirm" onClick={confirmIngredientChange}>Confirm</button>
-                                            <button className="cancel" onClick={cancelIngredientChange}>Cancel</button>
+                                    <div className="right-section">
+                                        <input
+                                            className="ingredient-name"
+                                            value={ingredient.name}
+                                            onChange={(e) =>
+                                                handleIngredientChange(index, 'name', e.target.value)
+                                            }
+                                        />
+                                        <div className="quantity-section">
+                                            <p className="title-card">1) quantity and unit</p>
+                                            <input
+                                                className="ingredient-quantity"
+                                                value={ingredient.stock_quantity}
+                                                onChange={(e) =>
+                                                    handleIngredientChange(
+                                                        index,
+                                                        'stock_quantity',
+                                                        e.target.value
+                                                    )
+                                                }
+                                            />
+                                            <button
+                                                className="increment"
+                                                onClick={() => increment(index)}
+                                            >
+                                                +
+                                            </button>
+                                            <button
+                                                className="decrement"
+                                                onClick={() => decrement(index)}
+                                            >
+                                                -
+                                            </button>
+                                            <select
+                                                className="ingredient-stock-type"
+                                                value={ingredient.stock_type}
+                                                onChange={(e) =>
+                                                    handleIngredientChange(
+                                                        index,
+                                                        'stock_type',
+                                                        e.target.value
+                                                    )
+                                                }
+                                            >
+                                                <option>unit?</option>
+                                                <option value="grams">g</option>
+                                                <option value="miligrams">mg</option>
+                                                <option value="kilograms">kg</option>
+                                                <option value="pound">lb</option>
+                                                <option value="ounces">oz</option>
+                                                <option value="militers">ml</option>
+                                                <option value="liters">L</option>
+                                                <option value="units">units</option>
+                                                <option value="cloves">cloves</option>
+                                                <option value="leaves">leaves</option>
+                                                <option value="teaspoon">tsp</option>
+                                                <option value="tablespoon">tbsp</option>
+                                                <option value="bag">bag</option>
+                                            </select>
                                         </div>
-                                    )}
+                                        <p className="title-card">2) category</p>
+                                        <select
+                                            className="ingredient-category"
+                                            value={ingredient.category_id}
+                                            onChange={(e) =>
+                                                handleIngredientChange(
+                                                    index,
+                                                    'category_id',
+                                                    e.target.value
+                                                )
+                                            }
+                                        >
+                                            <option value="" disabled>
+                                                category?
+                                            </option>
+                                            {categories
+                                                .filter((category) => category.type === 'ingredient')
+                                                .map((category) => (
+                                                    <option key={category.id} value={category.id}>
+                                                        {category.name}
+                                                    </option>
+                                                ))}
+                                        </select>
+                                        <button
+                                            className="delete"
+                                            onClick={() => handleIngredientDelete(ingredient.name)}
+                                        >
+                                            delete
+                                        </button>
+                                        {modifiedIngredient &&
+                                            modifiedIngredient.id === ingredient.id && (
+                                                <div className="verifications">
+                                                    <button
+                                                        className="confirm"
+                                                        onClick={confirmIngredientChange}
+                                                    >
+                                                        Confirm
+                                                    </button>
+                                                    <button
+                                                        className="cancel"
+                                                        onClick={cancelIngredientChange}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            )}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
+                        ))}
                 </div>
             </div>
         </div>
-    );  
-};
+    );
+}
 
-  
 export default Component_IngredientTable;

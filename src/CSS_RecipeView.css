@@ -103,12 +103,6 @@ li {
     margin-bottom:-10px; 
 }
 
-.card-text-center{
-    border: 1px solid #000000;
-    border-radius: 8px;
-    text-align: center;
-}
-
 .recipe-category{
     font-family: 'Rubik', sans-serif;
     font-size: 17px; 
@@ -163,7 +157,6 @@ li {
     align-items: center; 
     justify-content: center; 
     text-align: center;
-    margin-top:100px;
 }
 
 .add-recipe{

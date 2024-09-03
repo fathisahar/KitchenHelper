@@ -12,7 +12,6 @@ function P_RecipeView() {
   const [checkedState, setCheckedState] = useState({});
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [modifiedRecipe, setModifiedRecipe] = useState(null);
-  const [isCreating, setIsCreating] = useState(false);
   const [newRecipe, setNewRecipe] = useState({
     name: '',
     instructions: '',
