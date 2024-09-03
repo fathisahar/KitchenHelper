@@ -273,6 +273,54 @@ def get_recipes():
         return jsonify(recipes=recipe_data)
     except Exception as e:
         return jsonify(error=str(e))
+
+from sqlalchemy import func, select
+
+@app.route('/api/get-possible-recipes', methods=['GET'])
+def get_possible_recipes():
+    try:
+        # Subquery to count the total number of ingredients for each recipe
+        total_ingredients_subquery = db.session.query(
+            recipe_ingredient.c.recipe_id,
+            func.count(recipe_ingredient.c.ingredient_id).label('total_count')
+        ).group_by(recipe_ingredient.c.recipe_id).subquery()
+
+        # Subquery to count the number of available ingredients for each recipe
+        available_ingredients_subquery = db.session.query(
+            recipe_ingredient.c.recipe_id,
+            func.count(recipe_ingredient.c.ingredient_id).label('available_count')
+        ).join(Ingredient).filter(
+            Ingredient.stock_quantity > 0
+        ).group_by(recipe_ingredient.c.recipe_id).subquery()
+
+        # Main query to get recipes where all ingredients are available
+        recipes = db.session.query(Recipe).join(
+            total_ingredients_subquery,
+            Recipe.id == total_ingredients_subquery.c.recipe_id
+        ).join(
+            available_ingredients_subquery,
+            Recipe.id == available_ingredients_subquery.c.recipe_id
+        ).filter(
+            total_ingredients_subquery.c.total_count == available_ingredients_subquery.c.available_count
+        ).all()
+
+        recipe_data = [
+            {
+                'id': recipe.id,
+                'name': recipe.name,
+                'instructions': recipe.instructions,
+                'description': recipe.description,
+                'category_id': recipe.category_id,
+                'ingredients': [ingredient.name for ingredient in recipe.ingredients],
+                'url': recipe.url
+            }
+            for recipe in recipes
+        ]
+
+        return jsonify(recipes=recipe_data)
+    except Exception as e:
+        return jsonify(error=str(e))
+
     
 if __name__ == '__main__':
     app.run(debug=True)

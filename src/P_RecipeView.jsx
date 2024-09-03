@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
 import './CSS_RecipeView.css'; 
 import './SCSS_RecipeView.scss';
 import Button from 'react-bootstrap/Button';
